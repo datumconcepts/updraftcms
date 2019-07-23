@@ -65,7 +65,7 @@ class ShortTextComponent extends React.Component<
         </CardActions>
         <Collapse in={this.state.expanded}>
           <CardActions>
-            <Grid container={true} spacing={24}>
+            <Grid container={true} spacing={10}>
               <Grid item={true} xs={true}>
                 <TextField
                   label="Name"

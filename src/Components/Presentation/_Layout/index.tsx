@@ -14,13 +14,13 @@ import { withStyles, WithStyles } from "@material-ui/core/styles";
 
 import styles from "./styles";
 
-const ObjectModelLink = (props: LinkProps) => <Link to="/object-models"  {...props}/>
+const ObjectModelLink = React.forwardRef<HTMLAnchorElement, LinkProps>((props , ref) => <Link innerRef={ref}  {...props} />);
 
 interface ILayoutState {
   open: boolean;
 }
 
-interface ILayoutProps extends RouteComponentProps, WithStyles<typeof styles>   {
+interface ILayoutProps extends RouteComponentProps, WithStyles<typeof styles> {
   authState?: string;
   classes: any;
 }
@@ -47,12 +47,12 @@ class Layout extends React.Component<ILayoutProps, ILayoutState, {}> {
         </AppBar>
         <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }} >
           <Toolbar variant="dense" />
-        <IconButton aria-label="Object Models" color="primary" component={ObjectModelLink}>
-          <WidgetsIcon />
-        </IconButton>
+          <IconButton aria-label="Object Models" color="primary" component={ObjectModelLink} to="/object-models">
+            <WidgetsIcon />
+          </IconButton>
         </Drawer>
         <main className={classes.content}>
-          <Toolbar variant="dense"/>
+          <Toolbar variant="dense" />
           {children}
         </main>
       </div>

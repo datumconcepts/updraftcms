@@ -10,17 +10,22 @@ import EmptyListDisplay from "../HOC/EmptyListDisplay";
 import AppContent from "../HOC/AppContent";
 import PageToolbar from "../HOC/PageToolbar";
 
+import * as guid from "uuid/v4";
+
 interface IObjectModelListProps extends RouteComponentProps {
   objectModels: IObjectModel[];
-  onCreateObjectModel: () => void;
 }
 class ObjectModelList extends React.Component<IObjectModelListProps> {
 
   public addObjectModel = (event: any) => {
-    const { onCreateObjectModel, history } = this.props;
-    history.push("/object-models/create");
-    onCreateObjectModel();
+    const { objectModels, history } = this.props;
+    let id = guid().replace(/-/g, "");
+    while (objectModels.find(model => model.id === id)) {
+      id = guid().replace(/-/g, "");
+    }
+    history.push(`/object-models/edit/${guid().replace(/-/g, "")}`);
   };
+
   public render() {
     const { objectModels } = this.props;
     return (

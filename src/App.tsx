@@ -1,22 +1,31 @@
-import * as React from 'react';
-import './App.css';
+import * as React from "react";
 
-import logo from './logo.svg';
+import { Provider } from 'react-redux';
 
-class App extends React.Component {
+import { BrowserRouter as Router } from "react-router-dom";
+
+import { MuiThemeProvider } from '@material-ui/core/styles';
+
+// import Constants from "./Constants";
+
+import { store } from './Store'
+
+import AppRouting from "./App.Routing";
+import theme from "./App.Theme";
+
+import Layout from "./Components/Presentation/_Layout";
+
+export default class App extends React.Component<any, any> {
+
   public render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </div>
-    );
+    return <Provider store={store}>
+      <MuiThemeProvider theme={theme}>
+        <Router>
+          <Layout>
+            <AppRouting />
+          </Layout>
+        </Router>
+      </MuiThemeProvider>
+    </Provider>
   }
 }
-
-export default App;

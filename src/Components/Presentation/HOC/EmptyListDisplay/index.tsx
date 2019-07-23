@@ -16,7 +16,7 @@ class EmptyListDisplay extends React.Component<IEmptyListDisplayProps> {
     const { clickHandler, title, classes } = this.props;
     return (
       <div className={classes.emptyList} onClick={clickHandler}>
-        <Typography variant="headline">{title}</Typography>
+        <Typography variant="h5">{title}</Typography>
       </div>
     );
   }

@@ -1,5 +1,9 @@
-import { IObjectModel } from 'src/Types';
+import { IObjectModelState } from './IObjectModel';
+
 
 export interface IAppState {
-    objectModels: IObjectModel[]
+    objectModel: IObjectModelState
 }
+
+
+export { IObjectModelState } from './IObjectModel';

@@ -1,1 +1,5 @@
-export const AppMiddleware = [];
+import thunk from 'redux-thunk';
+
+export const AppMiddleware = [
+    thunk
+];

@@ -59,8 +59,11 @@ const propertyTypes: any[] = [
   },
   {
     name: "Rich Text",
-    propertyComponent: (propertyMap: any) => (
-      <RichTextComponent propertyMap={propertyMap} />
+    propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
+      <RichTextComponent
+        propertyMap={propertyMap}
+        onPropertyUpdate={onPropertyUpdate}
+      />
     ),
     propertyType: "draftjs"
   },
@@ -82,7 +85,7 @@ const propertyTypes: any[] = [
 
 interface IHtmlSettingsTabProps extends WithStyles<typeof styles> {
   objectModel: IObjectModel;
-  onPropertyUpdate: (objectModel: IObjectModel) => void;
+  onPropertyUpdate: (objectModel: IObjectModel, name: string, value: any) => void;
 }
 
 class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
@@ -128,9 +131,7 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
   };
 
   public valueChangeHandler = (htmlProperty: IPropertyMap) => {
-    const {
-      objectModel: { htmlProperties }
-    } = this.props;
+    const { htmlProperties } = this.props.objectModel;
     this.updateHtmlProperties([
       ...htmlProperties.filter(x => x.id !== htmlProperty.id),
       htmlProperty
@@ -138,12 +139,7 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
   };
 
   public updateHtmlProperties = (htmlProperties: IPropertyMap[]) => {
-    const { objectModel, onPropertyUpdate } = this.props;
-    onPropertyUpdate(
-      Object.assign({}, objectModel, {
-        htmlProperties
-      })
-    );
+    this.props.onPropertyUpdate(this.props.objectModel, 'htmlProperties', htmlProperties);
   };
 
   public render() {
