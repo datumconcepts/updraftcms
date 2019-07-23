@@ -11,7 +11,6 @@ import { IObjectModel } from "src/Types";
 
 import styles from "src/Components/Presentation/ObjectModels/EditStyles";
 
-// import * as _ from "lodash";
 
 export interface IGeneralSettingsTabProps extends WithStyles<typeof styles> {
   objectModel: IObjectModel;
