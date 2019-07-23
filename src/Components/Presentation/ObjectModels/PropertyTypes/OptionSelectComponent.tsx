@@ -11,7 +11,7 @@ import Select from "react-select";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-import { IPropertyMap } from "../../../../Types";
+import { IPropertyMap } from "src/Types";
 
 interface IOptionSelectComponentProps {
   propertyMap: IPropertyMap;
@@ -46,7 +46,7 @@ class OptionSelectComponent extends React.Component<
     return (
       <Card>
         <CardActions>
-          <Select label={propertyMap.name} />
+          <Select fullWidth={true} label={propertyMap.name} />
 
           <IconButton
             onClick={this.handleExpandClick}
@@ -58,7 +58,7 @@ class OptionSelectComponent extends React.Component<
         </CardActions>
         <Collapse in={this.state.expanded}>
           <CardActions>
-            <Grid container={true} spacing={24}>
+            <Grid container={true} spacing={10}>
               <Grid item={true} xs={true}>
                 <TextField
                   label="Name"

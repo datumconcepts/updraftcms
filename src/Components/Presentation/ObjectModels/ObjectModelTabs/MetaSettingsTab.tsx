@@ -49,7 +49,7 @@ const propertyTypes: any[] = [
 
 interface IMetaSettingsTabProps extends WithStyles<typeof styles> {
   objectModel: IObjectModel;
-  onPropertyUpdate: (objectModel: IObjectModel) => void;
+  onPropertyUpdate: (objectModel: IObjectModel, name: string, value: any) => void;
 }
 
 
@@ -93,28 +93,23 @@ class MetaSettingsTab extends React.Component<
       metaProperties.splice(endIndex, 0, removed);
     }
 
-    this.updateHtmlProperties(
+    this.updateMetaProperties(
       metaProperties.map((x, i) => ({ ...x, sortOrder: i }))
     );
   };
 
-  public valueChangeHandler = (htmlProperty: IPropertyMap) => {
+  public valueChangeHandler = (metaProperty: IPropertyMap) => {
     const {
-      objectModel: { htmlProperties }
+      objectModel: { metaProperties }
     } = this.props;
-    this.updateHtmlProperties([
-      ...htmlProperties.filter(x => x.id !== htmlProperty.id),
-      htmlProperty
+    this.updateMetaProperties([
+      ...metaProperties.filter(x => x.id !== metaProperty.id),
+      metaProperty
     ]);
   };
 
-  public updateHtmlProperties = (htmlProperties: IPropertyMap[]) => {
-    const { objectModel, onPropertyUpdate } = this.props;
-    onPropertyUpdate(
-      Object.assign({}, objectModel, {
-        htmlProperties
-      })
-    );
+  public updateMetaProperties = (metaProperties: IPropertyMap[]) => {
+    this.props.onPropertyUpdate(this.props.objectModel, 'metaProperties', metaProperties);
   };
 
   public render() {

@@ -1,71 +1,54 @@
 // tslint:disable:jsx-no-lambda
+/* tslint:disable */
 import * as React from "react";
-import { Route, RouteComponentProps } from "react-router-dom";
+import { connect } from 'react-redux';
+import { Route } from "react-router-dom";
 
-import { IObjectModel } from "src/Types";
+import { AppActionsCreators } from 'src/Store/ActionCreators';
+import { IAppState, IObjectModelState } from 'src/Store/State';
 
 import ObjectModelEdit from "../../Presentation/ObjectModels/ObjectModelEdit";
 import ObjectModelList from "../../Presentation/ObjectModels/ObjectModelList";
+import { defaultObjectModel } from 'src/Store/State/IObjectModel';
 
-// import * as id from "uuid/v4";
 
-export interface IObjectModelContainerProps extends RouteComponentProps {
-  objectModels: IObjectModel[];
-}
-export interface IObjectModelContainerState {
-  objectModel: IObjectModel;
-}
-
-// This needs to be refactored to another file and exported - should it be on types? maybe default.
-const defaultObjectModel = {
-  description: "",
-  htmlProperties: [],
-  id: "",
-  metaProperties: [],
-  name: ""
-} as IObjectModel;
+type IObjectModelContainerProps = IObjectModelState & typeof AppActionsCreators.ObjectModel
 
 class ObjectModelContainer extends React.Component<
   IObjectModelContainerProps,
-  IObjectModelContainerState
+  {}
   > {
-  public state = {
-    objectModel: defaultObjectModel
-  };
+
   public componentDidMount() {
-    const { location } = this.props;
-    if (location.pathname === "/object-models/create") {
-      this.setState({});
-    }
+    this.props.requestObjectModels();
   }
 
-
   public render() {
-    const { objectModel } = this.state;
+    const { objectModels } = this.props;
     return (
       <React.Fragment>
         <Route
           path="/object-models"
           exact={true}
-          render={renderProps => (
-            <ObjectModelList
-              objectModels={[]}
-              onCreateObjectModel={this.componentDidMount}
-            />
-          )}
+          render={renderProps => {
+            return <ObjectModelList objectModels={[...objectModels.values()]} />
+          }}
         />
         <Route
-          path="/object-models/create"
-          render={renderProps => (
-            <ObjectModelEdit
-              onValueChange={this.componentDidMount}
-              objectModel={objectModel}
-            />
-          )}
+          path="/object-models/edit/:id"
+          render={renderProps => {
+            const id = renderProps.match.params.id;
+            return <ObjectModelEdit onValueChange={this.props.modifyObjectModel}
+              objectModel={objectModels.get(id) || { ...defaultObjectModel, id }} />
+          }}
         />
       </React.Fragment>
     );
   }
 }
 
-export default ObjectModelContainer;
+export default connect((state: IAppState) => {
+  return { ...state.objectModel }
+}, {
+    ...AppActionsCreators.ObjectModel
+  })(ObjectModelContainer);

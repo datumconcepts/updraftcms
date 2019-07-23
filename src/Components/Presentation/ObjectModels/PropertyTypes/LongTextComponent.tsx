@@ -36,7 +36,7 @@ class LongTextComponent extends React.Component<
     const {
       target: { name, value }
     } = e;
-    onPropertyUpdate(Object.assign({}, propertyMap, { [name]: value }));
+    onPropertyUpdate({...propertyMap,  [name]: value });
   };
 
   public render() {
@@ -67,7 +67,7 @@ class LongTextComponent extends React.Component<
         </CardActions>
         <Collapse in={this.state.expanded}>
           <CardActions>
-            <Grid container={true} spacing={24}>
+            <Grid container={true} spacing={10}>
               <Grid item={true} xs={true}>
                 <TextField
                   label="Name"

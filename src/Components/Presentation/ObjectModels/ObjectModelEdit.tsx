@@ -8,9 +8,9 @@ import AppBar from "@material-ui/core/AppBar";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 
+
 import styles from "./EditStyles";
 
-import * as  id from "uuid/v4";
 
 import GeneralSettingsTab from "./ObjectModelTabs/GeneralSettingsTab";
 import HtmlSettingsTab from "./ObjectModelTabs/HtmlSettingsTab";
@@ -18,38 +18,34 @@ import MetaSettingsTab from "./ObjectModelTabs/MetaSettingsTab";
 
 interface IObjectModelEditProps extends WithStyles<typeof styles> {
   objectModel: IObjectModel;
-  onValueChange: (objectModel: IObjectModel) => void;
+  onValueChange: (objectModel: IObjectModel, name: string, value: any) => void;
 }
 
 interface IObjectModelEditState {
   activeTab: number;
 }
 
+
 class ObjectModelEdit extends React.Component<
   IObjectModelEditProps,
   IObjectModelEditState
-> {
-  public static defaultProps = {
-    objectModel: {
-      description: "",
-      htmlProperties: [],
-      id: id().replace(/-/g, ""),
-      metaProperties: [],
-      name: ""
-    }
-  };
+  > {
 
   public state = {
     activeTab: 0
   };
 
-  public handleTabChange = (event :React.ChangeEvent, activeTab: number) => {
-    this.setState({ activeTab });
+  public handleTabChange = (event: React.ChangeEvent, activeTab: number) => {
+    if (activeTab === 5) {
+      event.preventDefault();
+    } else {
+      this.setState({ activeTab });
+    }
   };
-
-  public updateHandler = (objectModel: IObjectModel) => {
-    this.props.onValueChange(objectModel);
-  };
+  
+  public saveObjectModel = (e: any) => {
+    e.preventDefault();
+  }
 
   public renderTab = () => {
     const { objectModel } = this.props;
@@ -58,21 +54,21 @@ class ObjectModelEdit extends React.Component<
       case 0:
         return (
           <GeneralSettingsTab
-            onPropertyUpdate={this.updateHandler}
+            onPropertyUpdate={this.props.onValueChange}
             objectModel={objectModel}
           />
         );
       case 1:
         return (
           <HtmlSettingsTab
-            onPropertyUpdate={this.updateHandler}
+            onPropertyUpdate={this.props.onValueChange}
             objectModel={objectModel}
           />
         );
       case 2:
         return (
           <MetaSettingsTab
-            onPropertyUpdate={this.updateHandler}
+            onPropertyUpdate={this.props.onValueChange}
             objectModel={objectModel}
           />
         );
@@ -83,6 +79,7 @@ class ObjectModelEdit extends React.Component<
 
   public render() {
     const { activeTab } = this.state;
+    const { classes } = this.props;
     return (
       <React.Fragment>
         <AppBar position="static" color="default" elevation={1}>
@@ -91,6 +88,8 @@ class ObjectModelEdit extends React.Component<
             <Tab label="HTML Properties" />
             <Tab label="Meta Properties" />
             <Tab label="Access Control List" />
+            <Tab className={classes.spacer} />
+            <Tab label="Save" onClick={this.saveObjectModel} />
           </Tabs>
         </AppBar>
         {this.renderTab()}
