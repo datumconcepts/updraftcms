@@ -1,16 +1,8 @@
 import * as React from "react";
 
-// import { Editor, EditorState } from "draft-js";
-
-
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
-import Collapse from "@material-ui/core/Collapse";
 import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
-import TextField from "@material-ui/core/TextField";
-
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import CodeIcon from "@material-ui/icons/Code";
 import FormatBoldIcon from '@material-ui/icons/FormatBold';
@@ -21,7 +13,7 @@ import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
 import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
 
 
-import { IPropertyMap } from "src/Types";
+import {  IDocumentProperty } from "src/Types";
 
 import { DraftBlockType, Editor, EditorState, RichUtils } from 'draft-js';
 
@@ -29,8 +21,8 @@ import 'draft-js/dist/Draft.css'
 import StyleButton from '../../HOC/HtmlEditor/StyleButton';
 
 interface IRichTextComponentProps {
-  propertyMap: IPropertyMap;
-  onPropertyUpdate: (propertyMap: IPropertyMap) => void;
+  documentProperty: IDocumentProperty;
+  onPropertyUpdate: (documentProperty: IDocumentProperty) => void;
 }
 interface IRichTextComponentState {
   editorState: EditorState;
@@ -108,20 +100,14 @@ class RichTextComponent extends React.Component<IRichTextComponentProps, IRichTe
   public handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   };
-  public changeDefaultValue = (editorState: EditorState) => {
-    const { propertyMap, onPropertyUpdate } = this.props;
+  public changeValue = (editorState: EditorState) => {
+    const { documentProperty, onPropertyUpdate } = this.props;
     const contentState = editorState.getCurrentContent();
     this.setState({ editorState }, () => {
-      onPropertyUpdate({ ...propertyMap, 'defaultValue': contentState.getPlainText() });
+      onPropertyUpdate({ ...documentProperty, 'value': contentState.getPlainText() });
     });
   };
-  public changeValue = (e: any) => {
-    const { propertyMap, onPropertyUpdate } = this.props;
-    const {
-      target: { name, value }
-    } = e;
-    onPropertyUpdate({ ...propertyMap, [name]: value });
-  };
+ 
 
   public onChange = (editorState: EditorState) => this.setState({ editorState });
 
@@ -144,48 +130,19 @@ class RichTextComponent extends React.Component<IRichTextComponentProps, IRichTe
   }
 
   public render() {
-    const { propertyMap } = this.props;
     const { editorState } = this.state;
     return (
-      <Card square={true}>
-        <CardActions>
-          <div style={{ flex: 1 }} className="editor-container">
-            <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType} />
-            <InlineStyleControls editorState={editorState} onToggle={this.toggleInlineStyle} />
-            <Editor editorState={editorState} onChange={this.changeDefaultValue} />
-          </div>
-          <IconButton
-            onClick={this.handleExpandClick}
-            aria-expanded={this.state.expanded}
-            aria-label="Show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        </CardActions>
-        <Collapse in={this.state.expanded}>
+      <Grid item={true}>
+        <Card square={true}>
           <CardActions>
-            <Grid container={true} spacing={10}>
-              <Grid item={true} xs={true}>
-                <TextField
-                  label="Name"
-                  name="name"
-                  fullWidth={true}
-                  onChange={this.changeValue}
-                  value={propertyMap.name}
-                />
-              </Grid>
-              <Grid item={true} xs={true}>
-                <TextField
-                  label="Id"
-                  fullWidth={true}
-                  disabled={true}
-                  value={propertyMap.id}
-                />
-              </Grid>
-            </Grid>
+            <div style={{ flex: 1 }} className="editor-container">
+              <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType} />
+              <InlineStyleControls editorState={editorState} onToggle={this.toggleInlineStyle} />
+              <Editor editorState={editorState} onChange={this.changeValue} />
+            </div>
           </CardActions>
-        </Collapse>
-      </Card>);
+        </Card>
+      </Grid>);
   }
 }
 export default RichTextComponent;

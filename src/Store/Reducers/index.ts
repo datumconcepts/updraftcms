@@ -1,5 +1,7 @@
+import { ContentDocumentReducer } from './ContentDocument';
 import { ObjectModelReducer } from './ObjectModel';
 
 export const AppReducers = {
-    objectModel: ObjectModelReducer
+    contentDocument: ContentDocumentReducer,
+    objectModel: ObjectModelReducer,
 }

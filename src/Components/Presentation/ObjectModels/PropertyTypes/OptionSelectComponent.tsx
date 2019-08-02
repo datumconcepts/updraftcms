@@ -44,7 +44,7 @@ class OptionSelectComponent extends React.Component<
   public render() {
     const { propertyMap } = this.props;
     return (
-      <Card>
+      <Card square={true}>
         <CardActions>
           <Select fullWidth={true} label={propertyMap.name} />
 

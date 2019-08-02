@@ -5,6 +5,8 @@ import Drawer from "@material-ui/core/Drawer";
 import Toolbar from "@material-ui/core/Toolbar";
 
 import IconButton from '@material-ui/core/IconButton';
+import LayersIcon from '@material-ui/icons/Layers';
+import MediaIcon from '@material-ui/icons/PermMedia';
 import WidgetsIcon from '@material-ui/icons/Widgets';
 
 import { Link, LinkProps, RouteComponentProps, withRouter } from 'react-router-dom';
@@ -49,6 +51,12 @@ class Layout extends React.Component<ILayoutProps, ILayoutState, {}> {
           <Toolbar variant="dense" />
           <IconButton aria-label="Object Models" color="primary" component={ObjectModelLink} to="/object-models">
             <WidgetsIcon />
+          </IconButton>
+          <IconButton aria-label="Content" color="primary" component={ObjectModelLink} to="/content">
+            <LayersIcon />
+          </IconButton>
+          <IconButton aria-label="Media" color="primary" component={ObjectModelLink} to="/media">
+            <MediaIcon />
           </IconButton>
         </Drawer>
         <main className={classes.content}>

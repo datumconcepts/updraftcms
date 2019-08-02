@@ -9,7 +9,7 @@ import TextField from "@material-ui/core/TextField";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-import { IPropertyMap } from "../../../../Types";
+import { IPropertyMap } from "src/Types";
 
 interface ILongTextComponentProps {
   propertyMap: IPropertyMap;
@@ -42,7 +42,7 @@ class LongTextComponent extends React.Component<
   public render() {
     const { propertyMap } = this.props;
     return (
-      <Card>
+      <Card square={true}>
         <CardActions>
           <TextField
             fullWidth={true}

@@ -42,7 +42,7 @@ class ShortTextComponent extends React.Component<
   public render() {
     const { propertyMap } = this.props;
     return (
-      <Card>
+      <Card square={true}>
         <CardActions>
           <TextField
             fullWidth={true}

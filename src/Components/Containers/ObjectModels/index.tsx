@@ -14,14 +14,7 @@ import { defaultObjectModel } from 'src/Store/State/IObjectModel';
 
 type IObjectModelContainerProps = IObjectModelState & typeof AppActionsCreators.ObjectModel
 
-class ObjectModelContainer extends React.Component<
-  IObjectModelContainerProps,
-  {}
-  > {
-
-  public componentDidMount() {
-    this.props.requestObjectModels();
-  }
+class ObjectModelContainer extends React.Component<IObjectModelContainerProps, {}> {
 
   public render() {
     const { objectModels } = this.props;
@@ -39,7 +32,9 @@ class ObjectModelContainer extends React.Component<
           render={renderProps => {
             const id = renderProps.match.params.id;
             return <ObjectModelEdit onValueChange={this.props.modifyObjectModel}
-              objectModel={objectModels.get(id) || { ...defaultObjectModel, id }} />
+              objectModel={objectModels.get(id) || { ...defaultObjectModel, id }}
+              saveObjectModel={this.props.saveObjectModel}
+              deleteObjectModel={this.props.deleteObjectModel} />
           }}
         />
       </React.Fragment>

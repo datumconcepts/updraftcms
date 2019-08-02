@@ -9,6 +9,7 @@ import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
 
@@ -49,7 +50,7 @@ const propertyTypes: any[] = [
 
 interface IMetaSettingsTabProps extends WithStyles<typeof styles> {
   objectModel: IObjectModel;
-  onPropertyUpdate: (objectModel: IObjectModel, name: string, value: any) => void;
+  onPropertyUpdate: (objectModel: IObjectModel) => void;
 }
 
 
@@ -105,11 +106,11 @@ class MetaSettingsTab extends React.Component<
     this.updateMetaProperties([
       ...metaProperties.filter(x => x.id !== metaProperty.id),
       metaProperty
-    ]);
+    ].sort((a, b) => a.sortOrder - b.sortOrder));
   };
 
   public updateMetaProperties = (metaProperties: IPropertyMap[]) => {
-    this.props.onPropertyUpdate(this.props.objectModel, 'metaProperties', metaProperties);
+    this.props.onPropertyUpdate({ ...this.props.objectModel, 'metaProperties': metaProperties });
   };
 
   public render() {
@@ -159,7 +160,7 @@ class MetaSettingsTab extends React.Component<
             </AppContent>
           </Grid>
           <Grid item={true} xs={4}>
-            <Paper className={classes.propertyList}>
+            <Paper square={true} className={classes.propertyList}>
               <List disablePadding={true}>
                 <Droppable
                   isDropDisabled={true}
@@ -180,9 +181,11 @@ class MetaSettingsTab extends React.Component<
                               {...dragProvider.dragHandleProps}
                             >
                               <ListItem>
-                                <Avatar>
-                                  <ImageIcon />
-                                </Avatar>
+                                <ListItemAvatar>
+                                  <Avatar>
+                                    <ImageIcon />
+                                  </Avatar>
+                                </ListItemAvatar>
                                 <ListItemText
                                   primary={propType.name}
                                   secondary="Jan 9, 2014"

@@ -1,7 +1,9 @@
 import * as React from "react";
 
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
 
-export interface IDisplayCardProps  {
+export interface IDisplayCardProps {
   actions?: React.ReactFragment;
   title: string;
   subHeader?: string;
@@ -14,9 +16,19 @@ class DisplayCard extends React.Component<IDisplayCardProps> {
     const {
       children,
       title,
+      subHeader,
+      avatar,
+      headerAction
     } = this.props;
     return (
-    <div title={title}>{children}</div>
+      <Card square={true}>
+        <CardHeader
+          avatar={avatar}
+          action={headerAction}
+          title={title}
+          subheader={subHeader}
+        />
+        {children}</Card>
     );
   }
 }

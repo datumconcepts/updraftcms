@@ -8,7 +8,7 @@ export default (theme:Theme) =>
       flexGrow: 1,
       display: "flex",
       backgroundColor: theme.palette.background.paper,
-      padding: theme.spacing(3),
+      padding: theme.spacing(5),
       minWidth: 0 // So the Typography noWrap works
     }
   });

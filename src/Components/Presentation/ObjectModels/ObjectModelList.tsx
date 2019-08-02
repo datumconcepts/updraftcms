@@ -2,17 +2,28 @@ import * as React from "react";
 
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
+import { withStyles, WithStyles } from "@material-ui/core/styles";
+
+import Avatar from '@material-ui/core/Avatar';
+import Grid from "@material-ui/core/Grid";
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+
 import { IObjectModel } from "../../../Types";
 
 import DisplayCard from "../HOC/DisplayCard";
 import EmptyListDisplay from "../HOC/EmptyListDisplay";
 
 import AppContent from "../HOC/AppContent";
-import PageToolbar from "../HOC/PageToolbar";
+
+import styles from "./ListStyles";
 
 import * as guid from "uuid/v4";
 
-interface IObjectModelListProps extends RouteComponentProps {
+interface IObjectModelListProps extends RouteComponentProps, WithStyles<typeof styles> {
   objectModels: IObjectModel[];
 }
 class ObjectModelList extends React.Component<IObjectModelListProps> {
@@ -25,33 +36,46 @@ class ObjectModelList extends React.Component<IObjectModelListProps> {
     }
     history.push(`/object-models/edit/${guid().replace(/-/g, "")}`);
   };
+  public editObjectModel = (objectModel: IObjectModel) => {
+    const { history } = this.props;
+    history.push(`/object-models/edit/${objectModel.id}`);
+  }
 
   public render() {
-    const { objectModels } = this.props;
+    const { objectModels, classes } = this.props;
     return (
       <React.Fragment>
         <AppContent>
-          <PageToolbar />
           {objectModels.length === 0 ? (
             <EmptyListDisplay
               clickHandler={this.addObjectModel}
               title="It looks like you have no object models yet. Click here to add a new one"
             />
           ) : (
-              <div>
+              <Grid direction="column" container={true} spacing={10}>
                 {([] as IObjectModel[])
                   .concat(objectModels)
                   .map((objectModel, objectModelIndex) => (
-                    <div key={`object_model_${objectModelIndex}`}>
-                      <DisplayCard
-                        title={objectModel.name}
-                        subHeader="Welcome to Earth"
-                      >
-                        It's a brand new Day
-                    </DisplayCard>
-                    </div>
-                  ))}
-              </div>
+                    <DisplayCard key={`object_model_${objectModelIndex}`} 
+                      title={objectModel.name}
+                      subHeader={objectModel.id}
+                      avatar={
+                        <Avatar aria-label="Recipe">
+                          R
+                        </Avatar>
+                      }
+                      headerAction={
+                        <IconButton aria-label="Edit" onClick={() => this.editObjectModel(objectModel)}>
+                          <EditIcon />
+                        </IconButton>
+                      }
+                    />
+                  ))
+                }
+                <Fab color="primary" size="medium" aria-label="Add" className={classes.fab} onClick={this.addObjectModel} >
+                  <AddIcon />
+                </Fab>
+              </Grid>
             )}
         </AppContent>
       </React.Fragment>
@@ -59,4 +83,5 @@ class ObjectModelList extends React.Component<IObjectModelListProps> {
   }
 }
 
-export default withRouter(ObjectModelList);
+const routedObjectModelList = withRouter(ObjectModelList);
+export default withStyles(styles, { withTheme: true })(routedObjectModelList);

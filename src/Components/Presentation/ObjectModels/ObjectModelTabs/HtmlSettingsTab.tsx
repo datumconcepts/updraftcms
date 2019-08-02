@@ -9,12 +9,13 @@ import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
 
 import ImageIcon from "@material-ui/icons/Image";
 
-import AppContent from "../../HOC/AppContent";
+import AppContent from "src/Components/Presentation/HOC/AppContent";
 
 import LongTextComponent from "../PropertyTypes/LongTextComponent";
 import OptionSelectComponent from "../PropertyTypes/OptionSelectComponent";
@@ -23,7 +24,7 @@ import ShortTextComponent from "../PropertyTypes/ShortTextComponent";
 
 import * as id from "uuid/v4";
 
-import { IObjectModel, IPropertyMap } from "../../../../Types";
+import { IObjectModel, IPropertyMap } from "src/Types";
 import styles from "../EditStyles";
 
 const propertyTypes: any[] = [
@@ -85,7 +86,7 @@ const propertyTypes: any[] = [
 
 interface IHtmlSettingsTabProps extends WithStyles<typeof styles> {
   objectModel: IObjectModel;
-  onPropertyUpdate: (objectModel: IObjectModel, name: string, value: any) => void;
+  onPropertyUpdate: (objectModel: IObjectModel) => void;
 }
 
 class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
@@ -135,11 +136,11 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
     this.updateHtmlProperties([
       ...htmlProperties.filter(x => x.id !== htmlProperty.id),
       htmlProperty
-    ]);
+    ].sort((a, b) => a.sortOrder - b.sortOrder));
   };
 
   public updateHtmlProperties = (htmlProperties: IPropertyMap[]) => {
-    this.props.onPropertyUpdate(this.props.objectModel, 'htmlProperties', htmlProperties);
+    this.props.onPropertyUpdate({ ...this.props.objectModel, 'htmlProperties': htmlProperties });
   };
 
   public render() {
@@ -189,7 +190,7 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
             </AppContent>
           </Grid>
           <Grid item={true} xs={4}>
-            <Paper className={classes.propertyList}>
+            <Paper square={true} className={classes.propertyList}>
               <List disablePadding={true}>
                 <Droppable
                   isDropDisabled={true}
@@ -210,9 +211,10 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
                               {...dragProvider.dragHandleProps}
                             >
                               <ListItem>
-                                <Avatar>
-                                  <ImageIcon />
-                                </Avatar>
+                                <ListItemAvatar>
+                                  <Avatar>
+                                    <ImageIcon />
+                                  </Avatar></ListItemAvatar>
                                 <ListItemText
                                   primary={propType.name}
                                   secondary="Jan 9, 2014"

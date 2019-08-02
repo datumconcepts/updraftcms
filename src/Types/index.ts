@@ -12,3 +12,14 @@ export interface IObjectModel {
   htmlProperties: IPropertyMap[];
   metaProperties: IPropertyMap[];
 }
+export interface IDocumentProperty {
+  propertyMapId: string;
+  value: any;
+}
+export interface IContentDocument {
+  id: string;
+  name: string;
+  objectModelId: string;
+  htmlProperties: IDocumentProperty[];
+  metaProperties: IDocumentProperty[];
+}
