@@ -2,16 +2,18 @@ import * as React from "react";
 import { connect } from 'react-redux';
 import { Route } from "react-router-dom";
 
-import { IAppState } from 'src/Store/State';
+import { IAppState, IContentDocumentState,   IObjectModelState } from 'src/Store/State';
 
 import { AppActionsCreators } from 'src/Store/ActionCreators';
 
 import ContentDocumentIndexContainer from './Components/Containers/ContentDocuments';
 import ObjectModelIndexContainer from "./Components/Containers/ObjectModels";
 
-type IAppRoutingProps = 
-typeof AppActionsCreators.ContentDocument &
-typeof AppActionsCreators.ObjectModel
+type IAppRoutingProps =
+  IObjectModelState &
+  IContentDocumentState &
+  typeof AppActionsCreators.ContentDocument &
+  typeof AppActionsCreators.ObjectModel
 
 class AppRouting extends React.Component<IAppRoutingProps, {}> {
   public componentDidMount() {

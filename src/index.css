@@ -12,7 +12,6 @@ body {
   margin:auto;
   cursor:initial;
   /* box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.5); */
-  /* height:300px; */
   padding: 5px;
   font-size: 18px;
   font-family: 'calibri', sans-serif;
@@ -20,5 +19,9 @@ body {
 .DraftEditor-root{
   background-color:#fff;
   margin-top: 5px;
+  min-height:300px;
   padding: 10px;
+}
+.public-DraftEditor-content{
+  min-height: 300px;
 }

@@ -16,7 +16,11 @@ import { IObjectModel } from 'src/Types';
 
 import styles from './MenuStyles';
 
-interface IContentDocumentMenu extends RouteComponentProps, WithStyles<typeof styles> {
+interface IRouteParams {
+    objectModelId: string;
+}
+
+interface IContentDocumentMenu extends RouteComponentProps<IRouteParams>, WithStyles<typeof styles> {
     objectModels: IObjectModel[];
 }
 
@@ -26,7 +30,7 @@ class ContentDocumentMenu extends React.Component<IContentDocumentMenu, {}>{
         history.push(`/${id}/content`);
     }
     public render() {
-        const { classes } = this.props;
+        const { classes, match: { params } } = this.props;
         return (<Drawer
             className={classes.drawer}
             variant="permanent"
@@ -39,7 +43,9 @@ class ContentDocumentMenu extends React.Component<IContentDocumentMenu, {}>{
                 {([] as IObjectModel[])
                     .concat(this.props.objectModels)
                     .map((objectModel, index) => (
-                        <ListItem button={true} key={objectModel.id} onClick={() => this.navigateToModel(objectModel.id)}>
+                        <ListItem button={true} key={objectModel.id}
+                            onClick={() => this.navigateToModel(objectModel.id)}
+                            selected={params.objectModelId === objectModel.id}>
                             <ListItemText primary={objectModel.name} />
                         </ListItem>
                     ))}

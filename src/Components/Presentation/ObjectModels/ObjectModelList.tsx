@@ -6,8 +6,6 @@ import { withStyles, WithStyles } from "@material-ui/core/styles";
 
 import Avatar from '@material-ui/core/Avatar';
 import Grid from "@material-ui/core/Grid";
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
 
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
@@ -56,18 +54,14 @@ class ObjectModelList extends React.Component<IObjectModelListProps> {
                 {([] as IObjectModel[])
                   .concat(objectModels)
                   .map((objectModel, objectModelIndex) => (
-                    <DisplayCard key={`object_model_${objectModelIndex}`} 
+                    <DisplayCard key={`object_model_${objectModelIndex}`}
                       title={objectModel.name}
                       subHeader={objectModel.id}
+                      clickAction={() => this.editObjectModel(objectModel)}
                       avatar={
                         <Avatar aria-label="Recipe">
                           R
                         </Avatar>
-                      }
-                      headerAction={
-                        <IconButton aria-label="Edit" onClick={() => this.editObjectModel(objectModel)}>
-                          <EditIcon />
-                        </IconButton>
                       }
                     />
                   ))

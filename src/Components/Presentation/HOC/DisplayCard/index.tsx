@@ -9,6 +9,7 @@ export interface IDisplayCardProps {
   subHeader?: string;
   avatar?: React.ReactFragment;
   headerAction?: React.ReactFragment;
+  clickAction: () => void;
 }
 
 class DisplayCard extends React.Component<IDisplayCardProps> {
@@ -22,7 +23,7 @@ class DisplayCard extends React.Component<IDisplayCardProps> {
     } = this.props;
     return (
       <Card square={true}>
-        <CardHeader
+        <CardHeader onClick={this.props.clickAction}
           avatar={avatar}
           action={headerAction}
           title={title}

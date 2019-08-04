@@ -1,8 +1,5 @@
 import * as React from "react";
 
-// import { Editor, EditorState } from "draft-js";
-
-
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import Collapse from "@material-ui/core/Collapse";
@@ -23,7 +20,7 @@ import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
 
 import { IPropertyMap } from "src/Types";
 
-import { DraftBlockType, Editor, EditorState, RichUtils } from 'draft-js';
+import { convertFromRaw, convertToRaw, DraftBlockType, Editor, EditorState, RichUtils } from 'draft-js';
 
 import 'draft-js/dist/Draft.css'
 import StyleButton from '../../HOC/HtmlEditor/StyleButton';
@@ -105,6 +102,14 @@ class RichTextComponent extends React.Component<IRichTextComponentProps, IRichTe
     editorState: EditorState.createEmpty(),
     expanded: false
   }
+  public componentDidMount() {
+    const { propertyMap } = this.props;
+    if (propertyMap.defaultValue) {
+      const contentState = convertFromRaw(propertyMap.defaultValue);
+      const editorState = EditorState.createWithContent(contentState);
+      this.setState({ editorState });
+    }
+  }
   public handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   };
@@ -112,7 +117,7 @@ class RichTextComponent extends React.Component<IRichTextComponentProps, IRichTe
     const { propertyMap, onPropertyUpdate } = this.props;
     const contentState = editorState.getCurrentContent();
     this.setState({ editorState }, () => {
-      onPropertyUpdate({ ...propertyMap, 'defaultValue': contentState.getPlainText() });
+      onPropertyUpdate({ ...propertyMap, 'defaultValue': convertToRaw(contentState) });
     });
   };
   public changeValue = (e: any) => {

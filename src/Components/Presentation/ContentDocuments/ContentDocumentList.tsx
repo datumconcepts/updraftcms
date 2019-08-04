@@ -7,11 +7,9 @@ import { withStyles, WithStyles } from "@material-ui/core/styles";
 import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import Grid from "@material-ui/core/Grid";
-import IconButton from '@material-ui/core/IconButton';
 
 
 import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
 
 import { IContentDocument, IObjectModel, } from "src/Types";
 
@@ -25,23 +23,28 @@ import styles from "./ListStyles";
 import * as guid from "uuid/v4";
 import ContentDocumentMenu from './ContentDocumentMenu';
 
-interface IContentDocumentListProps extends RouteComponentProps, WithStyles<typeof styles> {
+
+interface IRouteParams {
+  objectModelId?: string;
+}
+interface IContentDocumentListProps extends RouteComponentProps<IRouteParams>, WithStyles<typeof styles> {
   objectModels: IObjectModel[];
   contentDocuments: IContentDocument[];
 }
 class ContentDocumentList extends React.Component<IContentDocumentListProps> {
 
   public addContentDocument = (event: any) => {
-    const { contentDocuments, history } = this.props;
+    const { contentDocuments, history, match: { params } } = this.props;
     let id = guid().replace(/-/g, "");
     while (contentDocuments.find(model => model.id === id)) {
       id = guid().replace(/-/g, "");
     }
-    history.push(`/content/edit/${guid().replace(/-/g, "")}`);
+    history.push(params.objectModelId ? `/${params.objectModelId}/content/edit/${id}` : `/content/edit/${id}`);
   };
   public editContentDocument = (contentDocument: IContentDocument) => {
-    const { history } = this.props;
-    history.push(`/content/edit/${contentDocument.id}`);
+    const { history, match: { params } } = this.props;
+    const id = contentDocument.id;
+    history.push(params.objectModelId ? `/${params.objectModelId}/content/edit/${id}` : `/content/edit/${id}`);
   }
 
   public render() {
@@ -63,15 +66,11 @@ class ContentDocumentList extends React.Component<IContentDocumentListProps> {
                     <DisplayCard key={`content_document_${contentDocumentIndex}`}
                       title={"Content Document"}
                       subHeader={contentDocument.id}
+                      clickAction={() => this.editContentDocument(contentDocument)}
                       avatar={
                         <Avatar aria-label="Recipe">
                           R
                         </Avatar>
-                      }
-                      headerAction={
-                        <IconButton aria-label="Edit" onClick={() => this.editContentDocument(contentDocument)}>
-                          <EditIcon />
-                        </IconButton>
                       }
                     />
                   ))

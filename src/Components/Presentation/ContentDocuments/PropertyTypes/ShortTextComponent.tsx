@@ -6,11 +6,12 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 
 
-import { IPropertyMap } from "src/Types";
+import { IDocumentProperty, IPropertyMap } from "src/Types";
 
 interface ITextboxComponentProps {
+  documentProperty: IDocumentProperty
   propertyMap: IPropertyMap;
-  onPropertyUpdate: (propertyMap: IPropertyMap) => void;
+  onPropertyUpdate: (documentProperty: IDocumentProperty) => void;
 }
 
 class ShortTextComponent extends React.Component<
@@ -19,24 +20,24 @@ class ShortTextComponent extends React.Component<
   > {
 
   public changeValue = (e: any) => {
-    const { propertyMap, onPropertyUpdate } = this.props;
+    const { documentProperty, onPropertyUpdate } = this.props;
     const {
       target: { name, value }
     } = e;
-    onPropertyUpdate({ ...propertyMap, [name]: value });
+    onPropertyUpdate({ ...documentProperty, [name]: value });
   };
 
   public render() {
-    const { propertyMap } = this.props;
+    const { documentProperty, propertyMap } = this.props;
     return (
       <Grid item={true}>
         <Card square={true}>
           <CardActions>
             <TextField
               fullWidth={true}
-              name="defaultValue"
+              name="value"
               onChange={this.changeValue}
-              value={propertyMap.defaultValue}
+              value={documentProperty.value}
               label={propertyMap.name}
               InputLabelProps={{
                 shrink: true

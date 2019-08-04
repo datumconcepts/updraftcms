@@ -16,13 +16,10 @@ export default class StyleButton extends React.Component<IStyleButtonProps> {
     };
 
     public render() {
-        let className = 'RichEditor-styleButton';
-        if (this.props.active) {
-            className += ' RichEditor-activeButton';
-        }
+    
 
         return (
-            <ToggleButton className={className} onMouseDown={this.onToggle}>
+            <ToggleButton selected={this.props.active} value={this.props.style} onMouseDown={this.onToggle}>
                 {this.props.icon ? (this.props.icon) : (this.props.label)}
             </ToggleButton>
         );

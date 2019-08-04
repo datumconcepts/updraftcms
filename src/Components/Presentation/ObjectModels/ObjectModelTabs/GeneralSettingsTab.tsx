@@ -14,7 +14,7 @@ import styles from "src/Components/Presentation/ObjectModels/EditStyles";
 
 export interface IGeneralSettingsTabProps extends WithStyles<typeof styles> {
   objectModel: IObjectModel;
-  onPropertyUpdate: (objectModel: IObjectModel, name: string, value: any) => void;
+  onPropertyUpdate: (objectModel: IObjectModel) => void;
 }
 
 export interface IGeneralSettingsTabState {
@@ -31,7 +31,7 @@ class GeneralSettingsTab extends React.Component<
 
   public valueChangeHandler = (e: any) => {
     const { name, value } = e.target;
-    this.props.onPropertyUpdate(this.props.objectModel, name, value);
+    this.props.onPropertyUpdate({ ...this.props.objectModel, [name]: value });
   };
 
   public render() {

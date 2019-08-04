@@ -4,7 +4,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 
-import { IContentDocument, IDocumentProperty, IObjectModel } from "src/Types";
+import { IContentDocument, IDocumentProperty, IObjectModel, IPropertyMap } from "src/Types";
 
 import { defaultObjectModel } from 'src/Store/State/IObjectModel';
 
@@ -36,7 +36,12 @@ import OptionSelectComponent from "./PropertyTypes/OptionSelectComponent";
 import RichTextComponent from "./PropertyTypes/RichTextComponent";
 import ShortTextComponent from "./PropertyTypes/ShortTextComponent";
 
-interface IContentDocumentEditProps extends RouteComponentProps, WithStyles<typeof styles> {
+
+interface IRouteParams {
+  objectModelId?: string;
+}
+
+interface IContentDocumentEditProps extends RouteComponentProps<IRouteParams>, WithStyles<typeof styles> {
   contentDocument: IContentDocument;
   objectModels: Map<string, IObjectModel>;
   onValueChange: (contentDocument: IContentDocument) => void;
@@ -48,9 +53,10 @@ interface IContentDocumentEditProps extends RouteComponentProps, WithStyles<type
 const propertyTypes: any[] = [
   {
     name: "Short Text",
-    propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: any) => (
+    propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
       <ShortTextComponent key={key}
         onPropertyUpdate={onPropertyUpdate}
+        documentProperty={documentProperty}
         propertyMap={propertyMap}
       />
     ),
@@ -58,7 +64,7 @@ const propertyTypes: any[] = [
   },
   {
     name: "Long Text",
-    propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: any) => (
+    propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
       <LongTextComponent key={key}
         onPropertyUpdate={onPropertyUpdate}
         propertyMap={propertyMap}
@@ -68,7 +74,7 @@ const propertyTypes: any[] = [
   },
   {
     name: "Option Select",
-    propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: any) => (
+    propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
       <OptionSelectComponent key={key}
         onPropertyUpdate={onPropertyUpdate}
         propertyMap={propertyMap}
@@ -78,7 +84,7 @@ const propertyTypes: any[] = [
   },
   {
     name: "Rich Text",
-    propertyComponent: (key: string, onPropertyUpdate: any, documentProperty: IDocumentProperty) => (
+    propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
       <RichTextComponent key={key}
         documentProperty={documentProperty}
         onPropertyUpdate={onPropertyUpdate}
@@ -107,7 +113,6 @@ const propertyTypes: any[] = [
 interface IContendDocumentEditState {
   activeTab: number;
   speedDialOpen: boolean;
-  objectModel: IObjectModel;
 }
 
 class ContendDocumentEdit extends React.Component<
@@ -117,10 +122,29 @@ class ContendDocumentEdit extends React.Component<
 
   public state = {
     activeTab: 0,
-    objectModel: defaultObjectModel,
     speedDialOpen: false,
   };
 
+
+  public htmlPropertyChangeHandler = (htmlPrperty: IDocumentProperty) => {
+    const { contentDocument, objectModels } = this.props;
+    const objectModel = objectModels.get(contentDocument.objectModelId);
+    if (!objectModel) {
+      return;
+    }
+    this.props.onValueChange({
+      ...contentDocument,
+      htmlProperties: [
+        ...contentDocument.htmlProperties.filter(prop => prop.propertyMapId !== htmlPrperty.propertyMapId),
+        htmlPrperty
+      ].sort((a: IDocumentProperty, b: IDocumentProperty) => {
+        const sortOrderA = (objectModel.htmlProperties.find(prop => prop.id === a.propertyMapId) || { sortOrder: 0 }).sortOrder;
+        const sortOrderB = (objectModel.htmlProperties.find(prop => prop.id === b.propertyMapId) || { sortOrder: 0 }).sortOrder;
+        return sortOrderA - sortOrderB
+      })
+    })
+
+  }
   public valueChangeHandler = (e: any) => {
     const { name, value } = e.target;
     this.props.onValueChange({ ...this.props.contentDocument, [name]: value });
@@ -128,24 +152,26 @@ class ContendDocumentEdit extends React.Component<
   public handleTabChange = (event: React.ChangeEvent, activeTab: number) => {
     this.setState({ activeTab });
   };
-  public handleObjectModelChange = ({ value, label }: { value: string, label: string }) => {
+  public handleObjectModelChange = ({ value }: { value: string, label: string }) => {
     const { objectModels } = this.props;
     const objectModel = objectModels.get(value);
     if (objectModel) {
-      this.setState({ objectModel }, () => {
-        this.loadObjectModel(objectModel);
-      })
+      this.loadObjectModel(objectModel);
     }
   }
   public saveContentDocument = (e: any) => {
-    const { contentDocument, history } = this.props;
+    const { contentDocument, history, match: { params } } = this.props;
     this.props.saveContentDocument(contentDocument);
-    history.push(`/content`);
+    history.push(params.objectModelId ? `/${params.objectModelId}/content` : `/content`);
   }
   public deleteContentDocument = (e: any) => {
-    const { contentDocument, history } = this.props;
+    const { contentDocument, history, match: { params } } = this.props;
     this.props.deleteContentDocument(contentDocument.id);
-    history.push(`/content`);
+    history.push(params.objectModelId ? `/${params.objectModelId}/content` : `/content`);
+  }
+  public closeContentDocument = (e: any) => {
+    const { history, match: { params } } = this.props;
+    history.push(params.objectModelId ? `/${params.objectModelId}/content` : `/content`);
   }
   public handleClose = () => {
     this.setState({ speedDialOpen: false });
@@ -160,9 +186,9 @@ class ContendDocumentEdit extends React.Component<
   };
 
   public render() {
-    const { activeTab, objectModel } = this.state;
+    const { activeTab } = this.state;
     const { classes, contentDocument, objectModels } = this.props;
-    console.log(contentDocument);
+    const objectModel = objectModels.get(contentDocument.objectModelId) || defaultObjectModel;
     return (
       <React.Fragment>
         <AppBar position="static" color="default" elevation={1}>
@@ -183,7 +209,7 @@ class ContendDocumentEdit extends React.Component<
               />
             </Grid>
             <Grid item={true}>
-              <Select fullWidth={true} label="Object Model"
+              <Select fullWidth={true} label="Object Model" value={{ label: objectModel.name, value: objectModel.id }}
                 options={[...objectModels.values()].map(objectModelOption => ({ value: objectModelOption.id, label: objectModelOption.name }))}
                 onChange={this.handleObjectModelChange}
               />
@@ -193,13 +219,8 @@ class ContendDocumentEdit extends React.Component<
                 const propItem = objectModel.htmlProperties.find(prop => prop.id === docProp.propertyMapId);
                 if (propItem) {
                   return propertyTypes
-                    .find(
-                      x => x.propertyType === propItem.propertyType
-                    )
-                    .propertyComponent(`doc_prop_html_${docPropIndex}`,
-                      this.props.onValueChange,
-                      docProp
-                    )
+                    .find(x => x.propertyType === propItem.propertyType)
+                    .propertyComponent(`doc_prop_html_${docPropIndex}`, this.htmlPropertyChangeHandler, propItem, docProp)
                 }
               })
             }
@@ -220,6 +241,7 @@ class ContendDocumentEdit extends React.Component<
         >
           <SpeedDialAction icon={<SaveIcon />} tooltipTitle={"Save"} onClick={this.saveContentDocument} />
           <SpeedDialAction icon={<DeleteIcon />} tooltipTitle={"Delete"} onClick={this.deleteContentDocument} />
+          <SpeedDialAction icon={<CloseIcon />} tooltipTitle={"Close"} onClick={this.closeContentDocument} />
         </SpeedDial>
       </React.Fragment>
     );
@@ -233,14 +255,16 @@ class ContendDocumentEdit extends React.Component<
         objectModel.htmlProperties.find(template => template.id === prop.propertyMapId)),
       ...objectModel.htmlProperties.filter(template =>
         !contentDocument.htmlProperties.find(prop => template.id === prop.propertyMapId)).map(
-          (prop, index) => ({ propertyMapId: prop.id, value: prop.defaultValue || "" })
+          (prop, index) =>
+            ({ propertyMapId: prop.id, value: prop.defaultValue || "" })
         )],
       metaProperties: [...contentDocument.metaProperties.filter(prop =>
         objectModel.metaProperties.find(template => template.id === prop.propertyMapId)),
       ...objectModel.metaProperties.filter(template =>
         !contentDocument.metaProperties.find(prop => template.id === prop.propertyMapId)).map(
           (prop, index) => ({ propertyMapId: prop.id, value: prop.defaultValue || "" })
-        )]
+        )],
+      objectModelId: objectModel.id
     });
   }
 }

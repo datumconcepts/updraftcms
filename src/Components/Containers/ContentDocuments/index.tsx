@@ -1,9 +1,8 @@
 import * as React from "react";
-import { connect } from 'react-redux';
 import { Route } from "react-router-dom";
 
 import { AppActionsCreators } from 'src/Store/ActionCreators';
-import { IAppState, IContentDocumentState } from 'src/Store/State';
+import { IContentDocumentState } from 'src/Store/State';
 
 import ContentDocumentEdit from 'src/Components/Presentation/ContentDocuments/ContentDocumentEdit';
 import ContentDocumentList from "src/Components/Presentation/ContentDocuments/ContentDocumentList";
@@ -43,11 +42,25 @@ class ContentDocumentContainer extends React.Component<IContentDocumentContainer
           path="/content/edit/:id"
           render={renderProps => {
             const id = renderProps.match.params.id;
-            return <ContentDocumentEdit onValueChange={this.props.modifyContentDocument}
-              contentDocument={contentDocuments.get(id) || { ...defaultContentDocument, id }}
-              objectModels={objectModels}
+            return <ContentDocumentEdit
+              onValueChange={this.props.modifyContentDocument}
               saveContentDocument={this.props.saveContentDocument}
-              deleteContentDocument={this.props.deleteContentDocument} />
+              deleteContentDocument={this.props.deleteContentDocument}
+              contentDocument={contentDocuments.get(id) || { ...defaultContentDocument, id }}
+              objectModels={objectModels} />
+          }}
+        />
+        <Route
+          path="/:objectModelId/content/edit/:id"
+          render={renderProps => {
+            const id = renderProps.match.params.id;
+            const objectModelId = renderProps.match.params.objectModelId;
+            return <ContentDocumentEdit
+              onValueChange={this.props.modifyContentDocument}
+              saveContentDocument={this.props.saveContentDocument}
+              deleteContentDocument={this.props.deleteContentDocument}
+              contentDocument={contentDocuments.get(id) || { ...defaultContentDocument, id, objectModelId }}
+              objectModels={objectModels} />
           }}
         />
       </React.Fragment>
@@ -55,8 +68,4 @@ class ContentDocumentContainer extends React.Component<IContentDocumentContainer
   }
 }
 
-export default connect((state: IAppState) => {
-  return { ...state.contentDocument, ...state.objectModel }
-}, {
-    ...AppActionsCreators.ContentDocument
-  })(ContentDocumentContainer);
+export default ContentDocumentContainer;

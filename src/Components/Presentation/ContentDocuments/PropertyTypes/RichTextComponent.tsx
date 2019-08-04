@@ -13,12 +13,12 @@ import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
 import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
 
 
-import {  IDocumentProperty } from "src/Types";
+import { IDocumentProperty } from "src/Types";
 
-import { DraftBlockType, Editor, EditorState, RichUtils } from 'draft-js';
+import { convertFromRaw, convertToRaw, DraftBlockType, Editor, EditorState, RichUtils } from 'draft-js';
 
 import 'draft-js/dist/Draft.css'
-import StyleButton from '../../HOC/HtmlEditor/StyleButton';
+import StyleButton from 'src/Components/Presentation/HOC/HtmlEditor/StyleButton';
 
 interface IRichTextComponentProps {
   documentProperty: IDocumentProperty;
@@ -97,6 +97,15 @@ class RichTextComponent extends React.Component<IRichTextComponentProps, IRichTe
     editorState: EditorState.createEmpty(),
     expanded: false
   }
+
+  public componentDidMount() {
+    const { documentProperty } = this.props;
+    if (documentProperty.value) {
+      const contentState = convertFromRaw(documentProperty.value);
+      const editorState = EditorState.createWithContent(contentState);
+      this.setState({ editorState });
+    }
+  }
   public handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   };
@@ -104,10 +113,10 @@ class RichTextComponent extends React.Component<IRichTextComponentProps, IRichTe
     const { documentProperty, onPropertyUpdate } = this.props;
     const contentState = editorState.getCurrentContent();
     this.setState({ editorState }, () => {
-      onPropertyUpdate({ ...documentProperty, 'value': contentState.getPlainText() });
+      onPropertyUpdate({ ...documentProperty, 'value': convertToRaw(contentState) });
     });
   };
- 
+
 
   public onChange = (editorState: EditorState) => this.setState({ editorState });
 

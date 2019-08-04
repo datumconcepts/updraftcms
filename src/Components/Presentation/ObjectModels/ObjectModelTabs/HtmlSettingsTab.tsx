@@ -26,6 +26,7 @@ import * as id from "uuid/v4";
 
 import { IObjectModel, IPropertyMap } from "src/Types";
 import styles from "../EditStyles";
+import SingleFileComponent from '../PropertyTypes/SingleFileComponent';
 
 const propertyTypes: any[] = [
   {
@@ -71,7 +72,7 @@ const propertyTypes: any[] = [
   {
     name: "Single File",
     propertyComponent: (props: any, propertyMap: any) => (
-      <ShortTextComponent {...props} propertyMap={propertyMap} />
+      <SingleFileComponent {...props} propertyMap={propertyMap} />
     ),
     propertyType: "file"
   },
