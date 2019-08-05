@@ -2,11 +2,10 @@ import * as React from "react";
 
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
-import IconButton from "@material-ui/core/IconButton";
+import Grid from "@material-ui/core/Grid";
 
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-import { IPropertyMap } from "../../../../Types";
+import { IPropertyMap } from "src/Types";
 
 interface ISingleFileComponentProps {
   propertyMap: IPropertyMap;
@@ -38,18 +37,13 @@ class SingleFileComponent extends React.Component<
 
   public render() {
     return (
-      <Card square={true}>
-        <CardActions>
-          <input type="file" />
-          <IconButton
-            onClick={this.handleExpandClick}
-            aria-expanded={this.state.expanded}
-            aria-label="Show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        </CardActions>
-      </Card>
+      <Grid item={true}>
+        <Card square={true}>
+          <CardActions>
+            <input type="file" />
+           
+          </CardActions>
+        </Card></Grid>
     );
   }
 }

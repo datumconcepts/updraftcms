@@ -55,12 +55,11 @@ class ContentDocumentContainer extends React.Component<IContentDocumentContainer
           render={renderProps => {
             const id = renderProps.match.params.id;
             const objectModelId = renderProps.match.params.objectModelId;
-            return <ContentDocumentEdit
-              onValueChange={this.props.modifyContentDocument}
-              saveContentDocument={this.props.saveContentDocument}
-              deleteContentDocument={this.props.deleteContentDocument}
+            return <ContentDocumentEdit objectModels={objectModels}
               contentDocument={contentDocuments.get(id) || { ...defaultContentDocument, id, objectModelId }}
-              objectModels={objectModels} />
+              deleteContentDocument={this.props.deleteContentDocument}
+              saveContentDocument={this.props.saveContentDocument}
+              onValueChange={this.props.modifyContentDocument} />
           }}
         />
       </React.Fragment>

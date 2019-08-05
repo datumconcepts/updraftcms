@@ -4,9 +4,8 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 
-import { IContentDocument, IDocumentProperty, IObjectModel, IPropertyMap } from "src/Types";
+import { IContentDocument, IObjectModel } from "src/Types";
 
-import { defaultObjectModel } from 'src/Store/State/IObjectModel';
 
 import AppBar from "@material-ui/core/AppBar";
 import Tab from "@material-ui/core/Tab";
@@ -18,27 +17,20 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import SaveIcon from '@material-ui/icons/Save';
 
 
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-
-import Select from "react-select";
-
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 
+
+import HtmlSettingsTab from './ContentDocumentTabs/HtmlSettingsTab';
+
 import styles from "./EditStyles";
 
-import AppContent from "src/Components/Presentation/HOC/AppContent";
-
-import LongTextComponent from "./PropertyTypes/LongTextComponent";
-import OptionSelectComponent from "./PropertyTypes/OptionSelectComponent";
-import RichTextComponent from "./PropertyTypes/RichTextComponent";
-import ShortTextComponent from "./PropertyTypes/ShortTextComponent";
 
 
 interface IRouteParams {
   objectModelId?: string;
+  id: string;
 }
 
 interface IContentDocumentEditProps extends RouteComponentProps<IRouteParams>, WithStyles<typeof styles> {
@@ -49,75 +41,14 @@ interface IContentDocumentEditProps extends RouteComponentProps<IRouteParams>, W
   deleteContentDocument: (id: string) => void;
 }
 
-
-const propertyTypes: any[] = [
-  {
-    name: "Short Text",
-    propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
-      <ShortTextComponent key={key}
-        onPropertyUpdate={onPropertyUpdate}
-        documentProperty={documentProperty}
-        propertyMap={propertyMap}
-      />
-    ),
-    propertyType: "textbox"
-  },
-  {
-    name: "Long Text",
-    propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
-      <LongTextComponent key={key}
-        onPropertyUpdate={onPropertyUpdate}
-        propertyMap={propertyMap}
-      />
-    ),
-    propertyType: "textarea"
-  },
-  {
-    name: "Option Select",
-    propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
-      <OptionSelectComponent key={key}
-        onPropertyUpdate={onPropertyUpdate}
-        propertyMap={propertyMap}
-      />
-    ),
-    propertyType: "select"
-  },
-  {
-    name: "Rich Text",
-    propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
-      <RichTextComponent key={key}
-        documentProperty={documentProperty}
-        onPropertyUpdate={onPropertyUpdate}
-      />
-    ),
-    propertyType: "draftjs"
-  },
-  {
-    name: "Single File",
-    propertyComponent: (key: string, props: any, propertyMap: any) => (
-      <ShortTextComponent key={key} {...props} propertyMap={propertyMap} />
-    ),
-    propertyType: "file"
-  },
-  {
-    name: "Multiple Files",
-    propertyComponent: (key: string, props: any, propertyMap: any) => (
-      <ShortTextComponent key={key} {...props} propertyMap={propertyMap} />
-    ),
-    propertyType: "multifile"
-  }
-];
-
-
-
-interface IContendDocumentEditState {
+interface IContentDocumentEditState {
   activeTab: number;
   speedDialOpen: boolean;
 }
 
-class ContendDocumentEdit extends React.Component<
+class ContentDocumentEdit extends React.Component<
   IContentDocumentEditProps,
-  IContendDocumentEditState
+  IContentDocumentEditState
   > {
 
   public state = {
@@ -125,40 +56,29 @@ class ContendDocumentEdit extends React.Component<
     speedDialOpen: false,
   };
 
+  public componentDidMount() {
+    const { contentDocument: { objectModelId }, objectModels } = this.props;
 
-  public htmlPropertyChangeHandler = (htmlPrperty: IDocumentProperty) => {
-    const { contentDocument, objectModels } = this.props;
-    const objectModel = objectModels.get(contentDocument.objectModelId);
-    if (!objectModel) {
-      return;
-    }
-    this.props.onValueChange({
-      ...contentDocument,
-      htmlProperties: [
-        ...contentDocument.htmlProperties.filter(prop => prop.propertyMapId !== htmlPrperty.propertyMapId),
-        htmlPrperty
-      ].sort((a: IDocumentProperty, b: IDocumentProperty) => {
-        const sortOrderA = (objectModel.htmlProperties.find(prop => prop.id === a.propertyMapId) || { sortOrder: 0 }).sortOrder;
-        const sortOrderB = (objectModel.htmlProperties.find(prop => prop.id === b.propertyMapId) || { sortOrder: 0 }).sortOrder;
-        return sortOrderA - sortOrderB
-      })
-    })
-
-  }
-  public valueChangeHandler = (e: any) => {
-    const { name, value } = e.target;
-    this.props.onValueChange({ ...this.props.contentDocument, [name]: value });
-  };
-  public handleTabChange = (event: React.ChangeEvent, activeTab: number) => {
-    this.setState({ activeTab });
-  };
-  public handleObjectModelChange = ({ value }: { value: string, label: string }) => {
-    const { objectModels } = this.props;
-    const objectModel = objectModels.get(value);
+    const objectModel = objectModels.get(objectModelId);
     if (objectModel) {
       this.loadObjectModel(objectModel);
     }
   }
+  public componentDidUpdate(prevProps: IContentDocumentEditProps) {
+    const { contentDocument: { objectModelId }, objectModels } = this.props;
+    const { contentDocument: { objectModelId: prevObjectModelId } } = prevProps;
+    console.log(prevObjectModelId, objectModelId);
+    if (prevObjectModelId !== objectModelId) {
+      const objectModel = objectModels.get(objectModelId);
+      if (objectModel) {
+        this.loadObjectModel(objectModel);
+      }
+    }
+  }
+  public handleTabChange = (event: React.ChangeEvent, activeTab: number) => {
+    this.setState({ activeTab });
+  };
+
   public saveContentDocument = (e: any) => {
     const { contentDocument, history, match: { params } } = this.props;
     this.props.saveContentDocument(contentDocument);
@@ -185,10 +105,28 @@ class ContendDocumentEdit extends React.Component<
     }));
   };
 
+  public renderTab = () => {
+    const { contentDocument, objectModels, history, match: { params } } = this.props;
+    const { activeTab } = this.state;
+    switch (activeTab) {
+      case 0:
+        return (
+          <HtmlSettingsTab
+            onPropertyUpdate={this.props.onValueChange}
+            contentDocument={contentDocument}
+            objectModels={[...objectModels.values()]}
+            onObjectModelChange={objectModelId => {
+              history.push(`/${objectModelId}/content/edit/${params.id}`)
+            }}
+          />
+        );
+      default: return null
+    }
+  }
+
   public render() {
     const { activeTab } = this.state;
-    const { classes, contentDocument, objectModels } = this.props;
-    const objectModel = objectModels.get(contentDocument.objectModelId) || defaultObjectModel;
+    const { classes } = this.props;
     return (
       <React.Fragment>
         <AppBar position="static" color="default" elevation={1}>
@@ -197,35 +135,7 @@ class ContendDocumentEdit extends React.Component<
             <Tab label="Meta Properties" />
           </Tabs>
         </AppBar>
-        <AppContent>
-          <Grid direction="column" justify="flex-start" container={true} spacing={2}>
-            <Grid item={true}>
-              <TextField
-                onChange={this.valueChangeHandler}
-                fullWidth={true}
-                name="name"
-                value={contentDocument.name}
-                label="Name"
-              />
-            </Grid>
-            <Grid item={true}>
-              <Select fullWidth={true} label="Object Model" value={{ label: objectModel.name, value: objectModel.id }}
-                options={[...objectModels.values()].map(objectModelOption => ({ value: objectModelOption.id, label: objectModelOption.name }))}
-                onChange={this.handleObjectModelChange}
-              />
-            </Grid>
-            {
-              contentDocument.htmlProperties.map((docProp, docPropIndex) => {
-                const propItem = objectModel.htmlProperties.find(prop => prop.id === docProp.propertyMapId);
-                if (propItem) {
-                  return propertyTypes
-                    .find(x => x.propertyType === propItem.propertyType)
-                    .propertyComponent(`doc_prop_html_${docPropIndex}`, this.htmlPropertyChangeHandler, propItem, docProp)
-                }
-              })
-            }
-          </Grid>
-        </AppContent>
+        {this.renderTab()}
         <SpeedDial
           ariaLabel="Object Model Options"
           className={classes.fab}
@@ -268,5 +178,6 @@ class ContendDocumentEdit extends React.Component<
     });
   }
 }
-const routedContendDocumentEdit = withRouter(ContendDocumentEdit);
+
+const routedContendDocumentEdit = withRouter(ContentDocumentEdit);
 export default withStyles(styles, { withTheme: true })(routedContendDocumentEdit);

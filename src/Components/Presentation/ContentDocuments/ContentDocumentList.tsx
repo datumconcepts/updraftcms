@@ -40,7 +40,8 @@ class ContentDocumentList extends React.Component<IContentDocumentListProps> {
       id = guid().replace(/-/g, "");
     }
     history.push(params.objectModelId ? `/${params.objectModelId}/content/edit/${id}` : `/content/edit/${id}`);
-  };
+  }
+  
   public editContentDocument = (contentDocument: IContentDocument) => {
     const { history, match: { params } } = this.props;
     const id = contentDocument.id;
