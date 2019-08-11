@@ -23,6 +23,7 @@ import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 
 
 import HtmlSettingsTab from './ContentDocumentTabs/HtmlSettingsTab';
+import MetaSettingsTab from './ContentDocumentTabs/MetaSettingsTab';
 
 import styles from "./EditStyles";
 
@@ -57,24 +58,31 @@ class ContentDocumentEdit extends React.Component<
   };
 
   public componentDidMount() {
-    const { contentDocument: { objectModelId }, objectModels } = this.props;
-
-    const objectModel = objectModels.get(objectModelId);
-    if (objectModel) {
-      this.loadObjectModel(objectModel);
-    }
+    document.addEventListener('keydown', this.registerShortcuts);
   }
-  public componentDidUpdate(prevProps: IContentDocumentEditProps) {
-    const { contentDocument: { objectModelId }, objectModels } = this.props;
-    const { contentDocument: { objectModelId: prevObjectModelId } } = prevProps;
-    console.log(prevObjectModelId, objectModelId);
-    if (prevObjectModelId !== objectModelId) {
-      const objectModel = objectModels.get(objectModelId);
-      if (objectModel) {
-        this.loadObjectModel(objectModel);
+  public componentWillUnmount() {
+    document.removeEventListener('keydown', this.registerShortcuts);
+  }
+
+  public registerShortcuts = (event: KeyboardEvent) => {
+    if (event.ctrlKey) {
+      switch (event.key) {
+        case 's':
+          event.preventDefault();
+          this.saveContentDocument(event);
+          break;
+        case 'd':
+          event.preventDefault();
+          this.deleteContentDocument(event);
+          break;
+        case 'q':
+          event.preventDefault();
+          this.closeContentDocument(event);
+          break;
       }
     }
   }
+
   public handleTabChange = (event: React.ChangeEvent, activeTab: number) => {
     this.setState({ activeTab });
   };
@@ -85,11 +93,13 @@ class ContentDocumentEdit extends React.Component<
     history.push(params.objectModelId ? `/${params.objectModelId}/content` : `/content`);
   }
   public deleteContentDocument = (e: any) => {
+    // Add event confirmation
     const { contentDocument, history, match: { params } } = this.props;
     this.props.deleteContentDocument(contentDocument.id);
     history.push(params.objectModelId ? `/${params.objectModelId}/content` : `/content`);
   }
   public closeContentDocument = (e: any) => {
+    // Add event confirmation
     const { history, match: { params } } = this.props;
     history.push(params.objectModelId ? `/${params.objectModelId}/content` : `/content`);
   }
@@ -120,6 +130,10 @@ class ContentDocumentEdit extends React.Component<
             }}
           />
         );
+      case 1:
+        return (
+          <MetaSettingsTab onPropertyUpdate={this.props.onValueChange} objectModels={[...objectModels.values()]} contentDocument={contentDocument} />
+        )
       default: return null
     }
   }
@@ -149,34 +163,15 @@ class ContentDocumentEdit extends React.Component<
           open={this.state.speedDialOpen}
           direction="left"
         >
-          <SpeedDialAction icon={<SaveIcon />} tooltipTitle={"Save"} onClick={this.saveContentDocument} />
-          <SpeedDialAction icon={<DeleteIcon />} tooltipTitle={"Delete"} onClick={this.deleteContentDocument} />
-          <SpeedDialAction icon={<CloseIcon />} tooltipTitle={"Close"} onClick={this.closeContentDocument} />
+          <SpeedDialAction icon={<SaveIcon />} tooltipTitle={"Save [ ctrl + s ]"} onClick={this.saveContentDocument} />
+          <SpeedDialAction icon={<DeleteIcon />} tooltipTitle={"Delete [ ctrl + d ]"} onClick={this.deleteContentDocument} />
+          <SpeedDialAction icon={<CloseIcon />} tooltipTitle={"Close [ ctrl + q ]"} onClick={this.closeContentDocument} />
         </SpeedDial>
       </React.Fragment>
     );
   }
 
-  private loadObjectModel = (objectModel: IObjectModel) => {
-    const { contentDocument } = this.props;
-    this.props.onValueChange({
-      ...contentDocument,
-      htmlProperties: [...contentDocument.htmlProperties.filter(prop =>
-        objectModel.htmlProperties.find(template => template.id === prop.propertyMapId)),
-      ...objectModel.htmlProperties.filter(template =>
-        !contentDocument.htmlProperties.find(prop => template.id === prop.propertyMapId)).map(
-          (prop, index) =>
-            ({ propertyMapId: prop.id, value: prop.defaultValue || "" })
-        )],
-      metaProperties: [...contentDocument.metaProperties.filter(prop =>
-        objectModel.metaProperties.find(template => template.id === prop.propertyMapId)),
-      ...objectModel.metaProperties.filter(template =>
-        !contentDocument.metaProperties.find(prop => template.id === prop.propertyMapId)).map(
-          (prop, index) => ({ propertyMapId: prop.id, value: prop.defaultValue || "" })
-        )],
-      objectModelId: objectModel.id
-    });
-  }
+
 }
 
 const routedContendDocumentEdit = withRouter(ContentDocumentEdit);

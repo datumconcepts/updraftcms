@@ -2,12 +2,9 @@ import * as React from "react";
 
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
-import Collapse from "@material-ui/core/Collapse";
-import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
-import TextField from "@material-ui/core/TextField";
 
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import EditIcon from "@material-ui/icons/Edit";
 
 import CodeIcon from "@material-ui/icons/Code";
 import FormatBoldIcon from '@material-ui/icons/FormatBold';
@@ -149,7 +146,6 @@ class RichTextComponent extends React.Component<IRichTextComponentProps, IRichTe
   }
 
   public render() {
-    const { propertyMap } = this.props;
     const { editorState } = this.state;
     return (
       <Card square={true}>
@@ -164,32 +160,10 @@ class RichTextComponent extends React.Component<IRichTextComponentProps, IRichTe
             aria-expanded={this.state.expanded}
             aria-label="Show more"
           >
-            <ExpandMoreIcon />
+            <EditIcon />
           </IconButton>
         </CardActions>
-        <Collapse in={this.state.expanded}>
-          <CardActions>
-            <Grid container={true} spacing={10}>
-              <Grid item={true} xs={true}>
-                <TextField
-                  label="Name"
-                  name="name"
-                  fullWidth={true}
-                  onChange={this.changeValue}
-                  value={propertyMap.name}
-                />
-              </Grid>
-              <Grid item={true} xs={true}>
-                <TextField
-                  label="Id"
-                  fullWidth={true}
-                  disabled={true}
-                  value={propertyMap.id}
-                />
-              </Grid>
-            </Grid>
-          </CardActions>
-        </Collapse>
+
       </Card>);
   }
 }

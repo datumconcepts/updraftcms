@@ -1,9 +1,14 @@
 import * as React from "react";
 
+
+import { withStyles, WithStyles } from '@material-ui/core';
+
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 
-export interface IDisplayCardProps {
+import  styles from './styles';
+
+export interface IDisplayCardProps extends WithStyles<typeof styles> {
   actions?: React.ReactFragment;
   title: string;
   subHeader?: string;
@@ -19,11 +24,13 @@ class DisplayCard extends React.Component<IDisplayCardProps> {
       title,
       subHeader,
       avatar,
-      headerAction
+      headerAction,
+      classes
     } = this.props;
     return (
       <Card square={true}>
-        <CardHeader onClick={this.props.clickAction}
+        <CardHeader className={classes.displayCardHeader}
+          onClick={this.props.clickAction}
           avatar={avatar}
           action={headerAction}
           title={title}
@@ -33,4 +40,4 @@ class DisplayCard extends React.Component<IDisplayCardProps> {
     );
   }
 }
-export default DisplayCard;
+export default withStyles(styles, { withTheme: true })(DisplayCard);

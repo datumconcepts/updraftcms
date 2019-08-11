@@ -25,4 +25,12 @@ export default (theme: Theme) =>
     workspace: {
       flexGrow: 1
     },
+    fileUpload: {
+      padding: theme.spacing(3),
+      backgroundColor: theme.palette.background.default,
+      justifyContent: "center",
+      alignItems: "center",
+      cursor: "pointer",
+      display: "flex",
+    }
   });

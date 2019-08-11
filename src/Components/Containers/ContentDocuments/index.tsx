@@ -9,6 +9,7 @@ import ContentDocumentList from "src/Components/Presentation/ContentDocuments/Co
 
 import { defaultContentDocument } from 'src/Store/State/IContentDocument';
 import { IObjectModelState } from 'src/Store/State/IObjectModel';
+import { IContentDocument } from 'src/Types';
 
 type IContentDocumentContainerProps =
   IContentDocumentState &
@@ -46,7 +47,7 @@ class ContentDocumentContainer extends React.Component<IContentDocumentContainer
               onValueChange={this.props.modifyContentDocument}
               saveContentDocument={this.props.saveContentDocument}
               deleteContentDocument={this.props.deleteContentDocument}
-              contentDocument={contentDocuments.get(id) || { ...defaultContentDocument, id }}
+              contentDocument={this.loadContentDocument(id)}
               objectModels={objectModels} />
           }}
         />
@@ -56,7 +57,7 @@ class ContentDocumentContainer extends React.Component<IContentDocumentContainer
             const id = renderProps.match.params.id;
             const objectModelId = renderProps.match.params.objectModelId;
             return <ContentDocumentEdit objectModels={objectModels}
-              contentDocument={contentDocuments.get(id) || { ...defaultContentDocument, id, objectModelId }}
+              contentDocument={this.loadContentDocument(id, objectModelId)}
               deleteContentDocument={this.props.deleteContentDocument}
               saveContentDocument={this.props.saveContentDocument}
               onValueChange={this.props.modifyContentDocument} />
@@ -64,6 +65,33 @@ class ContentDocumentContainer extends React.Component<IContentDocumentContainer
         />
       </React.Fragment>
     );
+  }
+  private loadContentDocument = (id: string, objectModelId?: string): IContentDocument => {
+    const { contentDocuments, objectModels } = this.props;
+
+    const contentDocument = contentDocuments.get(id) || { ...defaultContentDocument, id };
+    if (!objectModelId) { return contentDocument; }
+
+    const objectModel = objectModels.get(objectModelId)
+    if (!objectModel) { return contentDocument; }
+
+    return {
+      ...contentDocument,
+      htmlProperties: [...contentDocument.htmlProperties.filter(prop =>
+        objectModel.htmlProperties.find(template => template.id === prop.propertyMapId)),
+      ...objectModel.htmlProperties.filter(template =>
+        !contentDocument.htmlProperties.find(prop => template.id === prop.propertyMapId)).map(
+          (prop, index) =>
+            ({ propertyMapId: prop.id, value: prop.defaultValue || "" })
+        )],
+      metaProperties: [...contentDocument.metaProperties.filter(prop =>
+        objectModel.metaProperties.find(template => template.id === prop.propertyMapId)),
+      ...objectModel.metaProperties.filter(template =>
+        !contentDocument.metaProperties.find(prop => template.id === prop.propertyMapId)).map(
+          (prop, index) => ({ propertyMapId: prop.id, value: prop.defaultValue || "" })
+        )],
+      objectModelId: objectModel.id
+    };
   }
 }
 

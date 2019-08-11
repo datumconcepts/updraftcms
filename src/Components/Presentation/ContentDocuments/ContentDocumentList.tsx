@@ -41,11 +41,10 @@ class ContentDocumentList extends React.Component<IContentDocumentListProps> {
     }
     history.push(params.objectModelId ? `/${params.objectModelId}/content/edit/${id}` : `/content/edit/${id}`);
   }
-  
+
   public editContentDocument = (contentDocument: IContentDocument) => {
-    const { history, match: { params } } = this.props;
-    const id = contentDocument.id;
-    history.push(params.objectModelId ? `/${params.objectModelId}/content/edit/${id}` : `/content/edit/${id}`);
+    const { id, objectModelId } = contentDocument;
+    this.props.history.push(objectModelId ? `/${objectModelId}/content/edit/${id}` : `/content/edit/${id}`);
   }
 
   public render() {
@@ -65,7 +64,7 @@ class ContentDocumentList extends React.Component<IContentDocumentListProps> {
                   .concat(contentDocuments)
                   .map((contentDocument, contentDocumentIndex) => (
                     <DisplayCard key={`content_document_${contentDocumentIndex}`}
-                      title={"Content Document"}
+                      title={contentDocument.name}
                       subHeader={contentDocument.id}
                       clickAction={() => this.editContentDocument(contentDocument)}
                       avatar={

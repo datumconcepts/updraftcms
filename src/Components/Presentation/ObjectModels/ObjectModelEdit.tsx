@@ -50,6 +50,32 @@ class ObjectModelEdit extends React.Component<
     speedDialOpen: false
   };
 
+  public componentDidMount() {
+    document.addEventListener('keydown', this.registerShortcuts);
+  }
+  public componentWillUnmount() {
+    document.removeEventListener('keydown', this.registerShortcuts);
+  }
+
+  public registerShortcuts = (event: KeyboardEvent) => {
+    if (event.ctrlKey) {
+      switch (event.key) {
+        case 's':
+          event.preventDefault();
+          this.saveObjectModel(event);
+          break;
+        case 'd':
+          event.preventDefault();
+          this.deleteObjectModel(event);
+          break;
+        case 'q':
+          event.preventDefault();
+          this.closeObjectModel(event);
+          break;
+      }
+    }
+  }
+
   public handleTabChange = (event: React.ChangeEvent, activeTab: number) => {
     this.setState({ activeTab });
   };
@@ -59,9 +85,15 @@ class ObjectModelEdit extends React.Component<
     this.props.saveObjectModel(objectModel);
     history.push(`/object-models`);
   }
-  public deleteObjectModel = (e:any)=>{
+  public deleteObjectModel = (e: any) => {
+    // Add event confirmation
     const { objectModel, history } = this.props;
     this.props.deleteObjectModel(objectModel.id);
+    history.push(`/object-models`);
+  }
+  public closeObjectModel = (e: any) => {
+    // Add event confirmation
+    const { history } = this.props;
     history.push(`/object-models`);
   }
 
@@ -134,8 +166,9 @@ class ObjectModelEdit extends React.Component<
           open={this.state.speedDialOpen}
           direction="left"
         >
-          <SpeedDialAction icon={<SaveIcon />}  tooltipTitle={"Save"} onClick={this.saveObjectModel} />
-          <SpeedDialAction icon={<DeleteIcon />} tooltipTitle={"Delete"} onClick={this.deleteObjectModel} />
+          <SpeedDialAction icon={<SaveIcon />} tooltipTitle={"Save [ ctrl + s ]"} onClick={this.saveObjectModel} />
+          <SpeedDialAction icon={<DeleteIcon />} tooltipTitle={"Delete [ ctrl + d ]"} onClick={this.deleteObjectModel} />
+          <SpeedDialAction icon={<CloseIcon />} tooltipTitle={"Close [ ctrl + q ]"} onClick={this.closeObjectModel} />
         </SpeedDial>
 
       </React.Fragment>

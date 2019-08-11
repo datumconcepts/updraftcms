@@ -26,7 +26,7 @@ import * as id from "uuid/v4";
 
 import { IObjectModel, IPropertyMap } from "src/Types";
 import styles from "../EditStyles";
-import SingleFileComponent from '../PropertyTypes/SingleFileComponent';
+import FileUploadComponent from '../PropertyTypes/FileUploadComponent';
 
 const propertyTypes: any[] = [
   {
@@ -70,18 +70,11 @@ const propertyTypes: any[] = [
     propertyType: "draftjs"
   },
   {
-    name: "Single File",
+    name: "File Upload",
     propertyComponent: (props: any, propertyMap: any) => (
-      <SingleFileComponent {...props} propertyMap={propertyMap} />
+      <FileUploadComponent {...props} propertyMap={propertyMap} />
     ),
     propertyType: "file"
-  },
-  {
-    name: "Multiple Files",
-    propertyComponent: (props: any, propertyMap: any) => (
-      <ShortTextComponent {...props} propertyMap={propertyMap} />
-    ),
-    propertyType: "multifile"
   }
 ];
 

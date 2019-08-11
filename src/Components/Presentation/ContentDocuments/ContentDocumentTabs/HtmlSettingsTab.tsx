@@ -70,6 +70,7 @@ const propertyTypes: any[] = [
         propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
             <SingleFileComponent key={key}
                 onPropertyUpdate={onPropertyUpdate}
+                documentProperty={documentProperty}
                 propertyMap={propertyMap}
             />
         ),
