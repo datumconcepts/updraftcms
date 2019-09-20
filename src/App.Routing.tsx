@@ -7,6 +7,7 @@ import { IAppState, IContentDocumentState,   IObjectModelState } from 'src/Store
 import { AppActionsCreators } from 'src/Store/ActionCreators';
 
 import ContentDocumentIndexContainer from './Components/Containers/ContentDocuments';
+import MediaObjectIndexContainer from './Components/Containers/MediaObjects';
 import ObjectModelIndexContainer from "./Components/Containers/ObjectModels";
 
 type IAppRoutingProps =
@@ -41,7 +42,12 @@ class AppRouting extends React.Component<IAppRoutingProps, {}> {
           render={renderProps => (
             <ContentDocumentIndexContainer  {...renderProps} {...this.props} />
           )}
-        />
+        /> <Route
+        path="/media-library"
+        render={renderProps => (
+          <MediaObjectIndexContainer {...renderProps} {...this.props} />
+        )}
+      />
       </>
     );
   }

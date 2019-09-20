@@ -55,7 +55,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState, {}> {
           <IconButton aria-label="Content" color="primary" component={ObjectModelLink} to="/content">
             <LayersIcon />
           </IconButton>
-          <IconButton aria-label="Media" color="primary" component={ObjectModelLink} to="/media">
+          <IconButton aria-label="Media Library" color="primary" component={ObjectModelLink} to="/media-library">
             <MediaIcon />
           </IconButton>
         </Drawer>

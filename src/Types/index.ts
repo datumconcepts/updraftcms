@@ -23,3 +23,15 @@ export interface IContentDocument {
   htmlProperties: IDocumentProperty[];
   metaProperties: IDocumentProperty[];
 }
+
+export interface IMediaObject {
+  id: string;
+  objectType: IMediaObjectType;
+  parentId?: string;
+  name: string;
+  path: string;
+}
+export enum IMediaObjectType {
+  DIRECTORY = 'directory',
+  FILE = 'file'
+}
