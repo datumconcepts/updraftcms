@@ -19,10 +19,12 @@ interface IEditContentDocumentsAction extends Action {
 interface ISaveContentDocumentsAction extends Action {
     type: 'SAVE_CONTENT_DOCUMENT';
     contentDocuments: Map<string, IContentDocument>;
+    savedContentDocument: IContentDocument
 }
 interface IDeleteContentDocumentsAction extends Action {
     type: 'DELETE_CONTENT_DOCUMENT';
     contentDocuments: Map<string, IContentDocument>;
+    deletedContentDocument: IContentDocument
 }
 
 export type KnownContentDocumentActions = IEditContentDocumentsAction | IDeleteContentDocumentsAction | IReceiveContentDocumentsAction | IRequestContentDocumentsAction | ISaveContentDocumentsAction;
@@ -30,8 +32,11 @@ export type KnownContentDocumentActions = IEditContentDocumentsAction | IDeleteC
 export const ContentDocumentActionCreators = {
     deleteContentDocument: (id: string): AppResult<void> => (dispatch: AppDispatch, getState: () => IAppState) => {
         const { contentDocuments } = getState().contentDocument;
-        contentDocuments.delete(id);
-        dispatch({ type: 'DELETE_CONTENT_DOCUMENT', contentDocuments: new Map([...contentDocuments]) });
+        const deletedContentDocument = contentDocuments.get(id);
+        if (deletedContentDocument) {
+            contentDocuments.delete(id);
+            dispatch({ type: 'DELETE_CONTENT_DOCUMENT', deletedContentDocument, contentDocuments: new Map([...contentDocuments]) });
+        }
     },
     modifyContentDocument: (contentDocument: IContentDocument): AppResult<void> =>
         (dispatch: AppDispatch, getState: () => IAppState) => {
@@ -45,6 +50,6 @@ export const ContentDocumentActionCreators = {
     saveContentDocument: (contentDocument: IContentDocument): AppResult<void> =>
         (dispatch: AppDispatch, getState: () => IAppState) => {
             const { contentDocuments } = getState().contentDocument;
-            dispatch({ type: 'SAVE_CONTENT_DOCUMENT', contentDocuments: new Map([...contentDocuments.set(contentDocument.id, contentDocument)]) });
+            dispatch({ type: 'SAVE_CONTENT_DOCUMENT', savedContentDocument: contentDocument, contentDocuments: new Map([...contentDocuments.set(contentDocument.id, contentDocument)]) });
         }
 }

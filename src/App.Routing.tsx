@@ -6,9 +6,9 @@ import { IAppState, IContentDocumentState,   IObjectModelState } from 'src/Store
 
 import { AppActionsCreators } from 'src/Store/ActionCreators';
 
-import ContentDocumentIndexContainer from './Components/Containers/ContentDocuments';
-import MediaObjectIndexContainer from './Components/Containers/MediaObjects';
-import ObjectModelIndexContainer from "./Components/Containers/ObjectModels";
+import ContentDocumentIndexContainer from 'src/Containers/ContentDocuments';
+import MediaObjectIndexContainer from 'src/Containers/MediaObjects';
+import ObjectModelIndexContainer from "src/Containers/ObjectModels";
 
 type IAppRoutingProps =
   IObjectModelState &

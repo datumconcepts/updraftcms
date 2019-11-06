@@ -19,10 +19,12 @@ interface IEditObjectModelsAction extends Action {
 interface ISaveObjectModelsAction extends Action {
     type: 'SAVE_OBJECT_MODEL';
     objectModels: Map<string, IObjectModel>;
+    savedObjectModel: IObjectModel;
 }
 interface IDeleteObjectModelsAction extends Action {
     type: 'DELETE_OBJECT_MODEL';
     objectModels: Map<string, IObjectModel>;
+    deletedObjectModel: IObjectModel;
 }
 
 export type KnownObjectModelActions = IEditObjectModelsAction | IDeleteObjectModelsAction | IReceiveObjectModelsAction | IRequestObjectModelsAction | ISaveObjectModelsAction;
@@ -30,8 +32,11 @@ export type KnownObjectModelActions = IEditObjectModelsAction | IDeleteObjectMod
 export const ObjectModelActionCreators = {
     deleteObjectModel: (id: string): AppResult<void> => (dispatch: AppDispatch, getState: () => IAppState) => {
         const { objectModels } = getState().objectModel;
-        objectModels.delete(id);
-        dispatch({ type: 'DELETE_OBJECT_MODEL', objectModels: new Map([...objectModels]) });
+        const deletedObjectModel = objectModels.get(id);
+        if (deletedObjectModel) {
+            objectModels.delete(id);
+            dispatch({ type: 'DELETE_OBJECT_MODEL', deletedObjectModel, objectModels: new Map([...objectModels]) });
+        }
     },
     modifyObjectModel: (objectModel: IObjectModel): AppResult<void> =>
         (dispatch: AppDispatch, getState: () => IAppState) => {
@@ -45,6 +50,6 @@ export const ObjectModelActionCreators = {
     saveObjectModel: (objectModel: IObjectModel): AppResult<void> =>
         (dispatch: AppDispatch, getState: () => IAppState) => {
             const { objectModels } = getState().objectModel;
-            dispatch({ type: 'SAVE_OBJECT_MODEL', objectModels: new Map([...objectModels.set(objectModel.id, objectModel)]) });
+            dispatch({ type: 'SAVE_OBJECT_MODEL', savedObjectModel: objectModel, objectModels: new Map([...objectModels.set(objectModel.id, objectModel)]) });
         }
 }
