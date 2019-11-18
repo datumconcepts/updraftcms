@@ -24,8 +24,12 @@ interface IDeleteMediaObjectsAction extends Action {
     type: 'DELETE_MEDIA_OBJECT';
     mediaObjects: Map<string, IMediaObject>;
 }
+interface ISelectMediaObject extends Action {
+    type: 'SELECT_MEDIA_OBJECT';
+    selectedMediaObjectId: string;
+}
 
-export type KnownMediaObjectActions = IEditMediaObjectsAction | IDeleteMediaObjectsAction | IReceiveMediaObjectsAction | IRequestMediaObjectsAction | ISaveMediaObjectsAction;
+export type KnownMediaObjectActions = IEditMediaObjectsAction | IDeleteMediaObjectsAction | IReceiveMediaObjectsAction | IRequestMediaObjectsAction | ISaveMediaObjectsAction | ISelectMediaObject;
 
 export const MediaObjectActionCreators = {
     deletemediaObject: (id: string): AppResult<void> => (dispatch: AppDispatch, getState: () => IAppState) => {
@@ -46,5 +50,7 @@ export const MediaObjectActionCreators = {
         (dispatch: AppDispatch, getState: () => IAppState) => {
             const { mediaObjects } = getState().mediaObject;
             dispatch({ type: 'SAVE_MEDIA_OBJECT', mediaObjects: new Map([...mediaObjects.set(mediaObject.id, mediaObject)]) });
-        }
+        },
+
+    setSelectedMediaObject: (id: string) => ({ type: 'SELECT_MEDIA_OBJECT', selectedMediaObjectId: id })
 }

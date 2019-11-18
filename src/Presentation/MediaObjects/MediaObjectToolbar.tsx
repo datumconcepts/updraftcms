@@ -12,6 +12,8 @@ import CreateFileIcon from '@material-ui/icons/NoteAdd';
 import styles from "./ToobarStyles";
 
 interface IMediaObjectToolbarProps extends RouteComponentProps, WithStyles<typeof styles> {
+    selectedMediaObjectId:string;
+
     // onFileUploaded: (file: File) => void;
 }
 class MediaObjectToolbar extends React.Component<IMediaObjectToolbarProps> {
@@ -30,6 +32,9 @@ class MediaObjectToolbar extends React.Component<IMediaObjectToolbarProps> {
         const { classes } = this.props;
         return (<>
             <Toolbar variant="dense" className={classes.root} >
+                {
+                    this.props.selectedMediaObjectId
+                }
                 <ButtonGroup>
                     <Button >
                         <CreateFolderIcon />

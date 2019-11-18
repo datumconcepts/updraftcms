@@ -15,14 +15,14 @@ type IMediaObjectContainerProps = IMediaObjectState & typeof AppActionsCreators.
 class MediaObjectContainer extends React.Component<IMediaObjectContainerProps, {}> {
 
   public render() {
-    const { mediaObjects, selectedMediaObjectId } = this.props;
+    const { mediaObjects, selectedMediaObjectId, setSelectedMediaObject } = this.props;
     return (
       <React.Fragment>
         <Route
           path="/media-library"
           exact={true}
           render={renderProps => {
-            return <MediaObjectList mediaObjects={[...mediaObjects.values()]} selectedMediaObjectId={selectedMediaObjectId} />
+            return <MediaObjectList mediaObjects={[...mediaObjects.values()]} selectedMediaObjectId={selectedMediaObjectId} setSelectedMediaObject={setSelectedMediaObject} />
           }}
         />
       </React.Fragment>

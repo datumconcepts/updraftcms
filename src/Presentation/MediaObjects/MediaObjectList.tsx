@@ -21,19 +21,20 @@ import { Grid } from '@material-ui/core';
 interface IMediaObjectListProps extends RouteComponentProps, WithStyles<typeof styles> {
     mediaObjects: IMediaObject[];
     selectedMediaObjectId: string;
+    setSelectedMediaObject(id: string): void;
 }
 
 class MediaObjectList extends React.Component<IMediaObjectListProps> {
 
     public render() {
-        const { mediaObjects, selectedMediaObjectId } = this.props;
+        const { mediaObjects, selectedMediaObjectId, setSelectedMediaObject } = this.props;
         return (
             <Grid container={true} direction="row">
                 <Grid item={true}>
-                    <MediaObjectMenu mediaObjects={mediaObjects} selectedMediaObjectId={selectedMediaObjectId} /></Grid >
+                    <MediaObjectMenu mediaObjects={mediaObjects} selectedMediaObjectId={selectedMediaObjectId} setSelectedMediaObject={setSelectedMediaObject} /></Grid >
                 <Grid item={true} xs={true}>
                     <Grid container={true} direction="column">
-                        <MediaObjectToolbar />
+                        <MediaObjectToolbar  selectedMediaObjectId={selectedMediaObjectId}/>
                         <AppContent>
                             {mediaObjects.length === 0 ? (
                                 <EmptyListDisplay

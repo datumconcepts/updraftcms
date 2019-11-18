@@ -15,6 +15,7 @@ export const MediaObjectReducer: Reducer<IMediaObjectState, Action> = (state, in
         case "EDIT_MEDIA_OBJECT": return { ...state, mediaObjects: action.mediaObjects };
         case "SAVE_MEDIA_OBJECT": return { ...state, mediaObjects: action.mediaObjects };
         case "DELETE_MEDIA_OBJECT": return { ...state, mediaObjects: action.mediaObjects };
+        case "SELECT_MEDIA_OBJECT": return { ...state, selectedMediaObjectId: action.selectedMediaObjectId };
         default: return state;
     }
 }
