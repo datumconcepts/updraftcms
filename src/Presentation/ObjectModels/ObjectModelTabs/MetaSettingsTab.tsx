@@ -12,7 +12,7 @@ import ShortTextComponent from "../PropertyTypes/ShortTextComponent";
 import id from "uuid/v4";
 
 import { IObjectModel, IPropertyMap } from "Types";
-import { Grid, Segment, List, Divider } from 'semantic-ui-react';
+import { Grid, Segment, List, Divider, Form } from 'semantic-ui-react';
 
 const propertyTypes: any[] = [
   {
@@ -107,49 +107,48 @@ class MetaSettingsTab extends React.Component<
       objectModel: { metaProperties }
     } = this.props;
     return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
-        <Grid container={true} spacing={0} className="workspace">
-          <Grid item={true} xs={true} container={true}>
-            <AppContent>
-              <Droppable droppableId="object_model_properties">
-                {(dropProvider, dropSnapshot) => (
-                  <div
-                    ref={dropProvider.innerRef}
-                    className="property-editor"
-                  >
-                    {metaProperties.map((propItem, propKey) => (
-                      <Draggable
-                        key={propItem.id}
-                        draggableId={propItem.id}
-                        index={propKey}
-                      >
-                        {(dragProvider, drapdropSnapshot) => (
-                          <div
-                            ref={dragProvider.innerRef}
-                            {...dragProvider.draggableProps}
-                            {...dragProvider.dragHandleProps}
-                          >
-                            {propertyTypes
-                              .find(
-                                x => x.propertyType === propItem.propertyType
-                              )
-                              .propertyComponent(
-                                this.valueChangeHandler,
-                                propItem
-                              )}
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {dropProvider.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </AppContent>
-          </Grid>
-          <Grid item={true} xs={4}>
-            <Segment square={true} className="property-list">
-              <List >
+      <AppContent>
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          <Grid style={{ display: 'flex', flex: 1 }}>
+            <Grid.Column stretched={true} width={13}>
+              <Segment as={Form} attached={true}>
+                <Droppable droppableId="object_model_properties">
+                  {(dropProvider, dropSnapshot) => (
+                    <div ref={dropProvider.innerRef}
+                      className={"property-editor"}
+                    >
+                      {metaProperties.map((propItem, propKey) => (
+                        <Draggable
+                          key={propItem.id}
+                          draggableId={propItem.id}
+                          index={propKey}
+                        >
+                          {(dragProvider, drapdropSnapshot) => (
+                            <div
+                              ref={dragProvider.innerRef}
+                              {...dragProvider.draggableProps}
+                              {...dragProvider.dragHandleProps}
+                            >
+                              {propertyTypes
+                                .find(
+                                  x => x.propertyType === propItem.propertyType
+                                )
+                                .propertyComponent(
+                                  this.valueChangeHandler,
+                                  propItem
+                                )}
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {dropProvider.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </Segment>
+            </Grid.Column>
+            <Grid.Column stretched={true} width={3}><Segment attached={true}>
+              <List relaxed={true} celled={true}>
                 <Droppable
                   isDropDisabled={true}
                   droppableId="available_html_property_types"
@@ -180,11 +179,11 @@ class MetaSettingsTab extends React.Component<
                     </div>
                   )}
                 </Droppable>
-              </List>
-            </Segment>
+              </List></Segment>
+            </Grid.Column>
           </Grid>
-        </Grid>
-      </DragDropContext>
+        </DragDropContext>
+      </AppContent>
     );
   }
 }

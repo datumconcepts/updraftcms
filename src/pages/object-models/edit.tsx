@@ -29,7 +29,7 @@ const ObjectModelsEditPage: React.FC = () => {
 
     const saveObjectModelHandler = React.useCallback((objectModel: IObjectModel) => dispatch({
         type: SAVE_OBJECT_MODEL,
-        objectModels: [...objectModels.set(objectModel.id, objectModel)],
+        objectModels: objectModels.set(objectModel.id, objectModel),
         objectModel
     }), [dispatch, objectModels]);
 
@@ -38,7 +38,7 @@ const ObjectModelsEditPage: React.FC = () => {
         objectModels.delete(objectModelId);
         dispatch({ type: DELETE_MEDIA_OBJECT, objectModels, deletedObjectModel });
     }, [dispatch, objectModels]);
-
+    console.log(objectModels)
     return (<Layout>
         <ObjectModelEdit
             onValueChange={valueChangeHandler}

@@ -35,43 +35,17 @@ class OptionSelectComponent extends React.Component<
 
   public render() {
     const { propertyMap } = this.props;
-    return (
-      <Card square={true}>
-        <Card.Content extra={true}>
-          <Select fullWidth={true} label={propertyMap.name} options={[]} />
+    return (<Card fluid={true}>
+      <Card.Content>
+        <Card.Header onClick={this.handleExpandClick}>
+          {propertyMap.name}
+        </Card.Header>
+      </Card.Content>
+      <Card.Content>
 
-          <Button icon={true}
-            onClick={this.handleExpandClick}
-            aria-expanded={this.state.expanded}
-            aria-label="Show more"
-          >
-            <Icon name="expand" />
-          </Button>
-        </Card.Content>
-        <Accordion in={this.state.expanded}>
-          <Accordion.Content>
-            <Grid container={true} spacing={10}>
-              <Grid item={true} xs={true}>
-                <Form.Field
-                  label="Name"
-                  name="name"
-                  fullWidth={true}
-                  onChange={this.changeValue}
-                  value={propertyMap.name}
-                />
-              </Grid>
-              <Grid item={true} xs={true}>
-                <Form.Field
-                  label="Id"
-                  fullWidth={true}
-                  disabled={true}
-                  value={propertyMap.id}
-                />
-              </Grid>
-            </Grid>
-          </Accordion.Content>
-        </Accordion>
-      </Card>
+        <Select fluid={true} label={propertyMap.name} options={[]} />
+      </Card.Content>
+    </Card>
     );
   }
 }

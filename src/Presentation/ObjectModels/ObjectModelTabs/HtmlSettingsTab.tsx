@@ -17,7 +17,7 @@ import ShortTextComponent from "../PropertyTypes/ShortTextComponent";
 import id from "uuid/v4";
 
 import { IObjectModel, IPropertyMap } from "Types";
-import { Grid, Segment, List, Divider, Sidebar, Menu } from 'semantic-ui-react';
+import { Grid, Segment, List, Divider, Form, } from 'semantic-ui-react';
 
 const propertyTypes: any[] = [
   {
@@ -135,45 +135,46 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
     return (
       <AppContent>
         <DragDropContext onDragEnd={this.onDragEnd}>
-          <Sidebar.Pushable>
-            <Sidebar.Pusher as={Segment} attached={true}>
-              <Droppable droppableId="object_model_properties">
-                {(dropProvider, dropSnapshot) => (
-                  <div
-                    ref={dropProvider.innerRef}
-                    className={"property-editor"}
-                  >
-                    {htmlProperties.map((propItem, propKey) => (
-                      <Draggable
-                        key={propItem.id}
-                        draggableId={propItem.id}
-                        index={propKey}
-                      >
-                        {(dragProvider, drapdropSnapshot) => (
-                          <div
-                            ref={dragProvider.innerRef}
-                            {...dragProvider.draggableProps}
-                            {...dragProvider.dragHandleProps}
-                          >
-                            {propertyTypes
-                              .find(
-                                x => x.propertyType === propItem.propertyType
-                              )
-                              .propertyComponent(
-                                this.valueChangeHandler,
-                                propItem
-                              )}
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {dropProvider.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </Sidebar.Pusher>
-            <Sidebar as={Menu} position="right" visible={true}>
-              <List>
+          <Grid style={{ display: 'flex', flex: 1 }}>
+            <Grid.Column stretched={true} width={13}>
+              <Segment as={Form} attached={true}>
+                <Droppable droppableId="object_model_properties">
+                  {(dropProvider, dropSnapshot) => (
+                    <div ref={dropProvider.innerRef}
+                      className={"property-editor"}
+                    >
+                      {htmlProperties.map((propItem, propKey) => (
+                        <Draggable
+                          key={propItem.id}
+                          draggableId={propItem.id}
+                          index={propKey}
+                        >
+                          {(dragProvider, drapdropSnapshot) => (
+                            <div
+                              ref={dragProvider.innerRef}
+                              {...dragProvider.draggableProps}
+                              {...dragProvider.dragHandleProps}
+                            >
+                              {propertyTypes
+                                .find(
+                                  x => x.propertyType === propItem.propertyType
+                                )
+                                .propertyComponent(
+                                  this.valueChangeHandler,
+                                  propItem
+                                )}
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {dropProvider.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </Segment>
+            </Grid.Column>
+            <Grid.Column stretched={true} width={3}><Segment attached={true}>
+              <List relaxed={true} celled={true}>
                 <Droppable
                   isDropDisabled={true}
                   droppableId="available_html_property_types"
@@ -204,9 +205,9 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
                     </div>
                   )}
                 </Droppable>
-              </List>
-            </Sidebar>
-          </Sidebar.Pushable>
+              </List></Segment>
+            </Grid.Column>
+          </Grid>
         </DragDropContext>
       </AppContent>
     );
