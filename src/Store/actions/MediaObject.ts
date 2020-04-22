@@ -1,8 +1,4 @@
 import { Action } from 'redux';
-
-import { IAppState } from 'Store/State';
-import { AppDispatch } from 'Store/StoreTypes';
-
 import { IMediaObject } from 'Types';
 
 

@@ -1,7 +1,7 @@
 
 import { AnyAction, Dispatch } from 'redux';
 
-import { KnownAppActions } from 'Store/ActionCreators';
+import { KnownAppActions } from 'Store/actions';
 import { AppMiddlewareApi } from 'Store/StoreTypes';
 import { IContentDocument, IObjectModel } from 'Types';
 

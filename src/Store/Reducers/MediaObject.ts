@@ -1,6 +1,6 @@
 import { Action, Reducer } from 'redux';
 
-import { KnownMediaObjectActions } from '../ActionCreators/MediaObject';
+import { KnownMediaObjectActions } from '../actions/MediaObject';
 import { IMediaObjectState, unloadedMediaObjectState } from '../State/IMediaObject';
 
 

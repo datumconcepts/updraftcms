@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 ;
 import ObjectModelsListPage from "pages/object-models";
 import ObjectModelsEditPage from "pages/object-models/edit";
@@ -19,6 +19,7 @@ const AppRouting: React.FC = () => {
         <Route path="/:objectmodelId?/content" exact={true} component={ContentDocumentsListPage} />
         <Route path="/:objectmodelId?/content/:id/edit" component={ContentDocumentsEditPage} />
         <Route path="/media-library" component={MediaObjectsPage} />
+        <Redirect path="*" to="/object-models" />
       </Switch>
     </Router>
   );

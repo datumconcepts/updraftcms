@@ -5,24 +5,33 @@ import { AppDispatch } from 'Store/StoreTypes';
 
 import { IObjectModel } from 'Types';
 
+export const REQUEST_OBJECT_MODELS = 'REQUEST_OBJECT_MODELS';
+export const RECEIVE_OBJECT_MODELS = 'RECEIVE_OBJECT_MODELS';
+export const EDIT_OBJECT_MODEL = 'EDIT_OBJECT_MODEL';
+export const SAVE_OBJECT_MODEL = 'SAVE_OBJECT_MODEL';
+export const DELETE_OBJECT_MODEL = 'DELETE_OBJECT_MODEL';
+
+
+
+
 interface IRequestObjectModelsAction extends Action {
-    type: 'REQUEST_OBJECT_MODELS';
+    type: typeof REQUEST_OBJECT_MODELS;
 }
 interface IReceiveObjectModelsAction extends Action {
-    type: 'RECEIVE_OBJECT_MODELS';
+    type: typeof RECEIVE_OBJECT_MODELS;
     objectModels: Map<string, IObjectModel>;
 }
 interface IEditObjectModelsAction extends Action {
-    type: 'EDIT_OBJECT_MODEL';
+    type: typeof EDIT_OBJECT_MODEL;
     objectModels: Map<string, IObjectModel>;
 }
 interface ISaveObjectModelsAction extends Action {
-    type: 'SAVE_OBJECT_MODEL';
+    type: typeof SAVE_OBJECT_MODEL;
     objectModels: Map<string, IObjectModel>;
     savedObjectModel: IObjectModel;
 }
 interface IDeleteObjectModelsAction extends Action {
-    type: 'DELETE_OBJECT_MODEL';
+    type: typeof DELETE_OBJECT_MODEL;
     objectModels: Map<string, IObjectModel>;
     deletedObjectModel: IObjectModel;
 }

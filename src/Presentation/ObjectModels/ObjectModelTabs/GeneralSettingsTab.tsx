@@ -5,7 +5,7 @@ import * as React from "react";
 import AppContent from "Presentation/HOC/AppContent";
 
 import { IObjectModel } from "Types";
-import { Grid, Form } from 'semantic-ui-react';
+import {  Form } from 'semantic-ui-react';
 
 
 

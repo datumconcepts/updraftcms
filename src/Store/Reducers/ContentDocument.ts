@@ -1,6 +1,6 @@
 import { Action, Reducer } from 'redux';
 
-import { KnownContentDocumentActions } from 'Store/ActionCreators/ContentDocument';
+import { KnownContentDocumentActions } from 'Store/actions/ContentDocument';
 import { IContentDocumentState, unloadedContentDocumentState } from 'Store/State/IContentDocument';
 
 

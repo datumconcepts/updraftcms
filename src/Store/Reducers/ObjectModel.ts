@@ -1,6 +1,6 @@
 import { Action, Reducer } from 'redux';
 
-import { KnownObjectModelActions } from '../ActionCreators/ObjectModel';
+import { KnownObjectModelActions } from '../actions/ObjectModel';
 import { IObjectModelState, unloadedObjectModelState } from '../State/IObjectModel';
 
 

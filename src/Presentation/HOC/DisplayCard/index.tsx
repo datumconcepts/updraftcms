@@ -22,7 +22,7 @@ class DisplayCard extends React.Component<IDisplayCardProps> {
       headerAction,
     } = this.props;
     return (
-      <Card square={true}>
+      <Card>
         <Card.Header className={'display-card-header'}
           onClick={this.props.clickAction}
           avatar={avatar}
