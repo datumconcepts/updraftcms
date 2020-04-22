@@ -1,8 +1,7 @@
 
-import { createStyles, Theme } from "@material-ui/core/styles";
 
-export default (theme: Theme) =>
-    createStyles({
+export default (theme: any) =>
+    ({
 
         displayCardHeader: {
             cursor: 'pointer'

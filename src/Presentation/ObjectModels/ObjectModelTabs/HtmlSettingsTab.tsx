@@ -1,21 +1,12 @@
 import * as React from "react";
 
-import { withStyles, WithStyles } from "@material-ui/core/styles";
 
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
-import Avatar from "@material-ui/core/Avatar";
-import Divider from "@material-ui/core/Divider";
-import Grid from "@material-ui/core/Grid";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from "@material-ui/core/ListItemText";
-import Paper from "@material-ui/core/Paper";
 
-import ImageIcon from "@material-ui/icons/Image";
 
-import AppContent from "src/Presentation/HOC/AppContent";
+
+import AppContent from "Presentation/HOC/AppContent";
 
 import FileUploadComponent from '../PropertyTypes/FileUploadComponent';
 import LongTextComponent from "../PropertyTypes/LongTextComponent";
@@ -23,10 +14,10 @@ import OptionSelectComponent from "../PropertyTypes/OptionSelectComponent";
 import RichTextComponent from "../PropertyTypes/RichTextComponent";
 import ShortTextComponent from "../PropertyTypes/ShortTextComponent";
 
-import * as id from "uuid/v4";
+import id from "uuid/v4";
 
-import { IObjectModel, IPropertyMap } from "src/Types";
-import styles from "../EditStyles";
+import { IObjectModel, IPropertyMap } from "Types";
+import { Grid, Segment, List, Divider, Sidebar, Menu } from 'semantic-ui-react';
 
 const propertyTypes: any[] = [
   {
@@ -78,7 +69,7 @@ const propertyTypes: any[] = [
   }
 ];
 
-interface IHtmlSettingsTabProps extends WithStyles<typeof styles> {
+interface IHtmlSettingsTabProps {
   objectModel: IObjectModel;
   onPropertyUpdate: (objectModel: IObjectModel) => void;
 }
@@ -138,20 +129,19 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
   };
 
   public render() {
-    const { classes } = this.props;
     const {
       objectModel: { htmlProperties }
     } = this.props;
     return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
-        <Grid container={true} spacing={0} className={classes.workspace}>
-          <Grid item={true} xs={true} container={true}>
-            <AppContent>
+      <AppContent>
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          <Sidebar.Pushable>
+            <Sidebar.Pusher as={Segment} attached={true}>
               <Droppable droppableId="object_model_properties">
                 {(dropProvider, dropSnapshot) => (
                   <div
                     ref={dropProvider.innerRef}
-                    className={classes.propertyEditor}
+                    className={"property-editor"}
                   >
                     {htmlProperties.map((propItem, propKey) => (
                       <Draggable
@@ -181,11 +171,9 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
                   </div>
                 )}
               </Droppable>
-            </AppContent>
-          </Grid>
-          <Grid item={true} xs={4}>
-            <Paper square={true} className={classes.propertyList}>
-              <List disablePadding={true}>
+            </Sidebar.Pusher>
+            <Sidebar as={Menu} position="right" visible={true}>
+              <List>
                 <Droppable
                   isDropDisabled={true}
                   droppableId="available_html_property_types"
@@ -204,16 +192,9 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
                               {...dragProvider.draggableProps}
                               {...dragProvider.dragHandleProps}
                             >
-                              <ListItem>
-                                <ListItemAvatar>
-                                  <Avatar>
-                                    <ImageIcon />
-                                  </Avatar></ListItemAvatar>
-                                <ListItemText
-                                  primary={propType.name}
-                                  secondary="Jan 9, 2014"
-                                />
-                              </ListItem>
+                              <List.Item>
+                                {propType.name}
+                              </List.Item>
                               <Divider />
                             </div>
                           )}
@@ -224,12 +205,12 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
                   )}
                 </Droppable>
               </List>
-            </Paper>
-          </Grid>
-        </Grid>
-      </DragDropContext>
+            </Sidebar>
+          </Sidebar.Pushable>
+        </DragDropContext>
+      </AppContent>
     );
   }
 }
 
-export default withStyles(styles, { withTheme: true })(HtmlSettingsTab);
+export default HtmlSettingsTab;

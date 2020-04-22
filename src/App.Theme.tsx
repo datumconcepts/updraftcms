@@ -1,6 +1,5 @@
 // tslint:disable:object-literal-sort-keys
 
-import { createMuiTheme } from "@material-ui/core/styles";
 
 const msTheme = {
   palette: {
@@ -34,7 +33,7 @@ const msTheme = {
   }
 };
 
-export default createMuiTheme({
+export default ({
   palette: {
     primary: {
       main: msTheme.palette.themePrimary

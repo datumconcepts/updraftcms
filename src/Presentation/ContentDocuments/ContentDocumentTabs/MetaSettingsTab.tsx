@@ -1,23 +1,18 @@
 import * as React from "react";
 
-import { withStyles, WithStyles } from "@material-ui/core/styles";
 
-
-import Grid from "@material-ui/core/Grid";
-
-
-import AppContent from "src/Presentation/HOC/AppContent";
+import AppContent from "Presentation/HOC/AppContent";
 
 import LongTextComponent from "../PropertyTypes/LongTextComponent";
 import OptionSelectComponent from "../PropertyTypes/OptionSelectComponent";
 import ShortTextComponent from "../PropertyTypes/ShortTextComponent";
 
 
-import { IContentDocument, IDocumentProperty, IObjectModel, IPropertyMap, } from "src/Types";
+import { IContentDocument, IDocumentProperty, IObjectModel, IPropertyMap, } from "Types";
 
-import { defaultObjectModel } from 'src/Store/State/IObjectModel';
+import { defaultObjectModel } from 'Store/State/IObjectModel';
+import { Grid } from 'semantic-ui-react';
 
-import styles from "../EditStyles";
 
 const propertyTypes: any[] = [
     {
@@ -53,7 +48,7 @@ const propertyTypes: any[] = [
     }
 ];
 
-interface IMetaSettingsTabProps extends WithStyles<typeof styles> {
+interface IMetaSettingsTabProps {
     contentDocument: IContentDocument;
     objectModels: IObjectModel[];
     onPropertyUpdate: (contentDocument: IContentDocument) => void;
@@ -85,7 +80,7 @@ class MetaSettingsTab extends React.Component<IMetaSettingsTabProps> {
         return (
             <AppContent>
                 <Grid direction="column" justify="flex-start" container={true} spacing={2}>
-                   
+
                     {
                         contentDocument.metaProperties.map((docProp, docPropIndex) => {
                             const propItem = objectModel.metaProperties.find(prop => prop.id === docProp.propertyMapId);
@@ -102,4 +97,4 @@ class MetaSettingsTab extends React.Component<IMetaSettingsTabProps> {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(MetaSettingsTab);
+export default MetaSettingsTab;

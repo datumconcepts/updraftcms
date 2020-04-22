@@ -2,30 +2,15 @@ import * as React from "react";
 
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
-import { withStyles, WithStyles } from "@material-ui/core/styles";
 
-import { IContentDocument, IObjectModel } from "src/Types";
+import { IContentDocument, IObjectModel } from "Types";
 
-
-import AppBar from "@material-ui/core/AppBar";
-import Tab from "@material-ui/core/Tab";
-import Tabs from "@material-ui/core/Tabs";
-
-import CloseIcon from '@material-ui/icons/Close';
-import DeleteIcon from '@material-ui/icons/Delete';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import SaveIcon from '@material-ui/icons/Save';
-
-
-import SpeedDial from '@material-ui/lab/SpeedDial';
-import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
-import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 
 
 import HtmlSettingsTab from './ContentDocumentTabs/HtmlSettingsTab';
 import MetaSettingsTab from './ContentDocumentTabs/MetaSettingsTab';
 
-import styles from "./EditStyles";
+import { Tab } from 'semantic-ui-react';
 
 
 
@@ -34,7 +19,7 @@ interface IRouteParams {
   id: string;
 }
 
-interface IContentDocumentEditProps extends RouteComponentProps<IRouteParams>, WithStyles<typeof styles> {
+interface IContentDocumentEditProps extends RouteComponentProps<IRouteParams> {
   contentDocument: IContentDocument;
   objectModels: Map<string, IObjectModel>;
   onValueChange: (contentDocument: IContentDocument) => void;
@@ -115,64 +100,53 @@ class ContentDocumentEdit extends React.Component<
     }));
   };
 
-  public renderTab = () => {
+  public render() {
     const { contentDocument, objectModels, history, match: { params } } = this.props;
     const { activeTab } = this.state;
-    switch (activeTab) {
-      case 0:
-        return (
-          <HtmlSettingsTab
-            onPropertyUpdate={this.props.onValueChange}
-            contentDocument={contentDocument}
-            objectModels={[...objectModels.values()]}
-            onObjectModelChange={objectModelId => {
-              history.push(`/${objectModelId}/content/edit/${params.id}`)
-            }}
-          />
-        );
-      case 1:
-        return (
-          <MetaSettingsTab onPropertyUpdate={this.props.onValueChange} objectModels={[...objectModels.values()]} contentDocument={contentDocument} />
-        )
-      default: return null
-    }
-  }
-
-  public render() {
-    const { activeTab } = this.state;
-    const { classes } = this.props;
     return (
-      <React.Fragment>
-        <AppBar position="static" color="default" elevation={1}>
-          <Tabs value={activeTab} onChange={this.handleTabChange}>
-            <Tab label="HTML Properties" />
-            <Tab label="Meta Properties" />
-          </Tabs>
-        </AppBar>
-        {this.renderTab()}
-        <SpeedDial
-          ariaLabel="Object Model Options"
-          className={classes.fab}
-          icon={<SpeedDialIcon icon={<MoreVertIcon />} openIcon={<CloseIcon />} />}
-          onBlur={this.handleClose}
-          onClick={this.handleClick}
-          onClose={this.handleClose}
-          onFocus={this.handleOpen}
-          onMouseEnter={this.handleOpen}
-          onMouseLeave={this.handleClose}
-          open={this.state.speedDialOpen}
-          direction="left"
-        >
-          <SpeedDialAction icon={<SaveIcon />} tooltipTitle={"Save [ ctrl + s ]"} onClick={this.saveContentDocument} />
-          <SpeedDialAction icon={<DeleteIcon />} tooltipTitle={"Delete [ ctrl + d ]"} onClick={this.deleteContentDocument} />
-          <SpeedDialAction icon={<CloseIcon />} tooltipTitle={"Close [ ctrl + q ]"} onClick={this.closeContentDocument} />
-        </SpeedDial>
-      </React.Fragment>
+      <>
+        <Tab menu={{ color: 'olive', inverted: true }} activeIndex={activeTab} panes={
+          [
+            {
+              menuItem: 'Html Properties',
+              pane: () => <HtmlSettingsTab
+                onPropertyUpdate={this.props.onValueChange}
+                contentDocument={contentDocument}
+                objectModels={[...objectModels.values()]}
+                onObjectModelChange={objectModelId => {
+                  history.push(`/${objectModelId}/content/edit/${params.id}`)
+                }}
+              />
+            },
+            {
+              menuItem: 'Meta Properties',
+              pane: () => <MetaSettingsTab onPropertyUpdate={this.props.onValueChange} objectModels={[...objectModels.values()]} contentDocument={contentDocument} />
+
+            }
+          ]
+        }></Tab>
+        {/* <SpeedDial
+      ariaLabel="Object Model Options"
+      className={classes.fab}
+      icon={<SpeedDialIcon icon={<MoreVertIcon />} openIcon={<CloseIcon />} />}
+      onBlur={this.handleClose}
+      onClick={this.handleClick}
+      onClose={this.handleClose}
+      onFocus={this.handleOpen}
+      onMouseEnter={this.handleOpen}
+      onMouseLeave={this.handleClose}
+      open={this.state.speedDialOpen}
+      direction="left"
+    >
+      <SpeedDialAction icon={<SaveIcon />} tooltipTitle={"Save [ ctrl + s ]"} onClick={this.saveContentDocument} />
+      <SpeedDialAction icon={<DeleteIcon />} tooltipTitle={"Delete [ ctrl + d ]"} onClick={this.deleteContentDocument} />
+      <SpeedDialAction icon={<CloseIcon />} tooltipTitle={"Close [ ctrl + q ]"} onClick={this.closeContentDocument} />
+    </SpeedDial> */}
+      </>
     );
   }
 
 
 }
 
-const routedContendDocumentEdit = withRouter(ContentDocumentEdit);
-export default withStyles(styles, { withTheme: true })(routedContendDocumentEdit);
+export default withRouter(ContentDocumentEdit);

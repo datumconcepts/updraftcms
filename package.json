@@ -1,49 +1,57 @@
 {
-  "name": "updraftcms",
+  "name": "dc-updraft-cms",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.6.0",
-    "@material-ui/icons": "^4.5.1",
-    "classnames": "^2.2.6",
-    "draft-js": "^0.11.2",
-    "prop-types": "^15.6.2",
-    "react": "^16.11.0",
-    "react-beautiful-dnd": "^11.0.5",
-    "react-dom": "^16.11.0",
-    "react-redux": "^7.1.3",
+    "draft-js": "^0.11.5",
+    "node-sass": "^4.13.1",
+    "react": "^16.13.1",
+    "react-beautiful-dnd": "^12.2.0",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
-    "react-scripts-ts": "^4.0.8",
-    "react-select": "^3.0.8",
-    "redux": "^4.0.4",
+    "react-scripts": "3.3.1",
+    "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "uuid": "^3.3.3"
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.88.2",
+    "typescript": "^3.8.3",
+    "uuid": "^3.4.0"
   },
   "scripts": {
-    "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "@material-ui/lab": "^4.0.0-alpha.31",
-    "@types/draft-js": "^0.10.37",
-    "@types/jest": "^24.0.22",
-    "@types/node": "^12.12.6",
-    "@types/react": "^16.9.11",
-    "@types/react-beautiful-dnd": "^11.0.3",
-    "@types/react-dom": "^16.9.3",
-    "@types/react-redux": "^7.1.5",
-    "@types/react-router-dom": "^4.3.5",
-    "@types/react-select": "^3.0.8",
-    "@types/uuid": "^3.4.6",
-    "typescript": "^3.7.2"
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "@types/draft-js": "^0.10.38",
+    "@types/jest": "^24.9.1",
+    "@types/node": "^12.12.35",
+    "@types/react": "^16.9.34",
+    "@types/react-beautiful-dnd": "^12.1.2",
+    "@types/react-dom": "^16.9.6",
+    "@types/react-redux": "^7.1.7",
+    "@types/react-router-dom": "^5.1.3",
+    "@types/uuid": "^3.4.8"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }

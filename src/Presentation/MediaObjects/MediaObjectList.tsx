@@ -1,24 +1,23 @@
 import * as React from 'react';
 
-import { RouteComponentProps, withRouter } from "react-router-dom";
-
-import { withStyles, WithStyles } from "@material-ui/core/styles";
+import { RouteComponentProps, withRouter } from "react-router";
 
 
-import { IMediaObject } from 'src/Types';
+
+import { IMediaObject } from 'Types';
 
 import EmptyListDisplay from "../HOC/EmptyListDisplay";
 
 import AppContent from "../HOC/AppContent";
 
-import styles from "./ListStyles";
-import MediaObjectMenu from './MediaObjectMenu';
+// import MediaObjectMenu from './MediaObjectMenu';
 import MediaObjectToolbar from './MediaObjectToolbar';
 
-import { Grid } from '@material-ui/core';
+import { Segment, Sidebar } from 'semantic-ui-react';
+import MediaObjectMenu from './MediaObjectMenu';
 
 
-interface IMediaObjectListProps extends RouteComponentProps, WithStyles<typeof styles> {
+interface IMediaObjectListProps extends RouteComponentProps {
     mediaObjects: IMediaObject[];
     selectedMediaObjectId: string;
     setSelectedMediaObject(id: string): void;
@@ -29,12 +28,11 @@ class MediaObjectList extends React.Component<IMediaObjectListProps> {
     public render() {
         const { mediaObjects, selectedMediaObjectId, setSelectedMediaObject } = this.props;
         return (
-            <Grid container={true} direction="row">
-                <Grid item={true}>
-                    <MediaObjectMenu mediaObjects={mediaObjects} selectedMediaObjectId={selectedMediaObjectId} setSelectedMediaObject={setSelectedMediaObject} /></Grid >
-                <Grid item={true} xs={true}>
-                    <Grid container={true} direction="column">
-                        <MediaObjectToolbar  selectedMediaObjectId={selectedMediaObjectId}/>
+            <>
+                <MediaObjectToolbar selectedMediaObjectId={selectedMediaObjectId} />
+                <Sidebar.Pushable as={Segment} className="workspace" attached={true}>
+                    <MediaObjectMenu mediaObjects={mediaObjects} selectedMediaObjectId={selectedMediaObjectId} setSelectedMediaObject={setSelectedMediaObject} />
+                    <Sidebar.Pusher>
                         <AppContent>
                             {mediaObjects.length === 0 ? (
                                 <EmptyListDisplay
@@ -46,13 +44,11 @@ class MediaObjectList extends React.Component<IMediaObjectListProps> {
                                 )
                             }
                         </AppContent>
-                    </Grid>
-                </Grid>
-            </Grid>
+                    </Sidebar.Pusher>
+                </Sidebar.Pushable></>
         )
     }
 
 }
 
-const routedMediaObjectList = withRouter(MediaObjectList);
-export default withStyles(styles, { withTheme: true })(routedMediaObjectList);
+export default withRouter(MediaObjectList)

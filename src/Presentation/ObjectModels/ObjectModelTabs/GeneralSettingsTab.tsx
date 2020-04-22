@@ -1,18 +1,15 @@
 import * as React from "react";
 
-import { withStyles, WithStyles } from "@material-ui/core/styles";
-
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-
-import AppContent from "src/Presentation/HOC/AppContent";
-
-import { IObjectModel } from "src/Types";
-
-import styles from "src/Presentation/ObjectModels/EditStyles";
 
 
-export interface IGeneralSettingsTabProps extends WithStyles<typeof styles> {
+import AppContent from "Presentation/HOC/AppContent";
+
+import { IObjectModel } from "Types";
+import { Grid, Form } from 'semantic-ui-react';
+
+
+
+export interface IGeneralSettingsTabProps {
   objectModel: IObjectModel;
   onPropertyUpdate: (objectModel: IObjectModel) => void;
 }
@@ -38,39 +35,30 @@ class GeneralSettingsTab extends React.Component<
     const { objectModel } = this.props;
     return (
       <AppContent>
-        <Grid direction="column" container={true} spacing={10}>
-          <Grid item={true}>
-            <TextField
-              onChange={this.valueChangeHandler}
-              fullWidth={true}
-              name="name"
-              value={objectModel.name}
-              label="Object Model Name"
-            />
-          </Grid>
-          <Grid item={true}>
-            <TextField
-              fullWidth={true}
-              name="id"
-              value={objectModel.id}
-              disabled={true}
-              label="Object Model Key"
-            />
-          </Grid>
-          <Grid item={true}>
-            <TextField
-              label="Description"
-              fullWidth={true}
-              name="description"
-              onChange={this.valueChangeHandler}
-              value={objectModel.description}
-              multiline={true}
-              rows={5}
-            />
-          </Grid>
-        </Grid>
+        <Form>
+          <Form.Input
+            onChange={this.valueChangeHandler}
+            fluid={true}
+            name="name"
+            value={objectModel.name}
+            label="Object Model Name"
+          />
+          <Form.Input
+            name="id"
+            value={objectModel.id}
+            disabled={true}
+            label="Object Model Key"
+          />
+          <Form.TextArea
+            label="Description"
+            name="description"
+            onChange={this.valueChangeHandler}
+            value={objectModel.description}
+            rows={5}
+          />
+        </Form>
       </AppContent>
     );
   }
 }
-export default withStyles(styles, { withTheme: true })(GeneralSettingsTab);
+export default GeneralSettingsTab;

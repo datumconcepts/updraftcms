@@ -1,4 +1,4 @@
-import { IContentDocument } from 'src/Types';
+import { IContentDocument } from 'Types';
 
 export interface IContentDocumentState {
     isLoading: boolean;
@@ -7,6 +7,6 @@ export interface IContentDocumentState {
 }
 
 
-export const defaultContentDocument = { name: "", htmlProperties: [], id: "", metaProperties: [], objectModelId: "" } as IContentDocument;
+export const defaultContentDocument: IContentDocument = { name: "", htmlProperties: [], id: "", metaProperties: [], objectModelId: "" };
 
 export const unloadedContentDocumentState: IContentDocumentState = { isLoading: false, contentDocuments: new Map<string, IContentDocument>(), };

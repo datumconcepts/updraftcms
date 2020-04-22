@@ -3,10 +3,11 @@ import * as React from "react";
 import { connect } from 'react-redux';
 import { Route } from "react-router-dom";
 
-import { AppActionsCreators } from 'src/Store/ActionCreators';
-import { IAppState, IMediaObjectState } from 'src/Store/State';
+import { AppActionsCreators } from 'Store/ActionCreators';
+import { IAppState } from 'Store/State';
 
-import MediaObjectList from 'src/Presentation/MediaObjects/MediaObjectList';
+import MediaObjectList from 'Presentation/MediaObjects/MediaObjectList';
+import { IMediaObjectState } from 'Store/State/IMediaObject';
 
 
 

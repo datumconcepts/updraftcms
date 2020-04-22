@@ -2,13 +2,15 @@ import * as React from "react";
 import { connect } from 'react-redux';
 import { Route } from "react-router-dom";
 
-import { IAppState, IContentDocumentState,   IObjectModelState } from 'src/Store/State';
+import { IAppState } from 'Store/State';
+import { IObjectModelState } from './Store/State/IObjectModel';
+import { IContentDocumentState } from './Store/State/IContentDocument';
 
-import { AppActionsCreators } from 'src/Store/ActionCreators';
+import { AppActionsCreators } from 'Store/ActionCreators';
 
-import ContentDocumentIndexContainer from 'src/Containers/ContentDocuments';
-import MediaObjectIndexContainer from 'src/Containers/MediaObjects';
-import ObjectModelIndexContainer from "src/Containers/ObjectModels";
+import ContentDocumentIndexContainer from 'Containers/ContentDocuments';
+import MediaObjectIndexContainer from 'Containers/MediaObjects';
+import ObjectModelIndexContainer from "Containers/ObjectModels";
 
 type IAppRoutingProps =
   IObjectModelState &
@@ -43,11 +45,11 @@ class AppRouting extends React.Component<IAppRoutingProps, {}> {
             <ContentDocumentIndexContainer  {...renderProps} {...this.props} />
           )}
         /> <Route
-        path="/media-library"
-        render={renderProps => (
-          <MediaObjectIndexContainer {...renderProps} {...this.props} />
-        )}
-      />
+          path="/media-library"
+          render={renderProps => (
+            <MediaObjectIndexContainer {...renderProps} {...this.props} />
+          )}
+        />
       </>
     );
   }
@@ -56,6 +58,6 @@ class AppRouting extends React.Component<IAppRoutingProps, {}> {
 export default connect((state: IAppState) => {
   return { ...state.contentDocument, ...state.objectModel }
 }, {
-    ...AppActionsCreators.ObjectModel,
-    ...AppActionsCreators.ContentDocument
-  })(AppRouting);
+  ...AppActionsCreators.ObjectModel,
+  ...AppActionsCreators.ContentDocument
+})(AppRouting);

@@ -1,7 +1,7 @@
 import { Action, Reducer } from 'redux';
 
-import { KnownContentDocumentActions } from 'src/Store/ActionCreators/ContentDocument';
-import { IContentDocumentState, unloadedContentDocumentState } from 'src/Store/State/IContentDocument';
+import { KnownContentDocumentActions } from 'Store/ActionCreators/ContentDocument';
+import { IContentDocumentState, unloadedContentDocumentState } from 'Store/State/IContentDocument';
 
 
 export const ContentDocumentReducer: Reducer<IContentDocumentState, Action> = (state, incommingAction) => {

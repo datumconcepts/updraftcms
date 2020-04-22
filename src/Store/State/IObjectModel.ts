@@ -1,4 +1,4 @@
-import { IObjectModel } from 'src/Types';
+import { IObjectModel } from 'Types';
 
 export interface IObjectModelState {
     isLoading: boolean;

@@ -1,25 +1,14 @@
 import * as React from "react";
 
 
-import { WithStyles, withStyles } from '@material-ui/core';
-
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import FormControl from '@material-ui/core/FormControl'
-import Grid from "@material-ui/core/Grid";
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
+import { Card, Form, Grid, Icon } from 'semantic-ui-react';
 
 
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { IDocumentProperty, IPropertyMap } from "Types";
 
 
-import { IDocumentProperty, IPropertyMap } from "src/Types";
 
-import styles from '../EditStyles';
-
-
-interface ISingleFileComponentProps extends WithStyles<typeof styles> {
+interface ISingleFileComponentProps {
   documentProperty: IDocumentProperty;
   propertyMap: IPropertyMap;
   onPropertyUpdate: (documentProperty: IDocumentProperty) => void;
@@ -78,21 +67,20 @@ class SingleFileComponent extends React.Component<
   }
 
   public render() {
-    const { classes, propertyMap } = this.props;
+    const { propertyMap } = this.props;
     return (
       <Grid item={true}>
         <Card square={true}>
-          <CardActions>
-            <FormControl fullWidth={true}>
-              <InputLabel shrink={true}>{propertyMap.name}</InputLabel>
-              <label className={classes.fileUpload} onDragOver={this.handleDragOver} onDrop={this.handleFileDrop}>
-                <CloudUploadIcon color="disabled" />
-                <Input type="file" name="value" onChange={this.changeValue} style={{ display: 'none' }} />
+          <Card.Content extra={true}>
+            <Form.Field label={propertyMap.name}>
+              <label className="file-upload" onDragOver={this.handleDragOver} onDrop={this.handleFileDrop}>
+                <Icon name="cloud upload"  />
+                <Form.Input type="file" name="value" onChange={this.changeValue} style={{ display: 'none' }} />
               </label>
-            </FormControl>
-          </CardActions>
+            </Form.Field>
+          </Card.Content>
         </Card></Grid>
     );
   }
 }
-export default withStyles(styles, { withTheme: true })(SingleFileComponent);
+export default SingleFileComponent;

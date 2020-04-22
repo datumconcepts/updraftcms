@@ -1,9 +1,9 @@
 
 import { AnyAction, Dispatch } from 'redux';
 
-import { KnownAppActions } from 'src/Store/ActionCreators';
-import { AppMiddlewareApi } from 'src/Store/StoreTypes';
-import { IContentDocument, IObjectModel } from 'src/Types';
+import { KnownAppActions } from 'Store/ActionCreators';
+import { AppMiddlewareApi } from 'Store/StoreTypes';
+import { IContentDocument, IObjectModel } from 'Types';
 
 
 export interface IDataPersistenceMiddleware {

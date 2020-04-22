@@ -2,14 +2,14 @@
 /* tslint:disable */
 import * as React from "react";
 import { connect } from 'react-redux';
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
-import { AppActionsCreators } from 'src/Store/ActionCreators';
-import { IAppState, IObjectModelState } from 'src/Store/State';
+import { AppActionsCreators } from 'Store/ActionCreators';
+import { IAppState } from 'Store/State';
 
-import ObjectModelEdit from "src/Presentation/ObjectModels/ObjectModelEdit";
-import ObjectModelList from "src/Presentation/ObjectModels/ObjectModelList";
-import { defaultObjectModel } from 'src/Store/State/IObjectModel';
+import ObjectModelEdit from "Presentation/ObjectModels/ObjectModelEdit";
+import ObjectModelList from "Presentation/ObjectModels/ObjectModelList";
+import { defaultObjectModel, IObjectModelState } from 'Store/State/IObjectModel';
 
 
 type IObjectModelContainerProps = IObjectModelState & typeof AppActionsCreators.ObjectModel
@@ -19,7 +19,7 @@ class ObjectModelContainer extends React.Component<IObjectModelContainerProps, {
   public render() {
     const { objectModels } = this.props;
     return (
-      <React.Fragment>
+      <Switch>
         <Route
           path="/object-models"
           exact={true}
@@ -37,7 +37,7 @@ class ObjectModelContainer extends React.Component<IObjectModelContainerProps, {
               deleteObjectModel={this.props.deleteObjectModel} />
           }}
         />
-      </React.Fragment>
+      </Switch>
     );
   }
 }
@@ -45,5 +45,5 @@ class ObjectModelContainer extends React.Component<IObjectModelContainerProps, {
 export default connect((state: IAppState) => {
   return { ...state.objectModel }
 }, {
-    ...AppActionsCreators.ObjectModel
-  })(ObjectModelContainer);
+  ...AppActionsCreators.ObjectModel
+})(ObjectModelContainer);

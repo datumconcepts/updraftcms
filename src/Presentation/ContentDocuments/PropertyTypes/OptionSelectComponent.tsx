@@ -1,11 +1,8 @@
 import * as React from "react";
 
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
 
-import Select from "react-select";
-
-import { IPropertyMap } from "src/Types";
+import { IPropertyMap } from "Types";
+import { Card, Select } from 'semantic-ui-react';
 
 interface IOptionSelectComponentProps {
   propertyMap: IPropertyMap;
@@ -18,7 +15,7 @@ interface IOptionSelectComponentState {
 class OptionSelectComponent extends React.Component<
   IOptionSelectComponentProps,
   IOptionSelectComponentState
-> {
+  > {
   public state = {
     expanded: false
   };
@@ -27,7 +24,7 @@ class OptionSelectComponent extends React.Component<
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
-  public changeValue = (e:any) => {
+  public changeValue = (e: any) => {
     const { propertyMap, onPropertyUpdate } = this.props;
     const {
       target: { name, value }
@@ -39,11 +36,11 @@ class OptionSelectComponent extends React.Component<
     const { propertyMap } = this.props;
     return (
       <Card square={true}>
-        <CardActions>
-          <Select fullWidth={true} label={propertyMap.name} />
+        <Card.Content>
+          <Select fullWidth={true} label={propertyMap.name} options={[]} />
 
-        </CardActions>
-        
+        </Card.Content>
+
       </Card>
     );
   }

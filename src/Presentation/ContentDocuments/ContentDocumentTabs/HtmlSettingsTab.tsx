@@ -1,14 +1,7 @@
 import * as React from "react";
 
-import { withStyles, WithStyles } from "@material-ui/core/styles";
 
-
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-
-import Select from "react-select";
-
-import AppContent from "src/Presentation/HOC/AppContent";
+import AppContent from "Presentation/HOC/AppContent";
 
 import LongTextComponent from "../PropertyTypes/LongTextComponent";
 import OptionSelectComponent from "../PropertyTypes/OptionSelectComponent";
@@ -17,11 +10,11 @@ import ShortTextComponent from "../PropertyTypes/ShortTextComponent";
 import SingleFileComponent from '../PropertyTypes/SingleFileComponent';
 
 
-import { IContentDocument, IDocumentProperty, IObjectModel, IPropertyMap, } from "src/Types";
+import { IContentDocument, IDocumentProperty, IObjectModel, IPropertyMap, } from "Types";
 
-import { defaultObjectModel } from 'src/Store/State/IObjectModel';
+import { defaultObjectModel } from 'Store/State/IObjectModel';
 
-import styles from "../EditStyles";
+import { Grid, Form, Select } from 'semantic-ui-react';
 
 const propertyTypes: any[] = [
     {
@@ -85,7 +78,7 @@ const propertyTypes: any[] = [
     }
 ];
 
-interface IHtmlSettingsTabProps extends WithStyles<typeof styles> {
+interface IHtmlSettingsTabProps {
     contentDocument: IContentDocument;
     objectModels: IObjectModel[]
     onPropertyUpdate: (contentDocument: IContentDocument) => void;
@@ -99,7 +92,7 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
         this.props.onPropertyUpdate({ ...this.props.contentDocument, [name]: value });
     }
 
-    public handleObjectModelChange = ({ value }: { value: string, label: string }) => this.props.onObjectModelChange(value);
+    public handleObjectModelChange = (value: any) => this.props.onObjectModelChange(value);
 
     public htmlValueChangeHandler = (htmlPrperty: IDocumentProperty) => {
         const { contentDocument, objectModels } = this.props;
@@ -126,7 +119,7 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
             <AppContent>
                 <Grid direction="column" justify="flex-start" container={true} spacing={2}>
                     <Grid item={true}>
-                        <TextField
+                        <Form.Field
                             onChange={this.valueChangeHandler}
                             fullWidth={true}
                             name="name"
@@ -135,9 +128,9 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
                         />
                     </Grid>
                     <Grid item={true}>
-                        <Select fullWidth={true} label="Object Model" value={{ label: objectModel.name, value: objectModel.id }}
+                        <Select fullWidth={true} label="Object Model" value={objectModel.id}
                             options={[...objectModels.values()].map(objectModelOption => ({ value: objectModelOption.id, label: objectModelOption.name }))}
-                            onChange={this.handleObjectModelChange}
+                            onChange={(e, { value }) => this.handleObjectModelChange(value)}
                         />
                     </Grid>
                     {
@@ -156,4 +149,4 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(HtmlSettingsTab);
+export default HtmlSettingsTab;

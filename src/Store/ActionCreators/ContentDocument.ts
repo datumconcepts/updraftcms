@@ -1,9 +1,9 @@
 import { Action } from 'redux';
 
-import { IAppState } from 'src/Store/State';
-import { AppDispatch, AppResult } from 'src/Store/StoreTypes';
+import { IAppState } from 'Store/State';
+import { AppDispatch } from 'Store/StoreTypes';
 
-import { IContentDocument } from 'src/Types';
+import { IContentDocument } from 'Types';
 
 interface IRequestContentDocumentsAction extends Action {
     type: 'REQUEST_CONTENT_DOCUMENTS';
@@ -30,7 +30,7 @@ interface IDeleteContentDocumentsAction extends Action {
 export type KnownContentDocumentActions = IEditContentDocumentsAction | IDeleteContentDocumentsAction | IReceiveContentDocumentsAction | IRequestContentDocumentsAction | ISaveContentDocumentsAction;
 
 export const ContentDocumentActionCreators = {
-    deleteContentDocument: (id: string): AppResult<void> => (dispatch: AppDispatch, getState: () => IAppState) => {
+    deleteContentDocument: (id: string): any => (dispatch: AppDispatch, getState: () => IAppState) => {
         const { contentDocuments } = getState().contentDocument;
         const deletedContentDocument = contentDocuments.get(id);
         if (deletedContentDocument) {
@@ -38,7 +38,7 @@ export const ContentDocumentActionCreators = {
             dispatch({ type: 'DELETE_CONTENT_DOCUMENT', deletedContentDocument, contentDocuments: new Map([...contentDocuments]) });
         }
     },
-    modifyContentDocument: (contentDocument: IContentDocument): AppResult<void> =>
+    modifyContentDocument: (contentDocument: IContentDocument): any =>
         (dispatch: AppDispatch, getState: () => IAppState) => {
             const { contentDocuments } = getState().contentDocument;
             dispatch({
@@ -47,7 +47,7 @@ export const ContentDocumentActionCreators = {
             });
         },
     requestContentDocuments: () => ({ type: 'REQUEST_CONTENT_DOCUMENTS' }),
-    saveContentDocument: (contentDocument: IContentDocument): AppResult<void> =>
+    saveContentDocument: (contentDocument: IContentDocument): any =>
         (dispatch: AppDispatch, getState: () => IAppState) => {
             const { contentDocuments } = getState().contentDocument;
             dispatch({ type: 'SAVE_CONTENT_DOCUMENT', savedContentDocument: contentDocument, contentDocuments: new Map([...contentDocuments.set(contentDocument.id, contentDocument)]) });

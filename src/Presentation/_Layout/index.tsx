@@ -1,70 +1,45 @@
 import * as React from "react";
 
-import AppBar from "@material-ui/core/AppBar";
-import Drawer from "@material-ui/core/Drawer";
-import Toolbar from "@material-ui/core/Toolbar";
-
-import IconButton from '@material-ui/core/IconButton';
-import LayersIcon from '@material-ui/icons/Layers';
-import MediaIcon from '@material-ui/icons/PermMedia';
-import WidgetsIcon from '@material-ui/icons/Widgets';
 
 import { Link, LinkProps, RouteComponentProps, withRouter } from 'react-router-dom';
+import { Menu, MenuItem, Icon, Sidebar, Segment, Popup } from 'semantic-ui-react';
 
 
-import { withStyles, WithStyles } from "@material-ui/core/styles";
 
-import styles from "./styles";
 
-const ObjectModelLink = React.forwardRef<HTMLAnchorElement, LinkProps>((props , ref) => <Link innerRef={ref}  {...props} />);
+const ObjectModelLink = React.forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => <Link innerRef={ref}  {...props} />);
 
 interface ILayoutState {
   open: boolean;
 }
 
-interface ILayoutProps extends RouteComponentProps, WithStyles<typeof styles> {
+interface ILayoutProps extends RouteComponentProps {
   authState?: string;
-  classes: any;
 }
 
-class Layout extends React.Component<ILayoutProps, ILayoutState, {}> {
-  public state: ILayoutState = {
-    open: false
-  };
+const Layout: React.FC<ILayoutProps> = ({ children }) => {
 
-  public handleDrawerOpen = () => {
-    this.setState({ open: true });
-  };
 
-  public handleDrawerClose = () => {
-    this.setState({ open: false });
-  };
-
-  public render() {
-    const { children, classes } = this.props;
-    return (
-      <div className={classes.root}>
-        <AppBar position="fixed" elevation={0} className={classes.appBar}>
-          <Toolbar variant="dense" />
-        </AppBar>
-        <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }} >
-          <Toolbar variant="dense" />
-          <IconButton aria-label="Object Models" color="primary" component={ObjectModelLink} to="/object-models">
-            <WidgetsIcon />
-          </IconButton>
-          <IconButton aria-label="Content" color="primary" component={ObjectModelLink} to="/content">
-            <LayersIcon />
-          </IconButton>
-          <IconButton aria-label="Media Library" color="primary" component={ObjectModelLink} to="/media-library">
-            <MediaIcon />
-          </IconButton>
-        </Drawer>
-        <main className={classes.content}>
-          <Toolbar variant="dense" />
-          {children}
-        </main>
-      </div>
-    );
-  }
+  return (
+    <>
+      <Menu inverted={true} color="blue" fluid={true} attached="top" ></Menu>
+      <Sidebar.Pushable as={Segment} attached={true}>
+        <Sidebar as={Menu} inverted={true} icon="labeled" vertical={true} visible={true}>
+          <Menu.Item aria-label="Object Models" as={ObjectModelLink} to="/object-models">
+            <Icon  name="object group outline" size="large" fitted={true} />Models
+          </Menu.Item>
+            <Menu.Item icon={true} aria-label="Content" as={ObjectModelLink} to="/content">
+              <Icon name="book" />Content
+            </Menu.Item>
+            <Menu.Item icon={true} aria-label="Media Library" as={ObjectModelLink} to="/media-library">
+              <Icon name="images outline" />Media
+            </Menu.Item>
+        </Sidebar>
+          <Sidebar.Pusher className="worksapace-pusher">
+            {children}
+          </Sidebar.Pusher>
+      </Sidebar.Pushable>
+    </>
+  );
 }
-export default withStyles(styles, { withTheme: true })(withRouter(Layout));
+export default withRouter(Layout);

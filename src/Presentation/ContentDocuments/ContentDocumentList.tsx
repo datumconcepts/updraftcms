@@ -2,32 +2,25 @@ import * as React from "react";
 
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
-import { withStyles, WithStyles } from "@material-ui/core/styles";
+;
 
-import Avatar from '@material-ui/core/Avatar';
-import Fab from '@material-ui/core/Fab';
-import Grid from "@material-ui/core/Grid";
-
-
-import AddIcon from '@material-ui/icons/Add';
-
-import { IContentDocument, IObjectModel, } from "src/Types";
+import { IContentDocument, IObjectModel, } from "Types";
 
 import DisplayCard from "../HOC/DisplayCard";
 import EmptyListDisplay from "../HOC/EmptyListDisplay";
 
 import AppContent from "../HOC/AppContent";
 
-import styles from "./ListStyles";
 
-import * as guid from "uuid/v4";
+import guid from "uuid/v4";
 import ContentDocumentMenu from './ContentDocumentMenu';
+import { Grid } from 'semantic-ui-react';
 
 
 interface IRouteParams {
   objectModelId?: string;
 }
-interface IContentDocumentListProps extends RouteComponentProps<IRouteParams>, WithStyles<typeof styles> {
+interface IContentDocumentListProps extends RouteComponentProps<IRouteParams> {
   objectModels: IObjectModel[];
   contentDocuments: IContentDocument[];
 }
@@ -48,9 +41,9 @@ class ContentDocumentList extends React.Component<IContentDocumentListProps> {
   }
 
   public render() {
-    const { contentDocuments, objectModels, classes } = this.props;
+    const { contentDocuments, objectModels } = this.props;
     return (
-      <React.Fragment>
+      <>
         <AppContent>
           <ContentDocumentMenu objectModels={objectModels} />
           {contentDocuments.length === 0 ? (
@@ -67,24 +60,19 @@ class ContentDocumentList extends React.Component<IContentDocumentListProps> {
                       title={contentDocument.name}
                       subHeader={contentDocument.id}
                       clickAction={() => this.editContentDocument(contentDocument)}
-                      avatar={
-                        <Avatar aria-label="Recipe">
-                          R
-                        </Avatar>
-                      }
+                      
                     />
                   ))
                 }
-                <Fab color="primary" size="medium" aria-label="Add" className={classes.fab} onClick={this.addContentDocument} >
+                {/* <Fab color="primary" size="medium" aria-label="Add" className={classes.fab} onClick={this.addContentDocument} >
                   <AddIcon />
-                </Fab>
+                </Fab> */}
               </Grid>
             )}
         </AppContent>
-      </React.Fragment>
+      </>
     );
   }
 }
 
-const routedContentDocumentList = withRouter(ContentDocumentList);
-export default withStyles(styles, { withTheme: true })(routedContentDocumentList);
+export default withRouter(ContentDocumentList);

@@ -1,15 +1,14 @@
 import * as React from "react";
 import { Route } from "react-router-dom";
 
-import { AppActionsCreators } from 'src/Store/ActionCreators';
-import { IContentDocumentState } from 'src/Store/State';
+import { AppActionsCreators } from 'Store/ActionCreators';
 
-import ContentDocumentEdit from 'src/Presentation/ContentDocuments/ContentDocumentEdit';
-import ContentDocumentList from "src/Presentation/ContentDocuments/ContentDocumentList";
+import ContentDocumentEdit from 'Presentation/ContentDocuments/ContentDocumentEdit';
+import ContentDocumentList from "Presentation/ContentDocuments/ContentDocumentList";
 
-import { defaultContentDocument } from 'src/Store/State/IContentDocument';
-import { IObjectModelState } from 'src/Store/State/IObjectModel';
-import { IContentDocument } from 'src/Types';
+import { defaultContentDocument, IContentDocumentState } from 'Store/State/IContentDocument';
+import { IObjectModelState } from 'Store/State/IObjectModel';
+import { IContentDocument } from 'Types';
 
 type IContentDocumentContainerProps =
   IContentDocumentState &
@@ -69,7 +68,7 @@ class ContentDocumentContainer extends React.Component<IContentDocumentContainer
   private loadContentDocument = (id: string, objectModelId?: string): IContentDocument => {
     const { contentDocuments, objectModels } = this.props;
 
-    const contentDocument = contentDocuments.get(id) || { ...defaultContentDocument, id };
+    const contentDocument: IContentDocument = contentDocuments.get(id) || { ...defaultContentDocument, id };
     if (!objectModelId) { return contentDocument; }
 
     const objectModel = objectModels.get(objectModelId)

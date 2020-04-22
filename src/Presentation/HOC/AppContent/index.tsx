@@ -1,16 +1,14 @@
 import * as React from "react";
+import { Segment } from "semantic-ui-react";
 
-import { withStyles, WithStyles } from "@material-ui/core/styles";
 
-import styles from "./styles";
-
-export interface IAppContentProps extends WithStyles<typeof styles> {}
+export interface IAppContentProps { }
 
 class AppContent extends React.Component<IAppContentProps> {
   public render() {
-    const { children, classes } = this.props;
-    return <div className={classes.content}>{children}</div>;
+    const { children } = this.props;
+    return <Segment basic={true} className="workspace-container">{children}</Segment>;
   }
 }
 
-export default withStyles(styles, { withTheme: true })(AppContent);
+export default AppContent;

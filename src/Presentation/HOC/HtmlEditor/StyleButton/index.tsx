@@ -1,6 +1,6 @@
 import * as React from 'react';
+import { Button } from 'semantic-ui-react';
 
-import ToggleButton from '@material-ui/lab/ToggleButton';
 
 export interface IStyleButtonProps {
     style: string;
@@ -16,12 +16,12 @@ export default class StyleButton extends React.Component<IStyleButtonProps> {
     };
 
     public render() {
-    
+
 
         return (
-            <ToggleButton selected={this.props.active} value={this.props.style} onMouseDown={this.onToggle}>
+            <Button selected={this.props.active} value={this.props.style} onMouseDown={this.onToggle}>
                 {this.props.icon ? (this.props.icon) : (this.props.label)}
-            </ToggleButton>
+            </Button>
         );
     }
 }

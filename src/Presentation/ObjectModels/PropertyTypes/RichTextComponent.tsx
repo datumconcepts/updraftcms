@@ -1,26 +1,15 @@
 import * as React from "react";
 
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import IconButton from "@material-ui/core/IconButton";
-
-import EditIcon from "@material-ui/icons/Edit";
-
-import CodeIcon from "@material-ui/icons/Code";
-import FormatBoldIcon from '@material-ui/icons/FormatBold';
-import FormatItalicsIcon from '@material-ui/icons/FormatItalic';
-import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
-import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
-import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
-import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
 
 
-import { IPropertyMap } from "src/Types";
+
+import { IPropertyMap } from "Types";
 
 import { convertFromRaw, convertToRaw, DraftBlockType, Editor, EditorState, RichUtils } from 'draft-js';
 
 import 'draft-js/dist/Draft.css'
 import StyleButton from '../../HOC/HtmlEditor/StyleButton';
+import { Icon, Card, Button } from 'semantic-ui-react';
 
 interface IRichTextComponentProps {
   propertyMap: IPropertyMap;
@@ -38,10 +27,10 @@ const BLOCK_TYPES = [
   // { label: 'H4', style: 'header-four' },
   // { label: 'H5', style: 'header-five' },
   // { label: 'H6', style: 'header-six' },
-  { label: 'Blockquote', style: 'blockquote', icon: <FormatQuoteIcon /> },
-  { label: 'UL', style: 'unordered-list-item', icon: <FormatListBulletedIcon /> },
-  { label: 'OL', style: 'ordered-list-item', icon: <FormatListNumberedIcon /> },
-  { label: 'Code Block', style: 'code-block', icon: <CodeIcon /> },
+  { label: 'Blockquote', style: 'blockquote', icon: <Icon name="quote left" /> },
+  { label: 'UL', style: 'unordered-list-item', icon: <Icon name="unordered list" /> },
+  { label: 'OL', style: 'ordered-list-item', icon: <Icon name="ordered list" /> },
+  { label: 'Code Block', style: 'code-block', icon: <Icon name="code" /> },
 ];
 
 const BlockStyleControls = (props: any) => {
@@ -69,9 +58,9 @@ const BlockStyleControls = (props: any) => {
 };
 
 const INLINE_STYLES = [
-  { label: 'Bold', style: 'BOLD', icon: <FormatBoldIcon /> },
-  { label: 'Italic', style: 'ITALIC', icon: <FormatItalicsIcon /> },
-  { label: 'Underline', style: 'UNDERLINE', icon: <FormatUnderlinedIcon /> },
+  { label: 'Bold', style: 'BOLD', icon: <Icon name="bold" /> },
+  { label: 'Italic', style: 'ITALIC', icon: <Icon name="italic" /> },
+  { label: 'Underline', style: 'UNDERLINE', icon: <Icon name="underline" /> },
 ];
 
 const InlineStyleControls = (props: any) => {
@@ -149,20 +138,20 @@ class RichTextComponent extends React.Component<IRichTextComponentProps, IRichTe
     const { editorState } = this.state;
     return (
       <Card square={true}>
-        <CardActions>
+        <Card.Content>
           <div style={{ flex: 1 }} className="editor-container">
             <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType} />
             <InlineStyleControls editorState={editorState} onToggle={this.toggleInlineStyle} />
             <Editor editorState={editorState} onChange={this.changeDefaultValue} />
           </div>
-          <IconButton
+          <Button icon={true}
             onClick={this.handleExpandClick}
             aria-expanded={this.state.expanded}
             aria-label="Show more"
           >
-            <EditIcon />
-          </IconButton>
-        </CardActions>
+            <Icon name="edit" />
+          </Button>
+        </Card.Content>
 
       </Card>);
   }

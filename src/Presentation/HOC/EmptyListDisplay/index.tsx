@@ -1,25 +1,23 @@
 import * as React from "react";
 
-import { withStyles, WithStyles } from "@material-ui/core/styles";
+import { Header } from 'semantic-ui-react';
 
-import styles from "./styles";
 
-import { Typography } from "@material-ui/core";
 
-export interface IEmptyListDisplayProps extends WithStyles<typeof styles> {
+export interface IEmptyListDisplayProps {
   clickHandler: (event: any) => void;
   title: string;
 }
 
 class EmptyListDisplay extends React.Component<IEmptyListDisplayProps> {
   public render() {
-    const { clickHandler, title, classes } = this.props;
+    const { clickHandler, title } = this.props;
     return (
-      <div className={classes.emptyList} onClick={clickHandler}>
-        <Typography variant="h5">{title}</Typography>
+      <div className={'empty-list'} onClick={clickHandler}>
+        <Header as="h5">{title}</Header>
       </div>
     );
   }
 }
 
-export default withStyles(styles, { withTheme: true })(EmptyListDisplay);
+export default EmptyListDisplay;

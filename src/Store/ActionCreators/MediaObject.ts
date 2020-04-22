@@ -1,9 +1,9 @@
 import { Action } from 'redux';
 
-import { IAppState } from '../State';
-import { AppDispatch, AppResult } from '../StoreTypes';
+import { IAppState } from 'Store/State';
+import { AppDispatch } from 'Store/StoreTypes';
 
-import { IMediaObject } from 'src/Types';
+import { IMediaObject } from 'Types';
 
 interface IRequestMediaObjectsAction extends Action {
     type: 'REQUEST_MEDIA_OBJECTS';
@@ -32,12 +32,12 @@ interface ISelectMediaObject extends Action {
 export type KnownMediaObjectActions = IEditMediaObjectsAction | IDeleteMediaObjectsAction | IReceiveMediaObjectsAction | IRequestMediaObjectsAction | ISaveMediaObjectsAction | ISelectMediaObject;
 
 export const MediaObjectActionCreators = {
-    deletemediaObject: (id: string): AppResult<void> => (dispatch: AppDispatch, getState: () => IAppState) => {
+    deletemediaObject: (id: string): any => (dispatch: AppDispatch, getState: () => IAppState) => {
         const { mediaObjects } = getState().mediaObject;
         mediaObjects.delete(id);
         dispatch({ type: 'DELETE_MEDIA_OBJECT', mediaObjects: new Map([...mediaObjects]) });
     },
-    modifymediaObject: (mediaObject: IMediaObject): AppResult<void> =>
+    modifymediaObject: (mediaObject: IMediaObject): any =>
         (dispatch: AppDispatch, getState: () => IAppState) => {
             const { mediaObjects } = getState().mediaObject;
             dispatch({
@@ -46,7 +46,7 @@ export const MediaObjectActionCreators = {
             });
         },
     requestmediaObjects: () => ({ type: 'REQUEST_MEDIA_OBJECTS' }),
-    savemediaObject: (mediaObject: IMediaObject): AppResult<void> =>
+    savemediaObject: (mediaObject: IMediaObject): any =>
         (dispatch: AppDispatch, getState: () => IAppState) => {
             const { mediaObjects } = getState().mediaObject;
             dispatch({ type: 'SAVE_MEDIA_OBJECT', mediaObjects: new Map([...mediaObjects.set(mediaObject.id, mediaObject)]) });

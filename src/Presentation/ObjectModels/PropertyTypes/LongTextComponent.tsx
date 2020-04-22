@@ -1,13 +1,8 @@
 import * as React from "react";
 
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import IconButton from "@material-ui/core/IconButton";
-import TextField from "@material-ui/core/TextField";
 
-import EditIcon from "@material-ui/icons/Edit";
-
-import { IPropertyMap } from "src/Types";
+import { IPropertyMap } from "Types";
+import { Card, Form, Button, Icon } from 'semantic-ui-react';
 
 interface ILongTextComponentProps {
   propertyMap: IPropertyMap;
@@ -41,8 +36,8 @@ class LongTextComponent extends React.Component<
     const { propertyMap } = this.props;
     return (
       <Card square={true}>
-        <CardActions>
-          <TextField
+        <Card.Content>
+          <Form.Field
             fullWidth={true}
             multiline={true}
             rows={5}
@@ -55,14 +50,14 @@ class LongTextComponent extends React.Component<
             }}
             placeholder="Enter default value"
           />
-          <IconButton
+          <Button icon={true}
             onClick={this.handleExpandClick}
             aria-expanded={this.state.expanded}
             aria-label="Show more"
           >
-            <EditIcon />
-          </IconButton>
-        </CardActions>
+            <Icon name="edit" />
+          </Button>
+        </Card.Content>
       </Card>
     );
   }

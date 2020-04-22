@@ -1,9 +1,9 @@
 import { Action } from 'redux';
 
-import { IAppState } from '../State';
-import { AppDispatch, AppResult } from '../StoreTypes';
+import { IAppState } from 'Store/State';
+import { AppDispatch } from 'Store/StoreTypes';
 
-import { IObjectModel } from 'src/Types';
+import { IObjectModel } from 'Types';
 
 interface IRequestObjectModelsAction extends Action {
     type: 'REQUEST_OBJECT_MODELS';
@@ -30,7 +30,7 @@ interface IDeleteObjectModelsAction extends Action {
 export type KnownObjectModelActions = IEditObjectModelsAction | IDeleteObjectModelsAction | IReceiveObjectModelsAction | IRequestObjectModelsAction | ISaveObjectModelsAction;
 
 export const ObjectModelActionCreators = {
-    deleteObjectModel: (id: string): AppResult<void> => (dispatch: AppDispatch, getState: () => IAppState) => {
+    deleteObjectModel: (id: string): any => (dispatch: AppDispatch, getState: () => IAppState) => {
         const { objectModels } = getState().objectModel;
         const deletedObjectModel = objectModels.get(id);
         if (deletedObjectModel) {
@@ -38,7 +38,7 @@ export const ObjectModelActionCreators = {
             dispatch({ type: 'DELETE_OBJECT_MODEL', deletedObjectModel, objectModels: new Map([...objectModels]) });
         }
     },
-    modifyObjectModel: (objectModel: IObjectModel): AppResult<void> =>
+    modifyObjectModel: (objectModel: IObjectModel): any =>
         (dispatch: AppDispatch, getState: () => IAppState) => {
             const { objectModels } = getState().objectModel;
             dispatch({
@@ -47,7 +47,7 @@ export const ObjectModelActionCreators = {
             });
         },
     requestObjectModels: () => ({ type: 'REQUEST_OBJECT_MODELS' }),
-    saveObjectModel: (objectModel: IObjectModel): AppResult<void> =>
+    saveObjectModel: (objectModel: IObjectModel): any =>
         (dispatch: AppDispatch, getState: () => IAppState) => {
             const { objectModels } = getState().objectModel;
             dispatch({ type: 'SAVE_OBJECT_MODEL', savedObjectModel: objectModel, objectModels: new Map([...objectModels.set(objectModel.id, objectModel)]) });

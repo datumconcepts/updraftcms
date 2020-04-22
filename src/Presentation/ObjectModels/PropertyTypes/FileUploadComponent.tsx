@@ -1,26 +1,13 @@
 import * as React from "react";
 
 
-import { WithStyles, withStyles } from '@material-ui/core';
 
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import FormControl from '@material-ui/core/FormControl'
-import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
-import InputLabel from '@material-ui/core/InputLabel';
+import { IDocumentProperty, IPropertyMap } from "Types";
+
+import { Icon, Grid, Card, Form, Button } from 'semantic-ui-react';
 
 
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import EditIcon from "@material-ui/icons/Edit";
-
-
-import { IDocumentProperty, IPropertyMap } from "src/Types";
-
-import styles from '../EditStyles';
-
-
-interface IFileUploadComponentProps extends WithStyles<typeof styles> {
+interface IFileUploadComponentProps {
   documentProperty: IDocumentProperty;
   propertyMap: IPropertyMap;
   onPropertyUpdate: (documentProperty: IDocumentProperty) => void;
@@ -43,27 +30,26 @@ class FileUploadComponent extends React.Component<
 
 
   public render() {
-    const { classes, propertyMap } = this.props;
+    const { propertyMap } = this.props;
     return (
       <Grid item={true}>
         <Card square={true}>
-          <CardActions>
-            <FormControl fullWidth={true}>
-              <InputLabel shrink={true}>{propertyMap.name}</InputLabel>
-              <label className={classes.fileUpload}>
-                <CloudUploadIcon color="disabled" />
+          <Card.Content extra={true}>
+            <Form.Field label={propertyMap.name}>
+              <label className="file-upload">
+                <Icon name="cloud upload" />
               </label>
-            </FormControl>
-            <IconButton
+            </Form.Field>
+            <Button icon={true}
               onClick={this.handleExpandClick}
               aria-expanded={this.state.expanded}
               aria-label="Show more"
             >
-              <EditIcon />
-            </IconButton>
-          </CardActions>
+              <Icon name="edit" />
+            </Button>
+          </Card.Content>
         </Card></Grid>
     );
   }
 }
-export default withStyles(styles, { withTheme: true })(FileUploadComponent);
+export default FileUploadComponent;
