@@ -31,24 +31,21 @@ class FileUploadComponent extends React.Component<
 
   public render() {
     const { propertyMap } = this.props;
-    return (
-      <Grid item={true}>
-        <Card square={true}>
-          <Card.Content extra={true}>
-            <Form.Field label={propertyMap.name}>
-              <label className="file-upload">
-                <Icon name="cloud upload" />
-              </label>
-            </Form.Field>
-            <Button icon={true}
-              onClick={this.handleExpandClick}
-              aria-expanded={this.state.expanded}
-              aria-label="Show more"
-            >
-              <Icon name="edit" />
-            </Button>
-          </Card.Content>
-        </Card></Grid>
+    return (<Card fluid={true}>
+      <Card.Content>
+        <Card.Header onClick={this.handleExpandClick}>
+          {propertyMap.name}
+        </Card.Header>
+      </Card.Content>
+      <Card.Content>
+        <Form.Field label={propertyMap.name}>
+          <label className="file-upload">
+            <Icon name="cloud upload" />
+          </label>
+        </Form.Field>
+      </Card.Content>
+    </Card>
+
     );
   }
 }

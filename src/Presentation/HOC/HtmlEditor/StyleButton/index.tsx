@@ -19,7 +19,7 @@ export default class StyleButton extends React.Component<IStyleButtonProps> {
 
 
         return (
-            <Button selected={this.props.active} value={this.props.style} onMouseDown={this.onToggle}>
+            <Button icon={true} selected={this.props.active} value={this.props.style} onMouseDown={this.onToggle}>
                 {this.props.icon ? (this.props.icon) : (this.props.label)}
             </Button>
         );

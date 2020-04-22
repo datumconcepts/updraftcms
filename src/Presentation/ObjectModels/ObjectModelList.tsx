@@ -12,14 +12,14 @@ import EmptyListDisplay from "../HOC/EmptyListDisplay";
 import AppContent from "../HOC/AppContent";
 
 import guid from "uuid/v4";
-import { Grid } from 'semantic-ui-react';
+import { Card } from 'semantic-ui-react';
 
 interface IObjectModelListProps extends RouteComponentProps {
   objectModels: IObjectModel[];
 }
 class ObjectModelList extends React.Component<IObjectModelListProps> {
 
-  public addObjectModel = (event: any) => {
+  public addObjectModel = () => {
     const { objectModels, history } = this.props;
     let id = guid().replace(/-/g, "");
     while (objectModels.find(model => model.id === id)) {
@@ -32,6 +32,24 @@ class ObjectModelList extends React.Component<IObjectModelListProps> {
     history.push(`/object-models/${objectModel.id}/edit`);
   }
 
+  public componentDidMount() {
+    document.addEventListener('keydown', this.registerShortcuts);
+  }
+  public componentWillUnmount() {
+    document.removeEventListener('keydown', this.registerShortcuts);
+  }
+
+  public registerShortcuts = (event: KeyboardEvent) => {
+    if (event.ctrlKey) {
+      switch (event.key) {
+        case 'a':
+          event.preventDefault();
+          this.addObjectModel();
+          break;
+      }
+    }
+  }
+
   public render() {
     const { objectModels } = this.props;
     return (
@@ -42,7 +60,7 @@ class ObjectModelList extends React.Component<IObjectModelListProps> {
             title="It looks like you have no object models yet. Click here to add a new one"
           />
         ) : (
-            <Grid direction="column" container={true} spacing={10}>
+            <Card.Group>
               {([] as IObjectModel[])
                 .concat(objectModels)
                 .map((objectModel, objectModelIndex) => (
@@ -55,8 +73,9 @@ class ObjectModelList extends React.Component<IObjectModelListProps> {
                 ))
               }
 
-            </Grid>
-          )}
+            </Card.Group>
+          )
+        }
       </AppContent>
     );
   }

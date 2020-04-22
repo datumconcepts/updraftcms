@@ -2,7 +2,7 @@ import * as React from "react";
 
 
 import { IPropertyMap } from "Types";
-import { Card, Form, Button, Icon } from 'semantic-ui-react';
+import { Card, Form, Button, Icon, TextArea } from 'semantic-ui-react';
 
 interface ILongTextComponentProps {
   propertyMap: IPropertyMap;
@@ -15,7 +15,7 @@ interface ILongTextComponentState {
 class LongTextComponent extends React.Component<
   ILongTextComponentProps,
   ILongTextComponentState
-> {
+  > {
   public state = {
     expanded: false
   };
@@ -24,39 +24,30 @@ class LongTextComponent extends React.Component<
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
-  public changeValue = (e:any) => {
+  public changeValue = (e: any) => {
     const { propertyMap, onPropertyUpdate } = this.props;
     const {
       target: { name, value }
     } = e;
-    onPropertyUpdate({...propertyMap,  [name]: value });
+    onPropertyUpdate({ ...propertyMap, [name]: value });
   };
 
   public render() {
     const { propertyMap } = this.props;
     return (
-      <Card square={true}>
+      <Card fluid={true}>
         <Card.Content>
-          <Form.Field
-            fullWidth={true}
-            multiline={true}
-            rows={5}
-            name="defaultValue"
+          <Card.Header onClick={this.handleExpandClick}>
+            {propertyMap.name}
+          </Card.Header>
+        </Card.Content>
+        <Card.Content>
+          <TextArea 
+            name="defaultValue" rows={5} 
             onChange={this.changeValue}
             value={propertyMap.defaultValue}
-            label={propertyMap.name}
-            InputLabelProps={{
-              shrink: true
-            }}
             placeholder="Enter default value"
           />
-          <Button icon={true}
-            onClick={this.handleExpandClick}
-            aria-expanded={this.state.expanded}
-            aria-label="Show more"
-          >
-            <Icon name="edit" />
-          </Button>
         </Card.Content>
       </Card>
     );

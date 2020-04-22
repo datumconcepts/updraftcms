@@ -15,7 +15,7 @@ const Layout: React.FC<ILayoutProps> = ({ children }) => {
     <>
       <Menu inverted={true} color="blue" fluid={true} attached="top" ></Menu>
       <Sidebar.Pushable as={Segment} attached={true}>
-        <Sidebar as={Menu} inverted={true} icon="labeled" vertical={true} visible={true}>
+        <Sidebar as={Menu} inverted={true} color="black" icon="labeled" vertical={true} visible={true}>
           <Menu.Item aria-label="Object Models" as={Link} to="/object-models">
             <Icon name="object group outline" size="large" fitted={true} />Models
           </Menu.Item>

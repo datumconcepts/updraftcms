@@ -42,7 +42,7 @@ const BlockStyleControls = (props: any) => {
     .getType();
 
   return (
-    <React.Fragment>
+    <Button.Group>
       {BLOCK_TYPES.map((type) =>
         <StyleButton
           key={type.label}
@@ -53,7 +53,7 @@ const BlockStyleControls = (props: any) => {
           style={type.style}
         />
       )}
-    </React.Fragment>
+    </Button.Group>
   );
 };
 
@@ -66,7 +66,7 @@ const INLINE_STYLES = [
 const InlineStyleControls = (props: any) => {
   const currentStyle = props.editorState.getCurrentInlineStyle();
   return (
-    <React.Fragment>
+    <Button.Group>
       {INLINE_STYLES.map(type =>
         <StyleButton
           key={type.label}
@@ -77,7 +77,7 @@ const InlineStyleControls = (props: any) => {
           style={type.style}
         />
       )}
-    </React.Fragment>
+    </Button.Group>
   );
 };
 
@@ -137,22 +137,19 @@ class RichTextComponent extends React.Component<IRichTextComponentProps, IRichTe
   public render() {
     const { editorState } = this.state;
     return (
-      <Card square={true}>
+      <Card fluid={true}>
+        <Card.Content>
+          <Card.Header onClick={this.handleExpandClick}>
+            {this.props.propertyMap.name}
+          </Card.Header>
+        </Card.Content>
         <Card.Content>
           <div style={{ flex: 1 }} className="editor-container">
             <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType} />
             <InlineStyleControls editorState={editorState} onToggle={this.toggleInlineStyle} />
             <Editor editorState={editorState} onChange={this.changeDefaultValue} />
           </div>
-          <Button icon={true}
-            onClick={this.handleExpandClick}
-            aria-expanded={this.state.expanded}
-            aria-label="Show more"
-          >
-            <Icon name="edit" />
-          </Button>
         </Card.Content>
-
       </Card>);
   }
 }

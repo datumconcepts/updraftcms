@@ -22,15 +22,13 @@ class DisplayCard extends React.Component<IDisplayCardProps> {
       headerAction,
     } = this.props;
     return (
-      <Card>
-        <Card.Header className={'display-card-header'}
-          onClick={this.props.clickAction}
-          avatar={avatar}
-          action={headerAction}
-          title={title}
-          subheader={subHeader}
-        />
-        {children}</Card>
+      <Card fluid={true} onClick={this.props.clickAction} color="blue">
+        <Card.Content>
+          <Card.Header>{title}</Card.Header>
+          <Card.Meta>{subHeader}</Card.Meta>
+          {children}
+        </Card.Content>
+      </Card>
     );
   }
 }
