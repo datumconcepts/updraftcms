@@ -67,3 +67,8 @@ body {
   display: flex;
   cursor: pointer;
 }
+.tab-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}

@@ -25,11 +25,11 @@ class ObjectModelList extends React.Component<IObjectModelListProps> {
     while (objectModels.find(model => model.id === id)) {
       id = guid().replace(/-/g, "");
     }
-    history.push(`/object-models/edit/${guid().replace(/-/g, "")}`);
+    history.push(`/object-models/${guid().replace(/-/g, "")}/edit`);
   };
   public editObjectModel = (objectModel: IObjectModel) => {
     const { history } = this.props;
-    history.push(`/object-models/edit/${objectModel.id}`);
+    history.push(`/object-models/${objectModel.id}/edit`);
   }
 
   public render() {

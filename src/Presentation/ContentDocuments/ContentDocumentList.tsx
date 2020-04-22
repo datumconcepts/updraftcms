@@ -32,12 +32,12 @@ class ContentDocumentList extends React.Component<IContentDocumentListProps> {
     while (contentDocuments.find(model => model.id === id)) {
       id = guid().replace(/-/g, "");
     }
-    history.push(params.objectModelId ? `/${params.objectModelId}/content/edit/${id}` : `/content/edit/${id}`);
+    history.push(params.objectModelId ? `/${params.objectModelId}/content/${id}/edit` : `/content/${id}/edit`);
   }
 
   public editContentDocument = (contentDocument: IContentDocument) => {
     const { id, objectModelId } = contentDocument;
-    this.props.history.push(objectModelId ? `/${objectModelId}/content/edit/${id}` : `/content/edit/${id}`);
+    this.props.history.push(objectModelId ? `/${objectModelId}/content/${id}/edit` : `/content/${id}/edit`);
   }
 
   public render() {

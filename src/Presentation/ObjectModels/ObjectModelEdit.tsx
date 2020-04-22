@@ -97,7 +97,7 @@ class ObjectModelEdit extends React.Component<
 
   public render() {
     const { objectModel } = this.props;
-    return (<Tab menu={{ color: 'olive', inverted: true }}  panes={[
+    return (<Tab className="tab-container" menu={{ color: 'olive', inverted: true }}  panes={[
       {
         menuItem: 'General Settings',
         render: () => <GeneralSettingsTab

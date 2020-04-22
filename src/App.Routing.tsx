@@ -1,63 +1,27 @@
 import * as React from "react";
-import { connect } from 'react-redux';
-import { Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+;
+import ObjectModelsListPage from "pages/object-models";
+import ObjectModelsEditPage from "pages/object-models/edit";
 
-import { IAppState } from 'Store/State';
-import { IObjectModelState } from './Store/State/IObjectModel';
-import { IContentDocumentState } from './Store/State/IContentDocument';
+import ContentDocumentsListPage from "pages/content-documents";
+import ContentDocumentsEditPage from "pages/content-documents/edit"
 
-import { AppActionsCreators } from 'Store/ActionCreators';
+import MediaObjectsPage from "pages/media-objects";
 
-import ContentDocumentIndexContainer from 'Containers/ContentDocuments';
-import MediaObjectIndexContainer from 'Containers/MediaObjects';
-import ObjectModelIndexContainer from "Containers/ObjectModels";
 
-type IAppRoutingProps =
-  IObjectModelState &
-  IContentDocumentState &
-  typeof AppActionsCreators.ContentDocument &
-  typeof AppActionsCreators.ObjectModel
-
-class AppRouting extends React.Component<IAppRoutingProps, {}> {
-  public componentDidMount() {
-    this.props.requestObjectModels();
-    this.props.requestContentDocuments();
-  }
-
-  public render() {
-    return (
-      <>
-        <Route
-          path="/object-models"
-          render={renderProps => (
-            <ObjectModelIndexContainer  {...renderProps} {...this.props} />
-          )}
-        />
-        <Route
-          path="/content"
-          render={renderProps => (
-            <ContentDocumentIndexContainer  {...renderProps} {...this.props} />
-          )}
-        />
-        <Route
-          path="/:objectmodelId/content"
-          render={renderProps => (
-            <ContentDocumentIndexContainer  {...renderProps} {...this.props} />
-          )}
-        /> <Route
-          path="/media-library"
-          render={renderProps => (
-            <MediaObjectIndexContainer {...renderProps} {...this.props} />
-          )}
-        />
-      </>
-    );
-  }
+const AppRouting: React.FC = () => {
+  return (
+    <Router>
+      <Switch>
+        <Route path="/object-models" exact={true} component={ObjectModelsListPage} />
+        <Route path="/object-models/:id/edit" component={ObjectModelsEditPage} />
+        <Route path="/:objectmodelId?/content" exact={true} component={ContentDocumentsListPage} />
+        <Route path="/:objectmodelId?/content/:id/edit" component={ContentDocumentsEditPage} />
+        <Route path="/media-library" component={MediaObjectsPage} />
+      </Switch>
+    </Router>
+  );
 }
 
-export default connect((state: IAppState) => {
-  return { ...state.contentDocument, ...state.objectModel }
-}, {
-  ...AppActionsCreators.ObjectModel,
-  ...AppActionsCreators.ContentDocument
-})(AppRouting);
+export default AppRouting;

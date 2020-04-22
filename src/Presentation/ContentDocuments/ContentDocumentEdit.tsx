@@ -105,7 +105,7 @@ class ContentDocumentEdit extends React.Component<
     const { activeTab } = this.state;
     return (
       <>
-        <Tab menu={{ color: 'olive', inverted: true }} activeIndex={activeTab} panes={
+        <Tab className="tab-container" menu={{ color: 'olive', inverted: true }} activeIndex={activeTab} panes={
           [
             {
               menuItem: 'Html Properties',
