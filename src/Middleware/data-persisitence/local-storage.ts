@@ -1,4 +1,4 @@
-import { IDataPersistenceMiddleware } from 'Store/MiddlewareSupport/data-persistence';
+import { IDataPersistenceMiddleware } from 'store/middleware-support/data-persistencee';
 
 import { IContentDocument, IObjectModel, } from 'Types';
 

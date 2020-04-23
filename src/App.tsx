@@ -1,10 +1,10 @@
 import * as React from "react";
 
-import UpdraftStore from './Store'
+import UpdraftStore from './store'
 
 import AppRouting from "./App.Routing";
 
-import { LocalStorageData } from './Middleware/data-persistence';
+import { LocalStorageData } from './middleware/data-persisitence/local-storage';
 
 const App: React.FC = () => {
 

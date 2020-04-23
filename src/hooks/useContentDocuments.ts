@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { IAppState } from 'Store/State';
-import { REQUEST_CONTENT_DOCUMENTS } from 'Store/actions/ContentDocument';
+import { IAppState } from 'store/State';
+import { REQUEST_CONTENT_DOCUMENTS } from 'store/actions/ContentDocument';
 
 
 

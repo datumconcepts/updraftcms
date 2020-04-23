@@ -1,7 +1,8 @@
 import React from 'react';
-import { Menu, Breadcrumb, Icon } from 'semantic-ui-react';
+import { Menu, Breadcrumb, Icon, Popup } from 'semantic-ui-react';
 
 import PageToolbar from 'Presentation/HOC/PageToolbar';
+import useShortcuts from 'hooks/useShortcuts';
 
 interface IContentDocumentEditToolbarProps {
     cloneContentDocument: () => void;
@@ -13,6 +14,12 @@ interface IContentDocumentEditToolbarProps {
 
 const ContentDocumentEditToolbar: React.FC<IContentDocumentEditToolbarProps> = ({ cloneContentDocument, saveContentDocument, deleteContentDocument, closeContentDocument, isNew }) => {
 
+    useShortcuts([
+        { key: 's', action: saveContentDocument },
+        { key: 'd', action: deleteContentDocument },
+        { key: 'q', action: closeContentDocument },
+        { key: 'a', action: cloneContentDocument }
+    ]);
     return <PageToolbar>
         <Menu.Item>
             <Breadcrumb.Section>Content Documents</Breadcrumb.Section>
@@ -20,21 +27,21 @@ const ContentDocumentEditToolbar: React.FC<IContentDocumentEditToolbarProps> = (
             <Breadcrumb.Section>Edit</Breadcrumb.Section></Menu.Item>
         <Menu.Menu position="right">
             {
-                !isNew && <Menu.Item icon={true} onClick={cloneContentDocument}>
-                    <Icon name="copy outline" color="blue" />
-                </Menu.Item>
+                !isNew && <Popup trigger={<Menu.Item icon={true} onClick={cloneContentDocument}>
+                    <Icon name="clone outline" color="blue" />
+                </Menu.Item>} content={<>Clone <b>(ctrl+ a)</b></>} position="bottom right" />
             }
-            <Menu.Item icon={true} onClick={saveContentDocument}>
+            <Popup trigger={<Menu.Item icon={true} onClick={saveContentDocument}>
                 <Icon name="save" color="blue" />
-            </Menu.Item>
+            </Menu.Item>} content={<>Save <b>(ctrl+ s)</b></>} position="bottom right" />
             {
-                !isNew && <Menu.Item onClick={deleteContentDocument}>
+                !isNew && <Popup trigger={<Menu.Item onClick={deleteContentDocument}>
                     <Icon name="trash alternate outline" color="red" />
-                </Menu.Item>
+                </Menu.Item>} content={<>Delete <b>(ctrl+ d)</b></>} position="bottom right" />
             }
-            <Menu.Item onClick={closeContentDocument}>
+            <Popup trigger={<Menu.Item onClick={closeContentDocument}>
                 <Icon name="close" />
-            </Menu.Item>
+            </Menu.Item>} content={<>Close <b>(ctrl+ q)</b></>} position="bottom right" />
         </Menu.Menu>
     </PageToolbar>
 }

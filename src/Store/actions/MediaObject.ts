@@ -1,4 +1,4 @@
-import { Action } from 'redux';
+import { Action } from 'store/actions/node_modules/redux';
 import { IMediaObject } from 'Types';
 
 

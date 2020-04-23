@@ -12,7 +12,7 @@ import SingleFileComponent from '../PropertyTypes/FileUploadComponent';
 
 import { IContentDocument, IDocumentProperty, IObjectModel, IPropertyMap, } from "Types";
 
-import { defaultObjectModel } from 'Store/State/IObjectModel';
+import { defaultObjectModel } from 'store/State/IObjectModel';
 
 import { Grid, Form, Select, Segment } from 'semantic-ui-react';
 
@@ -54,7 +54,7 @@ const propertyTypes: any[] = [
         name: "Rich Text",
         propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
             <RichTextComponent key={key}
-            propertyMap={propertyMap}
+                propertyMap={propertyMap}
                 documentProperty={documentProperty}
                 onPropertyUpdate={onPropertyUpdate}
             />

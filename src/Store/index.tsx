@@ -1,15 +1,15 @@
-import * as React from "react";
+import * as React from "store/node_modules/react";
 
-import { Provider } from 'react-redux';
+import { Provider } from 'store/node_modules/react-redux';
 
-import thunk from 'redux-thunk';
+import thunk from 'store/node_modules/redux-thunk';
 
-import { applyMiddleware, combineReducers, createStore, Store, } from 'redux';
+import { applyMiddleware, combineReducers, createStore, Store, } from 'store/node_modules/redux';
 
-import { AppMiddleware } from './MiddlewareSupport';
+import { AppMiddleware } from './middleware-support';
 import { AppReducers } from './Reducers';
 
-import { IDataPersistenceMiddleware } from './MiddlewareSupport/data-persistence';
+import { IDataPersistenceMiddleware } from './middleware-support/data-persistence';
 
 
 export interface IUpdraftStoreProps {

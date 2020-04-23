@@ -1,5 +1,5 @@
-import { Dispatch, MiddlewareAPI } from 'redux';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { Dispatch, MiddlewareAPI } from 'store/node_modules/redux';
+import { ThunkAction, ThunkDispatch } from 'store/node_modules/redux-thunk';
 
 import { KnownAppActions } from './actions';
 import { IAppState } from './State';

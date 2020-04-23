@@ -4,10 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import guid from "uuid/v4";
 
-import { IAppState } from 'Store/State';
+import { IAppState } from 'store/State';
 import { IContentDocument } from 'Types';
-import { SAVE_CONTENT_DOCUMENT, DELETE_CONTENT_DOCUMENT } from 'Store/actions/ContentDocument';
-import { defaultContentDocument } from 'Store/State/IContentDocument';
+import { SAVE_CONTENT_DOCUMENT, DELETE_CONTENT_DOCUMENT } from 'store/actions/ContentDocument';
+import { defaultContentDocument } from 'store/State/IContentDocument';
 
 import useObjectModels from 'hooks/useObjectModels';
 import useContentDocuments from 'hooks/useContentDocuments';
@@ -15,7 +15,6 @@ import useContentDocuments from 'hooks/useContentDocuments';
 import Layout from 'Presentation/_Layout';
 import ContentDocumentEdit from 'Presentation/ContentDocuments/ContentDocumentEdit';
 import ContentDocumentEditToolbar from 'Presentation/ContentDocuments/content-document-edit-toolbar';
-import useShortcuts from 'hooks/useShortcuts';
 
 interface IRouteParams {
     objectModelId?: string;
@@ -78,12 +77,6 @@ const ContentDocumentsEditPage: React.FC = () => {
     }, [dispatch, contentDocument, contentDocuments, closeContentDocument, saveContentDocumentHandler, objectModelId]);
 
 
-    useShortcuts([
-        { key: 's', action: saveContentDocumentHandler },
-        { key: 'd', action: deleteContentDocumentHandler },
-        { key: 'q', action: closeContentDocument },
-        { key: 'c', action: cloneContentDocumentHandler }
-    ]);
 
     React.useEffect(() => {
         let _contentDocument: IContentDocument = contentDocuments.get(id) || { ...defaultContentDocument, id };

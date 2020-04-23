@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import guid from "uuid/v4";
 
 
-import { IAppState } from 'Store/State';
+import { IAppState } from 'store/State';
 import useShortcuts from 'hooks/useShortcuts';
 import useObjectModels from 'hooks/useObjectModels';
 
