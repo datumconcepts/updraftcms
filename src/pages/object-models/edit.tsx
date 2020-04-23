@@ -1,7 +1,8 @@
 import React from 'react';
-import { useParams } from 'react-router';
+import { useParams, useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
+import guid from "uuid/v4";
 
 import { IAppState } from 'Store/State';
 import { IObjectModel } from 'Types';
@@ -9,8 +10,9 @@ import { defaultObjectModel } from 'Store/State/IObjectModel';
 
 import ObjectModelEdit from 'Presentation/ObjectModels/ObjectModelEdit';
 import Layout from 'Presentation/_Layout';
-import { EDIT_OBJECT_MODEL, SAVE_OBJECT_MODEL } from 'Store/actions/ObjectModel';
-import { DELETE_MEDIA_OBJECT } from 'Store/actions/MediaObject';
+import { SAVE_OBJECT_MODEL, DELETE_OBJECT_MODEL } from 'Store/actions/ObjectModel';
+import useShortcuts from 'hooks/useShortcuts';
+import ObjectModelEditToolbar from 'Presentation/ObjectModels/object-model-edit-toolbar';
 
 interface IRouteParams {
     id: string;
@@ -18,34 +20,74 @@ interface IRouteParams {
 
 const ObjectModelsEditPage: React.FC = () => {
 
-    const { objectModels } = useSelector((appState: IAppState) => appState.objectModel);
-    const { id } = useParams<IRouteParams>();
+    const history = useHistory();
     const dispatch = useDispatch();
+    const { id } = useParams<IRouteParams>();
+    const { objectModels } = useSelector((appState: IAppState) => appState.objectModel);
+    const [objectModel, updateObjectModel] = React.useState<IObjectModel>(objectModels.get(id) || { ...defaultObjectModel, id });
 
-    const valueChangeHandler = React.useCallback((objectModel: IObjectModel) => dispatch({
-        type: EDIT_OBJECT_MODEL,
-        objectModels: objectModels.set(objectModel.id, objectModel)
-    }), [dispatch, objectModels]);
+    const closeObjectModel = React.useCallback(() => history.push(`/object-models`), [history]);
 
-    const saveObjectModelHandler = React.useCallback((objectModel: IObjectModel) => dispatch({
-        type: SAVE_OBJECT_MODEL,
-        objectModels: objectModels.set(objectModel.id, objectModel),
-        objectModel
-    }), [dispatch, objectModels]);
+    React.useEffect(() => {
+        if (id !== objectModel.id) {
+            const om = objectModels.get(id);
+            if (om) {
+                updateObjectModel(om);
+            }
+        }
+    }, [id, objectModels, objectModel])
 
-    const deleteObjectModelHandler = React.useCallback((objectModelId: string) => {
-        const deletedObjectModel = objectModels.get(id);
-        objectModels.delete(objectModelId);
-        dispatch({ type: DELETE_MEDIA_OBJECT, objectModels, deletedObjectModel });
-    }, [dispatch, objectModels]);
-    console.log(objectModels)
+
+    const saveObjectModelHandler = React.useCallback(() => {
+        dispatch({
+            type: SAVE_OBJECT_MODEL,
+            objectModels: objectModels.set(objectModel.id, objectModel),
+            objectModel
+        });
+        closeObjectModel();
+    }, [dispatch, objectModels, objectModel, closeObjectModel]);
+
+
+    const deleteObjectModelHandler = React.useCallback(() => {
+        objectModels.delete(objectModel.id);
+        dispatch({ type: DELETE_OBJECT_MODEL, objectModels, deletedObjectModel: objectModel });
+        closeObjectModel();
+    }, [dispatch, objectModels, objectModel, closeObjectModel]);
+
+    const cloneObjectModelHandler = React.useCallback(() => {
+        saveObjectModelHandler();
+
+        let id = guid().replace(/-/g, "");
+        while (objectModels.get(id)) {
+            id = guid().replace(/-/g, "");
+        }
+        const clonedObjecetModel = { ...objectModel, id, name: `Clone of ${objectModel.name}` };
+
+        dispatch({
+            type: SAVE_OBJECT_MODEL,
+            objectModels: objectModels.set(id, clonedObjecetModel),
+            objectModel: clonedObjecetModel
+        });
+
+        history.push(`/object-models/${id}/edit`);
+    }, [dispatch, objectModels, objectModel, closeObjectModel, saveObjectModelHandler]);
+
+
+    useShortcuts([
+        { key: 's', action: saveObjectModelHandler },
+        { key: 'd', action: deleteObjectModelHandler },
+        { key: 'q', action: closeObjectModel },
+        { key: 'c', action: cloneObjectModelHandler }
+    ]);
+
     return (<Layout>
-        <ObjectModelEdit
-            onValueChange={valueChangeHandler}
-            objectModel={objectModels.get(id) || { ...defaultObjectModel, id }}
+        <ObjectModelEditToolbar isNew={objectModels.get(id) ? false : true}
             saveObjectModel={saveObjectModelHandler}
+            cloneObjectModel={cloneObjectModelHandler}
             deleteObjectModel={deleteObjectModelHandler}
-        /></Layout>
+            closeObjectModel={closeObjectModel} />
+        <ObjectModelEdit onValueChange={updateObjectModel} objectModel={objectModel} />
+    </Layout>
     );
 }
 

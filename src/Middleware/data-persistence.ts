@@ -6,40 +6,55 @@ const ContentocumentKey = "_content_dcuments";
 const ObjectModelKey = "_object_models";
 
 export class LocalStorageData implements IDataPersistenceMiddleware {
-    
-    public DeleteObjectModel(deletedObjectModel: IObjectModel, objectModels: Map<string, IObjectModel>): void {
-        localStorage.setItem(ObjectModelKey, JSON.stringify([...objectModels.values()]));
+
+    public DeleteObjectModel(deletedObjectModel: IObjectModel, objectModels: Map<string, IObjectModel>): Promise<any> {
+        return new Promise((resolve) => {
+            localStorage.setItem(ObjectModelKey, JSON.stringify([...objectModels.values()]));
+            resolve(deletedObjectModel);
+        });
     }
 
-    public RequestObjectModels(): Map<string, IObjectModel> {
-        const objectModelJson = localStorage.getItem(ObjectModelKey);
-        if (objectModelJson) {
-            const data: IObjectModel[] = JSON.parse(objectModelJson);
-            return new Map(data.map(objectModel => [objectModel.id, objectModel] as [string, IObjectModel]));
-        }
-        return new Map<string, IObjectModel>();
+    public RequestObjectModels(): Promise<Map<string, IObjectModel>> {
+        return new Promise<Map<string, IObjectModel>>((resolve, reject) => {
+            const objectModelJson = localStorage.getItem(ObjectModelKey);
+            if (objectModelJson) {
+                const data: IObjectModel[] = JSON.parse(objectModelJson);
+                resolve(new Map(data.map(objectModel => [objectModel.id, objectModel] as [string, IObjectModel])));
+            }
+            resolve(new Map<string, IObjectModel>());
+        });
     }
 
-    public SaveObjectModel(savedObjectModel: IObjectModel, objectModels: Map<string, IObjectModel>): void {
-        localStorage.setItem(ObjectModelKey, JSON.stringify([...objectModels.values()]));
+    public SaveObjectModel(savedObjectModel: IObjectModel, objectModels: Map<string, IObjectModel>): Promise<any> {
+        return new Promise((resolve) => {
+            localStorage.setItem(ObjectModelKey, JSON.stringify([...objectModels.values()]));
+            resolve(savedObjectModel);
+        });
     }
 
-    public DeleteContentDocument(deletedContentDocument: IContentDocument, contentDocuments: Map<string, IContentDocument>): void {
-        localStorage.setItem(ContentocumentKey, JSON.stringify([...contentDocuments.values()]));
+    public DeleteContentDocument(deletedContentDocument: IContentDocument, contentDocuments: Map<string, IContentDocument>): Promise<any> {
+        return new Promise((resolve) => {
+            localStorage.setItem(ContentocumentKey, JSON.stringify([...contentDocuments.values()]));
+            resolve(deletedContentDocument);
+        });
     }
 
-    public RequestContentDocuments(): Map<string, IContentDocument> {
-
-        const contentDocumentJson = localStorage.getItem(ContentocumentKey);
-        if (contentDocumentJson) {
-            const data: IContentDocument[] = JSON.parse(contentDocumentJson);
-            return new Map(data.map(contentDocument => [contentDocument.id, contentDocument] as [string, IContentDocument]));
-        }
-        return new Map<string, IContentDocument>();
+    public RequestContentDocuments(): Promise<Map<string, IContentDocument>> {
+        return new Promise<Map<string, IContentDocument>>((resolve, reject) => {
+            const contentDocumentJson = localStorage.getItem(ContentocumentKey);
+            if (contentDocumentJson) {
+                const data: IContentDocument[] = JSON.parse(contentDocumentJson);
+                resolve(new Map(data.map(contentDocument => [contentDocument.id, contentDocument] as [string, IContentDocument])));
+            }
+            resolve(new Map<string, IContentDocument>());
+        });
     }
-    
-    public SaveContentDocument(savedContentDocument: IContentDocument, contentDocuments: Map<string, IContentDocument>): void {
-        localStorage.setItem(ContentocumentKey, JSON.stringify([...contentDocuments.values()]));
+
+    public SaveContentDocument(savedContentDocument: IContentDocument, contentDocuments: Map<string, IContentDocument>): Promise<any> {
+        return new Promise((resolve) => {
+            localStorage.setItem(ContentocumentKey, JSON.stringify([...contentDocuments.values()]));
+            resolve(savedContentDocument);
+        });
     }
 
 

@@ -4,14 +4,9 @@ import { Menu } from 'semantic-ui-react';
 
 
 
-class PageToolbar extends React.Component<any> {
-  public render() {
-    // const { classes, children } = this.props;
-    return <Menu>
-     
-          Page Title
-     
-    </Menu>;
-  }
+const PageToolbar: React.FC = ({ children }) => {
+  return <Menu inverted={true} color="black" attached={true}>
+    {children}
+  </Menu>;
 }
 export default PageToolbar;
