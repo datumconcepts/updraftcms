@@ -1,4 +1,4 @@
-import { IContentDocument } from 'Types';
+import { IContentDocument } from 'models';
 
 export interface IContentDocumentState {
     isLoading: boolean;

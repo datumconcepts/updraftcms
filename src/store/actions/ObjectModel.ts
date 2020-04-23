@@ -1,9 +1,9 @@
 import { Action } from 'redux';
 
-import { IAppState } from 'store-data/State';
-import { AppDispatch } from 'store-data/StoreTypes';
+import { IAppState } from 'store/State';
+import { AppDispatch } from 'store/StoreTypes';
 
-import { IObjectModel } from 'Types';
+import { IObjectModel } from 'models';
 
 export const REQUEST_OBJECT_MODELS = 'REQUEST_OBJECT_MODELS';
 export const RECEIVE_OBJECT_MODELS = 'RECEIVE_OBJECT_MODELS';

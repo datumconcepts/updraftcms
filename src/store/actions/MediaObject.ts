@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { IMediaObject } from 'Types';
+import { IMediaObject } from 'models';
 
 
 export const REQUEST_MEDIA_OBJECTS = 'REQUEST_MEDIA_OBJECTS';

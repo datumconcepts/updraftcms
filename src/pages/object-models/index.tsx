@@ -1,25 +1,21 @@
 import React from 'react';
 import { useHistory } from 'react-router';
-import { useSelector } from 'react-redux';
 import guid from "uuid/v4";
 
 
-import { IAppState } from 'store-data/State';
 import useShortcuts from 'hooks/useShortcuts';
 import useObjectModels from 'hooks/useObjectModels';
+import Layout from 'components/layout';
+import ObjectModelListToolbar from 'components/object-models/object-model-list-toolbar';
+import ObjectModelList from 'components/object-models/object-model-list';
 
-import Layout from 'Presentation/_Layout';
 
-import ObjectModelList from 'Presentation/ObjectModels/ObjectModelList';
-import ObjectModelListToolbar from 'Presentation/ObjectModels/object-model-list-toolbar';
 
 const ObjectModelsListPage: React.FC = () => {
 
-    useObjectModels();
+    const objectModels = useObjectModels();
 
-    const { objectModels } = useSelector((appState: IAppState) => appState.objectModel);
     const history = useHistory();
-
 
     const addObjectModel = React.useCallback(() => {
         let id = guid().replace(/-/g, "");

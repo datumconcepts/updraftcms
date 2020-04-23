@@ -2,11 +2,13 @@ import * as React from "react";
 import { useHistory, useParams } from "react-router";
 import { Card } from 'semantic-ui-react';
 
-import { IContentDocument, } from "Types";
+import { IContentDocument, } from "models";
 
-import AppContent from "Presentation/HOC/AppContent";
-import DisplayCard from "Presentation/HOC/DisplayCard";
-import EmptyListDisplay from "Presentation/HOC/EmptyListDisplay";
+import AppContent from "components/high-order/AppContent";
+import EmptyListDisplay from "components/high-order/EmptyListDisplay";
+import DisplayCard from "components/high-order/DisplayCard";
+
+
 
 interface IRouteParams {
   objectModelId?: string;

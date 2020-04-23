@@ -1,7 +1,8 @@
 import React from 'react';
 import { Menu, Breadcrumb, Icon } from 'semantic-ui-react';
 
-import PageToolbar from 'Presentation/HOC/PageToolbar';
+import PageToolbar from 'components/high-order/PageToolbar';
+
 
 interface IObjectModelListToolbarProps {
     addObjectModel: () => void;

@@ -1,8 +1,8 @@
 import * as React from "react";
-
-
-import { IPropertyMap, IDocumentProperty } from "Types";
 import { Card, TextArea, TextAreaProps } from 'semantic-ui-react';
+
+
+import { IPropertyMap, IDocumentProperty } from 'models';
 
 interface ILongTextComponentProps {
   documentProperty: IDocumentProperty

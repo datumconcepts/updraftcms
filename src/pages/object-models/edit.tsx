@@ -4,18 +4,18 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import guid from "uuid/v4";
 
-import { IAppState } from 'store-data/State';
-import { IObjectModel } from 'Types';
-import { defaultObjectModel } from 'store-data/State/IObjectModel';
+import { IAppState } from 'store/State';
+import { IObjectModel } from 'models';
+import { defaultObjectModel } from 'store/State/IObjectModel';
 
-import { SAVE_OBJECT_MODEL, DELETE_OBJECT_MODEL } from 'store-data/actions/ObjectModel';
+import { SAVE_OBJECT_MODEL, DELETE_OBJECT_MODEL } from 'store/actions/ObjectModel';
 
 import useObjectModels from 'hooks/useObjectModels';
 import useShortcuts from 'hooks/useShortcuts';
+import Layout from 'components/layout';
+import ObjectModelEditToolbar from 'components/object-models/object-model-edit-toolbar';
+import ObjectModelEdit from 'components/object-models/object-model-edit';
 
-import Layout from 'Presentation/_Layout';
-import ObjectModelEdit from 'Presentation/ObjectModels/ObjectModelEdit';
-import ObjectModelEditToolbar from 'Presentation/ObjectModels/object-model-edit-toolbar';
 
 interface IRouteParams {
     id: string;
@@ -75,7 +75,7 @@ const ObjectModelsEditPage: React.FC = () => {
         });
 
         history.push(`/object-models/${id}/edit`);
-    }, [dispatch, objectModels, objectModel, closeObjectModel, saveObjectModelHandler]);
+    }, [dispatch, objectModels, objectModel, history, saveObjectModelHandler]);
 
 
     useShortcuts([

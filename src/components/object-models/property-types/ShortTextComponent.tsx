@@ -1,8 +1,8 @@
 import * as React from "react";
+import { Card, Form } from 'semantic-ui-react';
 
 
-import { IPropertyMap } from "Types";
-import { Card, Form, Button, Icon } from 'semantic-ui-react';
+import { IPropertyMap } from 'models';
 
 interface ITextboxComponentProps {
   propertyMap: IPropertyMap;

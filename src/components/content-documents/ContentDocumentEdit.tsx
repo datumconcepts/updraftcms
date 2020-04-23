@@ -3,7 +3,7 @@ import * as React from "react";
 import { useParams, useHistory } from "react-router-dom";
 
 
-import { IContentDocument, IObjectModel } from "Types";
+import { IContentDocument, IObjectModel } from 'models';
 
 
 

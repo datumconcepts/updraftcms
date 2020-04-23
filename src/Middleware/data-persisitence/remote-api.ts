@@ -1,6 +1,6 @@
-import { IDataPersistenceMiddleware } from 'store-data/middleware-support/data-persistence';
+import { IDataPersistenceMiddleware } from 'store/middleware-support/data-persistence';
 
-import { IContentDocument, IObjectModel, } from 'Types';
+import { IContentDocument, IObjectModel, } from 'models';
 
 
 export class LocalStorageData implements IDataPersistenceMiddleware {

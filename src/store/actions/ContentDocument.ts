@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { IContentDocument } from 'Types';
+import { IContentDocument } from 'models';
 
 export const REQUEST_CONTENT_DOCUMENTS = 'REQUEST_CONTENT_DOCUMENTS';
 export const RECEIVE_CONTENT_DOCUMENTS = 'RECEIVE_CONTENT_DOCUMENTS';

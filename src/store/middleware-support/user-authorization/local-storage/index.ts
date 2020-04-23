@@ -1,8 +1,8 @@
 
 import { AnyAction, Dispatch } from 'redux';
 
-import { KnownAppActions } from 'store-data/actions';
-import { AppMiddlewareApi } from 'store-data/StoreTypes';
+import { KnownAppActions } from 'store/actions';
+import { AppMiddlewareApi } from 'store/StoreTypes';
 
 export const middleware = (api: AppMiddlewareApi) =>
     (next: Dispatch<AnyAction>) =>

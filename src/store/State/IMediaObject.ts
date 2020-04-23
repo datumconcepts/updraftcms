@@ -1,4 +1,4 @@
-import { IMediaObject, IMediaObjectType } from 'Types';
+import { IMediaObject, IMediaObjectType } from 'models';
 
 export interface IMediaObjectState {
     isLoading: boolean;

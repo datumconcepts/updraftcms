@@ -1,6 +1,7 @@
-import { IDataPersistenceMiddleware } from 'store-data/middleware-support/data-persistencee';
 
-import { IContentDocument, IObjectModel, } from 'Types';
+import { IDataPersistenceMiddleware } from 'store/middleware-support/data-persistence';
+
+import { IContentDocument, IObjectModel, } from 'models';
 
 const ContentocumentKey = "_content_dcuments";
 const ObjectModelKey = "_object_models";

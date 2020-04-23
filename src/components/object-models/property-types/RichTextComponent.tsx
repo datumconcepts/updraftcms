@@ -1,15 +1,21 @@
 import * as React from "react";
-
-
-
-
-import { IPropertyMap } from "Types";
+import { Icon, Card, Button } from 'semantic-ui-react';
 
 import { convertFromRaw, convertToRaw, DraftBlockType, Editor, EditorState, RichUtils } from 'draft-js';
 
+
+
+
+import { IPropertyMap } from 'models'
+
+
+
+
+
+
+
 import 'draft-js/dist/Draft.css'
-import StyleButton from '../../HOC/HtmlEditor/StyleButton';
-import { Icon, Card, Button } from 'semantic-ui-react';
+import StyleButton from "components/high-order/HtmlEditor/StyleButton";
 
 interface IRichTextComponentProps {
   propertyMap: IPropertyMap;

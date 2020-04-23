@@ -1,18 +1,14 @@
 import * as React from "react";
-
-
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
-
-
-import AppContent from "Presentation/HOC/AppContent";
-
-import LongTextComponent from "../PropertyTypes/LongTextComponent";
-import ShortTextComponent from "../PropertyTypes/ShortTextComponent";
+import { Grid, Segment, List, Divider, Form } from 'semantic-ui-react';
 
 import id from "uuid/v4";
 
-import { IObjectModel, IPropertyMap } from "Types";
-import { Grid, Segment, List, Divider, Form } from 'semantic-ui-react';
+import { IObjectModel, IPropertyMap } from 'models';
+
+import ShortTextComponent from "../property-types/ShortTextComponent";
+import LongTextComponent from "../property-types/LongTextComponent";
+import AppContent from "components/high-order/AppContent";
 
 const propertyTypes: any[] = [
   {

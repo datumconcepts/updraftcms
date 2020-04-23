@@ -1,23 +1,18 @@
 import * as React from 'react';
-
-import { RouteComponentProps, withRouter } from "react-router";
-
+import { Segment, Sidebar } from 'semantic-ui-react';
 
 
-import { IMediaObject } from 'Types';
 
-import EmptyListDisplay from "../HOC/EmptyListDisplay";
+import { IMediaObject } from 'models';
 
-import AppContent from "../HOC/AppContent";
-
-// import MediaObjectMenu from './MediaObjectMenu';
 import MediaObjectToolbar from './MediaObjectToolbar';
 
-import { Segment, Sidebar } from 'semantic-ui-react';
 import MediaObjectMenu from './MediaObjectMenu';
+import AppContent from 'components/high-order/AppContent';
+import EmptyListDisplay from 'components/high-order/EmptyListDisplay';
 
 
-interface IMediaObjectListProps extends RouteComponentProps {
+interface IMediaObjectListProps {
     mediaObjects: IMediaObject[];
     selectedMediaObjectId: string;
     setSelectedMediaObject(id: string): void;
@@ -51,4 +46,4 @@ class MediaObjectList extends React.Component<IMediaObjectListProps> {
 
 }
 
-export default withRouter(MediaObjectList)
+export default MediaObjectList;

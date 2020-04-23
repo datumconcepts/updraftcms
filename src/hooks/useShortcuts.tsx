@@ -10,7 +10,7 @@ const useShortcuts = (shortcuts: IShortcut[]) => {
     React.useEffect(() => {
         const registerShortcuts = (event: KeyboardEvent) => {
             if (event.ctrlKey) {
-                shortcuts.map(shortcut => {
+                shortcuts.forEach(shortcut => {
                     if (event.key === shortcut.key) {
                         event.preventDefault();
                         shortcut.action();

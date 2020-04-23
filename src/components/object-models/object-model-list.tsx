@@ -3,12 +3,11 @@ import { Card } from 'semantic-ui-react';
 import { useHistory } from "react-router";
 
 
-import { IObjectModel } from "Types";
+import { IObjectModel } from 'models'
 
-
-import DisplayCard from 'Presentation/HOC/DisplayCard'
-import EmptyListDisplay from "Presentation/HOC/EmptyListDisplay";
-import AppContent from "Presentation/HOC/AppContent";
+import AppContent from "components/high-order/AppContent";
+import EmptyListDisplay from "components/high-order/EmptyListDisplay";
+import DisplayCard from "components/high-order/DisplayCard";
 
 
 interface IObjectModelListProps {

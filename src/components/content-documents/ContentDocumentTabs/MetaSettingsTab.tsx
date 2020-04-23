@@ -1,17 +1,16 @@
 import * as React from "react";
 
 
-import AppContent from "Presentation/HOC/AppContent";
-
 import LongTextComponent from "../PropertyTypes/LongTextComponent";
 import OptionSelectComponent from "../PropertyTypes/OptionSelectComponent";
 import ShortTextComponent from "../PropertyTypes/ShortTextComponent";
 
 
-import { IContentDocument, IDocumentProperty, IObjectModel, IPropertyMap, } from "Types";
+import { IContentDocument, IDocumentProperty, IObjectModel, IPropertyMap, } from 'models';
 
-import { defaultObjectModel } from 'store-data/State/IObjectModel';
+import { defaultObjectModel } from 'store/State/IObjectModel';
 import { Segment, Form } from 'semantic-ui-react';
+import AppContent from "components/high-order/AppContent";
 
 
 const propertyTypes: any[] = [
@@ -81,15 +80,13 @@ class MetaSettingsTab extends React.Component<IMetaSettingsTabProps> {
         const objectModel = objectModels.find(model => model.id === contentDocument.objectModelId) || defaultObjectModel;
         return (
             <AppContent>
-                 <Segment as={Form} attached={true}>
+                <Segment as={Form} attached={true}>
                     {
                         contentDocument.metaProperties.map((docProp, docPropIndex) => {
                             const propItem = objectModel.metaProperties.find(prop => prop.id === docProp.propertyMapId);
-                            if (propItem) {
-                                return propertyTypes
-                                    .find(x => x.propertyType === propItem.propertyType)
-                                    .propertyComponent(`doc_prop_meta_${docPropIndex}`, this.metaValueChangeHandler, propItem, docProp)
-                            }
+                            return propItem ? propertyTypes
+                                .find(x => x.propertyType === propItem.propertyType)
+                                .propertyComponent(`doc_prop_meta_${docPropIndex}`, this.metaValueChangeHandler, propItem, docProp) : null
                         })
                     }
                 </Segment>

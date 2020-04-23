@@ -3,13 +3,14 @@ import * as React from "react";
 
 
 
-import {  IDocumentProperty, IPropertyMap } from "Types";
+import {  IDocumentProperty, IPropertyMap } from "models";
 
 import { convertFromRaw, convertToRaw, DraftBlockType, Editor, EditorState, RichUtils } from 'draft-js';
 
 import 'draft-js/dist/Draft.css'
-import StyleButton from 'Presentation/HOC/HtmlEditor/StyleButton';
+
 import { Icon, Card, Button } from 'semantic-ui-react';
+import StyleButton from "components/high-order/HtmlEditor/StyleButton";
 
 interface IRichTextComponentProps {
   documentProperty: IDocumentProperty

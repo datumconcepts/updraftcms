@@ -18,8 +18,6 @@ class DisplayCard extends React.Component<IDisplayCardProps> {
       children,
       title,
       subHeader,
-      avatar,
-      headerAction,
     } = this.props;
     return (
       <Card fluid={true} onClick={this.props.clickAction} color="blue">

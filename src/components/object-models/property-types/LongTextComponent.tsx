@@ -1,8 +1,7 @@
 import * as React from "react";
+import { Card, TextArea } from 'semantic-ui-react';
 
-
-import { IPropertyMap } from "Types";
-import { Card, Form, Button, Icon, TextArea } from 'semantic-ui-react';
+import { IPropertyMap } from 'models'
 
 interface ILongTextComponentProps {
   propertyMap: IPropertyMap;
@@ -42,8 +41,8 @@ class LongTextComponent extends React.Component<
           </Card.Header>
         </Card.Content>
         <Card.Content>
-          <TextArea 
-            name="defaultValue" rows={5} 
+          <TextArea
+            name="defaultValue" rows={5}
             onChange={this.changeValue}
             value={propertyMap.defaultValue}
             placeholder="Enter default value"

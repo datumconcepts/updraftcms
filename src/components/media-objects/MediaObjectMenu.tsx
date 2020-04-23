@@ -1,10 +1,9 @@
 import * as React from 'react';
-
+import { Sidebar, List, Segment } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 
-import { IMediaObject, IMediaObjectType } from 'Types';
-import { Sidebar, Menu, Icon, List, Segment } from 'semantic-ui-react';
+import { IMediaObject, IMediaObjectType } from 'models';
 
 
 

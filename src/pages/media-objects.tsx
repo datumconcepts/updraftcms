@@ -1,9 +1,13 @@
 import React from 'react';
-import Layout from 'Presentation/_Layout';
-import MediaObjectList from 'Presentation/MediaObjects/MediaObjectList';
 import { useSelector, useDispatch } from 'react-redux';
-import { IAppState } from 'store-data/State';
-import { SELECT_MEDIA_OBJECT } from 'store-data/actions/MediaObject';
+
+import { IAppState } from 'store/State';
+import { SELECT_MEDIA_OBJECT } from 'store/actions/MediaObject';
+
+import Layout from 'components/layout';
+import MediaObjectList from 'components/media-objects/MediaObjectList';
+
+
 
 const MediaObjectsPage: React.FC = () => {
     const { mediaObjects, selectedMediaObjectId } = useSelector((appState: IAppState) => appState.mediaObject);

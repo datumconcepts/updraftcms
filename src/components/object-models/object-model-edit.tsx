@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Tab } from 'semantic-ui-react';
 
-import { IObjectModel } from "Types";
+import { IObjectModel } from 'models';
+import GeneralSettingsTab from "./object-model-tabs/GeneralSettingsTab";
+import HtmlSettingsTab from "./object-model-tabs/HtmlSettingsTab";
+import MetaSettingsTab from "./object-model-tabs/MetaSettingsTab";
 
-import GeneralSettingsTab from "./ObjectModelTabs/GeneralSettingsTab";
-import HtmlSettingsTab from "./ObjectModelTabs/HtmlSettingsTab";
-import MetaSettingsTab from "./ObjectModelTabs/MetaSettingsTab";
 
 interface IObjectModelEditProps {
   onValueChange: (objectModel: IObjectModel) => void;

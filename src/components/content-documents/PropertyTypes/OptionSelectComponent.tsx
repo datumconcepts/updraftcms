@@ -1,9 +1,9 @@
 import * as React from "react";
+import { Card, Select,  InputOnChangeData } from 'semantic-ui-react';
 
 
 
-import { IPropertyMap, IDocumentProperty } from "Types";
-import { Card, Select, Button, Icon, Accordion, Grid, Form, InputOnChangeData } from 'semantic-ui-react';
+import { IPropertyMap, IDocumentProperty } from 'models';
 
 interface IOptionSelectComponentProps {
   documentProperty: IDocumentProperty

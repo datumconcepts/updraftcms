@@ -2,10 +2,10 @@ import * as React from "react";
 
 
 
-import AppContent from "Presentation/HOC/AppContent";
 
-import { IObjectModel } from "Types";
+import { IObjectModel } from 'models';
 import {  Form } from 'semantic-ui-react';
+import AppContent from "components/high-order/AppContent";
 
 
 

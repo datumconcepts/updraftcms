@@ -9,12 +9,14 @@ import useShortcuts from 'hooks/useShortcuts';
 
 import useContentDocuments from 'hooks/useContentDocuments';
 import useObjectModels from 'hooks/useObjectModels';
-import { IAppState } from 'store-data/State';
+import { IAppState } from 'store/State';
 
-import Layout from 'Presentation/_Layout';
-import ContentDocumentMenu from 'Presentation/ContentDocuments/ContentDocumentMenu';
-import ContentDocumentList from 'Presentation/ContentDocuments/ContentDocumentList';
-import ContentDocumentListToolbar from 'Presentation/ContentDocuments/content-document-list-toolbar';
+import Layout from 'components/layout';
+import ContentDocumentListToolbar from 'components/content-documents/content-document-list-toolbar';
+import ContentDocumentMenu from 'components/content-documents/ContentDocumentMenu';
+import ContentDocumentList from 'components/content-documents/ContentDocumentList';
+
+
 
 
 

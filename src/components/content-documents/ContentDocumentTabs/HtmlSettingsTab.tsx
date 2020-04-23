@@ -1,7 +1,7 @@
 import * as React from "react";
+import { Form, Select, Segment } from 'semantic-ui-react';
 
 
-import AppContent from "Presentation/HOC/AppContent";
 
 import LongTextComponent from "../PropertyTypes/LongTextComponent";
 import OptionSelectComponent from "../PropertyTypes/OptionSelectComponent";
@@ -10,11 +10,11 @@ import ShortTextComponent from "../PropertyTypes/ShortTextComponent";
 import SingleFileComponent from '../PropertyTypes/FileUploadComponent';
 
 
-import { IContentDocument, IDocumentProperty, IObjectModel, IPropertyMap, } from "Types";
+import { IContentDocument, IDocumentProperty, IObjectModel, IPropertyMap, } from "models";
 
-import { defaultObjectModel } from 'store-data/State/IObjectModel';
+import { defaultObjectModel } from 'store/State/IObjectModel';
 
-import { Grid, Form, Select, Segment } from 'semantic-ui-react';
+import AppContent from "components/high-order/AppContent";
 
 const propertyTypes: any[] = [
     {
@@ -135,11 +135,10 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
                     {
                         contentDocument.htmlProperties.map((docProp, docPropIndex) => {
                             const propItem = objectModel.htmlProperties.find(prop => prop.id === docProp.propertyMapId);
-                            if (propItem) {
-                                return propertyTypes
-                                    .find(x => x.propertyType === propItem.propertyType)
-                                    .propertyComponent(`doc_prop_html_${docPropIndex}`, this.htmlValueChangeHandler, propItem, docProp)
-                            }
+
+                            return propItem ? propertyTypes
+                                .find(x => x.propertyType === propItem.propertyType)
+                                .propertyComponent(`doc_prop_html_${docPropIndex}`, this.htmlValueChangeHandler, propItem, docProp) : null
                         })
                     }
                 </Segment>

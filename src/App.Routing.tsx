@@ -1,6 +1,6 @@
 import * as React from "react";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
-;
+
 import ObjectModelsListPage from "pages/object-models";
 import ObjectModelsEditPage from "pages/object-models/edit";
 

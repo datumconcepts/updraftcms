@@ -1,8 +1,8 @@
 import React from 'react';
 import { Menu, Breadcrumb, Icon, Popup } from 'semantic-ui-react';
 
-import PageToolbar from 'Presentation/HOC/PageToolbar';
 import useShortcuts from 'hooks/useShortcuts';
+import PageToolbar from 'components/high-order/PageToolbar';
 
 interface IContentDocumentEditToolbarProps {
     cloneContentDocument: () => void;

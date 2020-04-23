@@ -1,10 +1,10 @@
 import * as React from "react";
+import { Icon,  Card, Form } from 'semantic-ui-react';
 
 
 
-import { IDocumentProperty, IPropertyMap } from "Types";
+import { IDocumentProperty, IPropertyMap } from 'models'
 
-import { Icon, Grid, Card, Form, Button } from 'semantic-ui-react';
 
 
 interface IFileUploadComponentProps {

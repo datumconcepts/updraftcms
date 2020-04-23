@@ -1,7 +1,7 @@
 import React from 'react';
 import { Menu, Breadcrumb, Icon } from 'semantic-ui-react';
+import PageToolbar from 'components/high-order/PageToolbar';
 
-import PageToolbar from 'Presentation/HOC/PageToolbar';
 
 interface IContentDocumentListToolbarProps {
     addContentDocument: () => void;

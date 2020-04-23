@@ -1,9 +1,8 @@
 import * as React from "react";
+import {  Menu } from 'semantic-ui-react';
+import {  useHistory, useParams } from "react-router-dom";
 
-import { RouteComponentProps, withRouter, useHistory, useParams } from "react-router-dom";
-
-import { IObjectModel } from 'Types';
-import { Sidebar, Menu } from 'semantic-ui-react';
+import { IObjectModel } from 'models';
 
 
 interface IRouteParams {
