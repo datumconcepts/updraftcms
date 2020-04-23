@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import guid from "uuid/v4";
 
-import { IAppState } from 'store/State';
+import { IAppState } from 'store-data/State';
 import { IObjectModel } from 'Types';
-import { defaultObjectModel } from 'store/State/IObjectModel';
+import { defaultObjectModel } from 'store-data/State/IObjectModel';
 
-import { SAVE_OBJECT_MODEL, DELETE_OBJECT_MODEL } from 'store/actions/ObjectModel';
+import { SAVE_OBJECT_MODEL, DELETE_OBJECT_MODEL } from 'store-data/actions/ObjectModel';
 
 import useObjectModels from 'hooks/useObjectModels';
 import useShortcuts from 'hooks/useShortcuts';

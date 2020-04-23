@@ -10,7 +10,7 @@ import ShortTextComponent from "../PropertyTypes/ShortTextComponent";
 
 import { IContentDocument, IDocumentProperty, IObjectModel, IPropertyMap, } from "Types";
 
-import { defaultObjectModel } from 'store/State/IObjectModel';
+import { defaultObjectModel } from 'store-data/State/IObjectModel';
 import { Segment, Form } from 'semantic-ui-react';
 
 

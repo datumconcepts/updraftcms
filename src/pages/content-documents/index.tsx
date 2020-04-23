@@ -9,7 +9,7 @@ import useShortcuts from 'hooks/useShortcuts';
 
 import useContentDocuments from 'hooks/useContentDocuments';
 import useObjectModels from 'hooks/useObjectModels';
-import { IAppState } from 'store/State';
+import { IAppState } from 'store-data/State';
 
 import Layout from 'Presentation/_Layout';
 import ContentDocumentMenu from 'Presentation/ContentDocuments/ContentDocumentMenu';

@@ -12,7 +12,7 @@ import SingleFileComponent from '../PropertyTypes/FileUploadComponent';
 
 import { IContentDocument, IDocumentProperty, IObjectModel, IPropertyMap, } from "Types";
 
-import { defaultObjectModel } from 'store/State/IObjectModel';
+import { defaultObjectModel } from 'store-data/State/IObjectModel';
 
 import { Grid, Form, Select, Segment } from 'semantic-ui-react';
 

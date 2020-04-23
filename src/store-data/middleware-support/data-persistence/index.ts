@@ -1,8 +1,8 @@
 
-import { AnyAction, Dispatch } from 'store/middleware-support/data-persistence/node_modules/redux';
+import { AnyAction, Dispatch } from 'redux';
 
-import { KnownAppActions } from 'store/actions';
-import { AppMiddlewareApi } from 'store/StoreTypes';
+import { KnownAppActions } from 'store-data/actions';
+import { AppMiddlewareApi } from 'store-data/StoreTypes';
 import { IContentDocument, IObjectModel } from 'Types';
 
 

@@ -4,10 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import guid from "uuid/v4";
 
-import { IAppState } from 'store/State';
+import { IAppState } from 'store-data/State';
 import { IContentDocument } from 'Types';
-import { SAVE_CONTENT_DOCUMENT, DELETE_CONTENT_DOCUMENT } from 'store/actions/ContentDocument';
-import { defaultContentDocument } from 'store/State/IContentDocument';
+import { SAVE_CONTENT_DOCUMENT, DELETE_CONTENT_DOCUMENT } from 'store-data/actions/ContentDocument';
+import { defaultContentDocument } from 'store-data/State/IContentDocument';
 
 import useObjectModels from 'hooks/useObjectModels';
 import useContentDocuments from 'hooks/useContentDocuments';

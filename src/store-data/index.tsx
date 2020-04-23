@@ -1,10 +1,10 @@
-import * as React from "store/node_modules/react";
+import * as React from "react";
 
-import { Provider } from 'store/node_modules/react-redux';
+import { Provider } from 'react-redux';
 
-import thunk from 'store/node_modules/redux-thunk';
+import thunk from 'redux-thunk';
 
-import { applyMiddleware, combineReducers, createStore, Store, } from 'store/node_modules/redux';
+import { applyMiddleware, combineReducers, createStore, Store, } from 'redux';
 
 import { AppMiddleware } from './middleware-support';
 import { AppReducers } from './Reducers';

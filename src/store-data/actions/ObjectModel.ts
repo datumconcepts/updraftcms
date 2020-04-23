@@ -1,7 +1,7 @@
-import { Action } from 'store/actions/node_modules/redux';
+import { Action } from 'redux';
 
-import { IAppState } from 'store/State';
-import { AppDispatch } from 'store/StoreTypes';
+import { IAppState } from 'store-data/State';
+import { AppDispatch } from 'store-data/StoreTypes';
 
 import { IObjectModel } from 'Types';
 

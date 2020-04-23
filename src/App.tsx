@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import UpdraftStore from './store'
+import UpdraftStore from './store-data'
 
 import AppRouting from "./App.Routing";
 

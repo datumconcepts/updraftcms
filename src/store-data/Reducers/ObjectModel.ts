@@ -1,4 +1,4 @@
-import { Action, Reducer } from 'store/Reducers/node_modules/redux';
+import { Action, Reducer } from 'redux';
 
 import { KnownObjectModelActions } from '../actions/ObjectModel';
 import { IObjectModelState, unloadedObjectModelState } from '../State/IObjectModel';

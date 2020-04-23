@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { IAppState } from 'store/State';
-import { REQUEST_OBJECT_MODELS } from 'store/actions/ObjectModel';
+import { IAppState } from 'store-data/State';
+import { REQUEST_OBJECT_MODELS } from 'store-data/actions/ObjectModel';
 
 
 
