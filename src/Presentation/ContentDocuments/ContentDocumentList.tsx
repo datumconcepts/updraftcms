@@ -1,78 +1,53 @@
 import * as React from "react";
+import { useHistory, useParams } from "react-router";
+import { Card } from 'semantic-ui-react';
 
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { IContentDocument, } from "Types";
 
-;
-
-import { IContentDocument, IObjectModel, } from "Types";
-
-import DisplayCard from "../HOC/DisplayCard";
-import EmptyListDisplay from "../HOC/EmptyListDisplay";
-
-import AppContent from "../HOC/AppContent";
-
-
-import guid from "uuid/v4";
-import ContentDocumentMenu from './ContentDocumentMenu';
-import { Grid } from 'semantic-ui-react';
-
+import AppContent from "Presentation/HOC/AppContent";
+import DisplayCard from "Presentation/HOC/DisplayCard";
+import EmptyListDisplay from "Presentation/HOC/EmptyListDisplay";
 
 interface IRouteParams {
   objectModelId?: string;
 }
-interface IContentDocumentListProps extends RouteComponentProps<IRouteParams> {
-  objectModels: IObjectModel[];
+
+interface IContentDocumentListProps {
   contentDocuments: IContentDocument[];
+  addContentDocument: () => void;
 }
-class ContentDocumentList extends React.Component<IContentDocumentListProps> {
+const ContentDocumentList: React.FC<IContentDocumentListProps> = ({ contentDocuments, addContentDocument }) => {
 
-  public addContentDocument = (event: any) => {
-    const { contentDocuments, history, match: { params } } = this.props;
-    let id = guid().replace(/-/g, "");
-    while (contentDocuments.find(model => model.id === id)) {
-      id = guid().replace(/-/g, "");
-    }
-    history.push(params.objectModelId ? `/${params.objectModelId}/content/${id}/edit` : `/content/${id}/edit`);
-  }
+  const { objectModelId } = useParams<IRouteParams>();
+  const history = useHistory();
 
-  public editContentDocument = (contentDocument: IContentDocument) => {
-    const { id, objectModelId } = contentDocument;
-    this.props.history.push(objectModelId ? `/${objectModelId}/content/${id}/edit` : `/content/${id}/edit`);
-  }
+  const editContentDocument = React.useCallback(({ id }: IContentDocument) => {
+    history.push(objectModelId ? `/${objectModelId}/content/${id}/edit` : `/content/${id}/edit`);
+  }, [history, objectModelId]);
 
-  public render() {
-    const { contentDocuments, objectModels } = this.props;
-    return (
-      <>
-        <AppContent>
-          <ContentDocumentMenu objectModels={objectModels} />
-          {contentDocuments.length === 0 ? (
-            <EmptyListDisplay
-              clickHandler={this.addContentDocument}
-              title="It looks like you have no content yet. Click here to add a new document"
-            />
-          ) : (
-              <Grid direction="column" container={true} spacing={10}>
-                {([] as IContentDocument[])
-                  .concat(contentDocuments)
-                  .map((contentDocument, contentDocumentIndex) => (
-                    <DisplayCard key={`content_document_${contentDocumentIndex}`}
-                      title={contentDocument.name}
-                      subHeader={contentDocument.id}
-                      clickAction={() => this.editContentDocument(contentDocument)}
-                      
-                    />
-                  ))
-                }
-                {/* <Fab color="primary" size="medium" aria-label="Add" className={classes.fab} onClick={this.addContentDocument} >
-                  <AddIcon />
-                </Fab> */}
-              </Grid>
-            )}
-        </AppContent>
-      </>
-    );
-  }
+
+  return (<AppContent>
+    {contentDocuments.length === 0 ? (
+      <EmptyListDisplay
+        clickHandler={addContentDocument}
+        title="It looks like you have no content yet. Click here to add a new document"
+      />
+    ) : (
+        <Card.Group>
+          {([] as IContentDocument[])
+            .concat(contentDocuments)
+            .map((contentDocument, contentDocumentIndex) => (
+              <DisplayCard key={`content_document_${contentDocumentIndex}`}
+                title={contentDocument.name}
+                subHeader={contentDocument.id}
+                clickAction={() => editContentDocument(contentDocument)}
+
+              />
+            ))
+          }
+        </Card.Group>
+      )}
+  </AppContent>);
 }
 
-export default withRouter(ContentDocumentList);
+export default ContentDocumentList;

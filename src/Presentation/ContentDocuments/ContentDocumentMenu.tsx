@@ -1,41 +1,39 @@
 import * as React from "react";
 
-import { RouteComponentProps, withRouter } from "react-router-dom";
-
-
-
+import { RouteComponentProps, withRouter, useHistory, useParams } from "react-router-dom";
 
 import { IObjectModel } from 'Types';
 import { Sidebar, Menu } from 'semantic-ui-react';
 
 
 interface IRouteParams {
-    objectModelId: string;
+    objectModelId?: string;
 }
 
-interface IContentDocumentMenu extends RouteComponentProps<IRouteParams> {
+interface IContentDocumentMenuProps {
     objectModels: IObjectModel[];
 }
 
-class ContentDocumentMenu extends React.Component<IContentDocumentMenu, {}>{
-    public navigateToModel = (id: string) => {
-        const { history } = this.props;
+const ContentDocumentMenu: React.FC<IContentDocumentMenuProps> = ({ objectModels }) => {
+
+    const { objectModelId } = useParams<IRouteParams>();
+    const history = useHistory();
+
+    const navigateToModel = React.useCallback(({ id }: IObjectModel) => {
         history.push(`/${id}/content`);
-    }
-    public render() {
-        const { match: { params } } = this.props;
-        return (<Sidebar as={Menu} >
-                {([] as IObjectModel[])
-                    .concat(this.props.objectModels)
-                    .map((objectModel, index) => (
-                        <Menu.Item button={true} key={objectModel.id}
-                            onClick={() => this.navigateToModel(objectModel.id)}
-                            selected={params.objectModelId === objectModel.id}>
-                            {objectModel.name}
-                        </Menu.Item>
-                    ))}
-        </Sidebar>);
-    }
+    }, [history])
+
+    return <Menu attached={true} vertical={true} fluid={true}>
+        {
+            objectModels.map((objectModel, index) => (
+                <Menu.Item key={objectModel.id} active={objectModel.id === objectModelId}
+                    color={objectModel.id === objectModelId ? "blue" : "black"}
+                    onClick={() => navigateToModel(objectModel)}>
+                    {objectModel.name}
+                </Menu.Item>
+            ))
+        }
+    </Menu>
 }
 
-export default withRouter(ContentDocumentMenu);
+export default ContentDocumentMenu;

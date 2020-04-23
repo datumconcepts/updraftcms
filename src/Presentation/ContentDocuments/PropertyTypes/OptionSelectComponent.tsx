@@ -1,12 +1,14 @@
 import * as React from "react";
 
 
-import { IPropertyMap } from "Types";
-import { Card, Select } from 'semantic-ui-react';
+
+import { IPropertyMap, IDocumentProperty } from "Types";
+import { Card, Select, Button, Icon, Accordion, Grid, Form, InputOnChangeData } from 'semantic-ui-react';
 
 interface IOptionSelectComponentProps {
+  documentProperty: IDocumentProperty
   propertyMap: IPropertyMap;
-  onPropertyUpdate: (propertyMap: IPropertyMap) => void;
+  onPropertyUpdate: (documentProperty: IDocumentProperty) => void;
 }
 interface IOptionSelectComponentState {
   expanded: boolean;
@@ -24,24 +26,24 @@ class OptionSelectComponent extends React.Component<
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
-  public changeValue = (e: any) => {
-    const { propertyMap, onPropertyUpdate } = this.props;
-    const {
-      target: { name, value }
-    } = e;
-    onPropertyUpdate(Object.assign({}, propertyMap, { [name]: value }));
+  public changeValue = (e: any, { value }: InputOnChangeData) => {
+    const { documentProperty, onPropertyUpdate } = this.props;
+    onPropertyUpdate({ ...documentProperty, value });
   };
 
   public render() {
     const { propertyMap } = this.props;
-    return (
-      <Card square={true}>
-        <Card.Content>
-          <Select fullWidth={true} label={propertyMap.name} options={[]} />
+    return (<Card fluid={true}>
+      <Card.Content>
+        <Card.Header onClick={this.handleExpandClick}>
+          {propertyMap.name}
+        </Card.Header>
+      </Card.Content>
+      <Card.Content>
 
-        </Card.Content>
-
-      </Card>
+        <Select fluid={true} label={propertyMap.name} options={[]} />
+      </Card.Content>
+    </Card>
     );
   }
 }

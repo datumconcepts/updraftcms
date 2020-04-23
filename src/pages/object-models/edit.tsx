@@ -8,10 +8,13 @@ import { IAppState } from 'Store/State';
 import { IObjectModel } from 'Types';
 import { defaultObjectModel } from 'Store/State/IObjectModel';
 
-import ObjectModelEdit from 'Presentation/ObjectModels/ObjectModelEdit';
-import Layout from 'Presentation/_Layout';
 import { SAVE_OBJECT_MODEL, DELETE_OBJECT_MODEL } from 'Store/actions/ObjectModel';
+
+import useObjectModels from 'hooks/useObjectModels';
 import useShortcuts from 'hooks/useShortcuts';
+
+import Layout from 'Presentation/_Layout';
+import ObjectModelEdit from 'Presentation/ObjectModels/ObjectModelEdit';
 import ObjectModelEditToolbar from 'Presentation/ObjectModels/object-model-edit-toolbar';
 
 interface IRouteParams {
@@ -19,6 +22,8 @@ interface IRouteParams {
 }
 
 const ObjectModelsEditPage: React.FC = () => {
+
+    useObjectModels();
 
     const history = useHistory();
     const dispatch = useDispatch();

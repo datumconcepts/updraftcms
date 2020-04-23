@@ -1,13 +1,13 @@
 import * as React from "react";
 
 
-
-import { IPropertyMap } from "Types";
-import { Grid, Card, Form } from 'semantic-ui-react';
+import { IPropertyMap, IDocumentProperty } from "Types";
+import { Card, TextArea, TextAreaProps } from 'semantic-ui-react';
 
 interface ILongTextComponentProps {
+  documentProperty: IDocumentProperty
   propertyMap: IPropertyMap;
-  onPropertyUpdate: (propertyMap: IPropertyMap) => void;
+  onPropertyUpdate: (documentProperty: IDocumentProperty) => void;
 }
 interface ILongTextComponentState {
   expanded: boolean;
@@ -25,37 +25,29 @@ class LongTextComponent extends React.Component<
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
-  public changeValue = (e: any) => {
-    const { propertyMap, onPropertyUpdate } = this.props;
-    const {
-      target: { name, value }
-    } = e;
-    onPropertyUpdate({ ...propertyMap, [name]: value });
+  public changeValue = (e: any, { value }: TextAreaProps) => {
+    const { documentProperty, onPropertyUpdate } = this.props;
+    onPropertyUpdate({ ...documentProperty, value });
   };
 
   public render() {
-    const { propertyMap } = this.props;
+    const { propertyMap, documentProperty } = this.props;
     return (
-
-      <Grid item={true}>
-        <Card square={true}>
-          <Card.Content>
-            <Form.Field
-              fullWidth={true}
-              multiline={true}
-              rows={5}
-              name="defaultValue"
-              onChange={this.changeValue}
-              value={propertyMap.defaultValue}
-              label={propertyMap.name}
-              InputLabelProps={{
-                shrink: true
-              }}
-              placeholder="Enter default value"
-            />
-          </Card.Content>
-        </Card>
-      </Grid>
+      <Card fluid={true}>
+        <Card.Content>
+          <Card.Header onClick={this.handleExpandClick}>
+            {propertyMap.name}
+          </Card.Header>
+        </Card.Content>
+        <Card.Content>
+          <TextArea
+            name="value" rows={5}
+            onChange={this.changeValue}
+            value={documentProperty.value}
+            placeholder="Enter value"
+          />
+        </Card.Content>
+      </Card>
     );
   }
 }

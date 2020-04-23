@@ -1,16 +1,19 @@
 import * as React from "react";
 
 
-import { IDocumentProperty } from "Types";
+
+
+import {  IDocumentProperty, IPropertyMap } from "Types";
 
 import { convertFromRaw, convertToRaw, DraftBlockType, Editor, EditorState, RichUtils } from 'draft-js';
 
 import 'draft-js/dist/Draft.css'
 import StyleButton from 'Presentation/HOC/HtmlEditor/StyleButton';
-import { Icon, Grid, Card } from 'semantic-ui-react';
+import { Icon, Card, Button } from 'semantic-ui-react';
 
 interface IRichTextComponentProps {
-  documentProperty: IDocumentProperty;
+  documentProperty: IDocumentProperty
+  propertyMap: IPropertyMap;
   onPropertyUpdate: (documentProperty: IDocumentProperty) => void;
 }
 interface IRichTextComponentState {
@@ -40,7 +43,7 @@ const BlockStyleControls = (props: any) => {
     .getType();
 
   return (
-    <React.Fragment>
+    <Button.Group>
       {BLOCK_TYPES.map((type) =>
         <StyleButton
           key={type.label}
@@ -51,7 +54,7 @@ const BlockStyleControls = (props: any) => {
           style={type.style}
         />
       )}
-    </React.Fragment>
+    </Button.Group>
   );
 };
 
@@ -64,7 +67,7 @@ const INLINE_STYLES = [
 const InlineStyleControls = (props: any) => {
   const currentStyle = props.editorState.getCurrentInlineStyle();
   return (
-    <React.Fragment>
+    <Button.Group>
       {INLINE_STYLES.map(type =>
         <StyleButton
           key={type.label}
@@ -75,7 +78,7 @@ const InlineStyleControls = (props: any) => {
           style={type.style}
         />
       )}
-    </React.Fragment>
+    </Button.Group>
   );
 };
 
@@ -105,8 +108,6 @@ class RichTextComponent extends React.Component<IRichTextComponentProps, IRichTe
       onPropertyUpdate({ ...documentProperty, 'value': convertToRaw(contentState) });
     });
   };
-
-
   public onChange = (editorState: EditorState) => this.setState({ editorState });
 
   public toggleBlockType = (blockType: DraftBlockType) => {
@@ -130,17 +131,20 @@ class RichTextComponent extends React.Component<IRichTextComponentProps, IRichTe
   public render() {
     const { editorState } = this.state;
     return (
-      <Grid item={true}>
-        <Card square={true}>
-          <Card.Content>
-            <div style={{ flex: 1 }} className="editor-container">
-              <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType} />
-              <InlineStyleControls editorState={editorState} onToggle={this.toggleInlineStyle} />
-              <Editor editorState={editorState} onChange={this.changeValue} />
-            </div>
-          </Card.Content>
-        </Card>
-      </Grid>);
+      <Card fluid={true}>
+        <Card.Content>
+          <Card.Header onClick={this.handleExpandClick}>
+            {this.props.propertyMap.name}
+          </Card.Header>
+        </Card.Content>
+        <Card.Content>
+          <div style={{ flex: 1 }} className="editor-container">
+            <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType} />
+            <InlineStyleControls editorState={editorState} onToggle={this.toggleInlineStyle} />
+            <Editor editorState={editorState} onChange={this.changeValue} />
+          </div>
+        </Card.Content>
+      </Card>);
   }
 }
 export default RichTextComponent;

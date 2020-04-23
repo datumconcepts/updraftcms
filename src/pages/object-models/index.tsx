@@ -1,23 +1,25 @@
 import React from 'react';
-
-import { useSelector, useDispatch } from 'react-redux';
-import { REQUEST_OBJECT_MODELS } from 'Store/actions/ObjectModel';
-import { IAppState } from 'Store/State';
-
+import { useHistory } from 'react-router';
+import { useSelector } from 'react-redux';
 import guid from "uuid/v4";
+
+
+import { IAppState } from 'Store/State';
+import useShortcuts from 'hooks/useShortcuts';
+import useObjectModels from 'hooks/useObjectModels';
 
 import Layout from 'Presentation/_Layout';
 
 import ObjectModelList from 'Presentation/ObjectModels/ObjectModelList';
 import ObjectModelListToolbar from 'Presentation/ObjectModels/object-model-list-toolbar';
-import { useHistory } from 'react-router';
-import useShortcuts from 'hooks/useShortcuts';
 
 const ObjectModelsListPage: React.FC = () => {
 
+    useObjectModels();
+
     const { objectModels } = useSelector((appState: IAppState) => appState.objectModel);
     const history = useHistory();
-    const dispatch = useDispatch();
+
 
     const addObjectModel = React.useCallback(() => {
         let id = guid().replace(/-/g, "");
@@ -29,10 +31,6 @@ const ObjectModelsListPage: React.FC = () => {
 
     useShortcuts([{ key: 'a', action: addObjectModel }]);
 
-
-    React.useEffect(() => {
-        dispatch({ type: REQUEST_OBJECT_MODELS });
-    }, [dispatch])
 
     return (<Layout>
         <ObjectModelListToolbar addObjectModel={addObjectModel} />

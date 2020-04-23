@@ -1,49 +1,53 @@
 import * as React from "react";
 
 
-import { IDocumentProperty, IPropertyMap } from "Types";
-import { Grid, Card, Form } from 'semantic-ui-react';
+import { IPropertyMap, IDocumentProperty } from "Types";
+import { Card, Form, Button, Icon, InputOnChangeData } from 'semantic-ui-react';
 
 interface ITextboxComponentProps {
   documentProperty: IDocumentProperty
   propertyMap: IPropertyMap;
   onPropertyUpdate: (documentProperty: IDocumentProperty) => void;
 }
+interface ITextboxComponentState {
+  expanded: boolean;
+}
 
 class ShortTextComponent extends React.Component<
   ITextboxComponentProps,
-  {}
+  ITextboxComponentState
   > {
+  public state = {
+    expanded: false
+  };
 
-  public changeValue = (e: any) => {
+  public handleExpandClick = () => {
+    this.setState(state => ({ expanded: !state.expanded }));
+  };
+
+  public changeValue = (e: any, { value }: InputOnChangeData) => {
     const { documentProperty, onPropertyUpdate } = this.props;
-    const {
-      target: { name, value }
-    } = e;
-    onPropertyUpdate({ ...documentProperty, [name]: value });
+    onPropertyUpdate({ ...documentProperty, value });
   };
 
   public render() {
-    const { documentProperty, propertyMap } = this.props;
+    const { propertyMap, documentProperty } = this.props;
     return (
-      <Grid item={true}>
-        <Card square={true}>
-          <Card.Content>
-            <Form.Field
-              fullWidth={true}
-              name="value"
-              onChange={this.changeValue}
-              value={documentProperty.value}
-              label={propertyMap.name}
-              InputLabelProps={{
-                shrink: true
-              }}
-              placeholder="Enter default value"
-            />
-
-          </Card.Content>
-        </Card>
-      </Grid>
+      <Card fluid={true}>
+        <Card.Content>
+          <Card.Header onClick={this.handleExpandClick}>
+            {propertyMap.name}
+          </Card.Header>
+        </Card.Content>
+        <Card.Content>
+          <Form.Input fluid={true}
+            name="value"
+            onChange={this.changeValue}
+            value={documentProperty.value}
+            placeholder="Enter value"
+          />
+        </Card.Content>
+      </Card>
     );
   }
 }

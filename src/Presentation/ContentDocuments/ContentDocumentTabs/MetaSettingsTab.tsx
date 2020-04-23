@@ -11,7 +11,7 @@ import ShortTextComponent from "../PropertyTypes/ShortTextComponent";
 import { IContentDocument, IDocumentProperty, IObjectModel, IPropertyMap, } from "Types";
 
 import { defaultObjectModel } from 'Store/State/IObjectModel';
-import { Grid } from 'semantic-ui-react';
+import { Segment, Form } from 'semantic-ui-react';
 
 
 const propertyTypes: any[] = [
@@ -32,6 +32,7 @@ const propertyTypes: any[] = [
             <LongTextComponent key={key}
                 onPropertyUpdate={onPropertyUpdate}
                 propertyMap={propertyMap}
+                documentProperty={documentProperty}
             />
         ),
         propertyType: "textarea"
@@ -42,6 +43,7 @@ const propertyTypes: any[] = [
             <OptionSelectComponent key={key}
                 onPropertyUpdate={onPropertyUpdate}
                 propertyMap={propertyMap}
+                documentProperty={documentProperty}
             />
         ),
         propertyType: "select"
@@ -56,7 +58,7 @@ interface IMetaSettingsTabProps {
 
 class MetaSettingsTab extends React.Component<IMetaSettingsTabProps> {
 
-    public metaValueChangeHandler = (htmlPrperty: IDocumentProperty) => {
+    public metaValueChangeHandler = (metaProperty: IDocumentProperty) => {
         const { contentDocument, objectModels } = this.props;
         const objectModel = objectModels.find(model => model.id === contentDocument.objectModelId);
         if (!objectModel) {
@@ -64,8 +66,8 @@ class MetaSettingsTab extends React.Component<IMetaSettingsTabProps> {
         }
         this.props.onPropertyUpdate({
             ...this.props.contentDocument, 'metaProperties': [
-                ...contentDocument.metaProperties.filter(prop => prop.propertyMapId !== htmlPrperty.propertyMapId),
-                htmlPrperty
+                ...contentDocument.metaProperties.filter(prop => prop.propertyMapId !== metaProperty.propertyMapId),
+                metaProperty
             ].sort((a: IDocumentProperty, b: IDocumentProperty) => {
                 const sortOrderA = (objectModel.metaProperties.find(prop => prop.id === a.propertyMapId) || { sortOrder: 0 }).sortOrder;
                 const sortOrderB = (objectModel.metaProperties.find(prop => prop.id === b.propertyMapId) || { sortOrder: 0 }).sortOrder;
@@ -79,8 +81,7 @@ class MetaSettingsTab extends React.Component<IMetaSettingsTabProps> {
         const objectModel = objectModels.find(model => model.id === contentDocument.objectModelId) || defaultObjectModel;
         return (
             <AppContent>
-                <Grid direction="column" justify="flex-start" container={true} spacing={2}>
-
+                 <Segment as={Form} attached={true}>
                     {
                         contentDocument.metaProperties.map((docProp, docPropIndex) => {
                             const propItem = objectModel.metaProperties.find(prop => prop.id === docProp.propertyMapId);
@@ -91,7 +92,7 @@ class MetaSettingsTab extends React.Component<IMetaSettingsTabProps> {
                             }
                         })
                     }
-                </Grid>
+                </Segment>
             </AppContent>
         );
     }

@@ -19,8 +19,8 @@ const ObjectModelList: React.FC<IObjectModelListProps> = ({ objectModels, addObj
 
   const history = useHistory();
 
-  const editObjectModel = React.useCallback((objectModel: IObjectModel) => {
-    history.push(`/object-models/${objectModel.id}/edit`);
+  const editObjectModel = React.useCallback(({ id }: IObjectModel) => {
+    history.push(`/object-models/${id}/edit`);
   }, [history]);
 
   return (

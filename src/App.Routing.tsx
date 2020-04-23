@@ -16,8 +16,8 @@ const AppRouting: React.FC = () => {
       <Switch>
         <Route path="/object-models" exact={true} component={ObjectModelsListPage} />
         <Route path="/object-models/:id/edit" component={ObjectModelsEditPage} />
-        <Route path="/:objectmodelId?/content" exact={true} component={ContentDocumentsListPage} />
-        <Route path="/:objectmodelId?/content/:id/edit" component={ContentDocumentsEditPage} />
+        <Route path="/:objectModelId?/content" exact={true} component={ContentDocumentsListPage} />
+        <Route path="/:objectModelId?/content/:id/edit" component={ContentDocumentsEditPage} />
         <Route path="/media-library" component={MediaObjectsPage} />
         <Redirect path="*" to="/object-models" />
       </Switch>

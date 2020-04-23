@@ -7,14 +7,14 @@ import LongTextComponent from "../PropertyTypes/LongTextComponent";
 import OptionSelectComponent from "../PropertyTypes/OptionSelectComponent";
 import RichTextComponent from "../PropertyTypes/RichTextComponent";
 import ShortTextComponent from "../PropertyTypes/ShortTextComponent";
-import SingleFileComponent from '../PropertyTypes/SingleFileComponent';
+import SingleFileComponent from '../PropertyTypes/FileUploadComponent';
 
 
 import { IContentDocument, IDocumentProperty, IObjectModel, IPropertyMap, } from "Types";
 
 import { defaultObjectModel } from 'Store/State/IObjectModel';
 
-import { Grid, Form, Select } from 'semantic-ui-react';
+import { Grid, Form, Select, Segment } from 'semantic-ui-react';
 
 const propertyTypes: any[] = [
     {
@@ -32,6 +32,7 @@ const propertyTypes: any[] = [
         name: "Long Text",
         propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
             <LongTextComponent key={key}
+                documentProperty={documentProperty}
                 onPropertyUpdate={onPropertyUpdate}
                 propertyMap={propertyMap}
             />
@@ -42,6 +43,7 @@ const propertyTypes: any[] = [
         name: "Option Select",
         propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
             <OptionSelectComponent key={key}
+                documentProperty={documentProperty}
                 onPropertyUpdate={onPropertyUpdate}
                 propertyMap={propertyMap}
             />
@@ -52,6 +54,7 @@ const propertyTypes: any[] = [
         name: "Rich Text",
         propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
             <RichTextComponent key={key}
+            propertyMap={propertyMap}
                 documentProperty={documentProperty}
                 onPropertyUpdate={onPropertyUpdate}
             />
@@ -117,22 +120,18 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
         const objectModel = objectModels.find(model => model.id === contentDocument.objectModelId) || defaultObjectModel;
         return (
             <AppContent>
-                <Grid direction="column" justify="flex-start" container={true} spacing={2}>
-                    <Grid item={true}>
-                        <Form.Field
-                            onChange={this.valueChangeHandler}
-                            fullWidth={true}
-                            name="name"
-                            value={contentDocument.name}
-                            label="Name"
-                        />
-                    </Grid>
-                    <Grid item={true}>
-                        <Select fullWidth={true} label="Object Model" value={objectModel.id}
-                            options={[...objectModels.values()].map(objectModelOption => ({ value: objectModelOption.id, label: objectModelOption.name }))}
-                            onChange={(e, { value }) => this.handleObjectModelChange(value)}
-                        />
-                    </Grid>
+                <Segment as={Form} attached={true}>
+                    <Form.Input
+                        onChange={this.valueChangeHandler}
+                        fluid={true}
+                        name="name"
+                        value={contentDocument.name}
+                        label="Name"
+                    />
+                    <Select fluid={true} label="Object Model" value={objectModel.id}
+                        options={[...objectModels.values()].map(objectModelOption => ({ value: objectModelOption.id, text: objectModelOption.name }))}
+                        onChange={(e, { value }) => this.handleObjectModelChange(value)}
+                    />
                     {
                         contentDocument.htmlProperties.map((docProp, docPropIndex) => {
                             const propItem = objectModel.htmlProperties.find(prop => prop.id === docProp.propertyMapId);
@@ -143,7 +142,7 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
                             }
                         })
                     }
-                </Grid>
+                </Segment>
             </AppContent>
         );
     }
