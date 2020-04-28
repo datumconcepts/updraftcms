@@ -4,6 +4,7 @@ export interface IPropertyMap {
   sortOrder: number;
   propertyType: string;
   defaultValue?: any;
+  properties?: any;
 }
 export interface IObjectModel {
   id: string;

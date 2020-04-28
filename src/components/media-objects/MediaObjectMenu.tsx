@@ -29,14 +29,16 @@ class MediaObjectMenu extends React.Component<IMediaObjectMenuProps> {
 
     public render() {
         const { mediaObjects } = this.props;
+        const rootDir = ([] as IMediaObject[]).concat(mediaObjects).find(dir => dir.objectType === IMediaObjectType.DIRECTORY && !dir.parentId)
         return (
             <Sidebar visible={true}>
                 <Segment circular={false}>
-                    <List>
-                        {
-                            ([] as IMediaObject[]).concat(mediaObjects).filter(dir => dir.objectType === IMediaObjectType.DIRECTORY && !dir.parentId).map((dir) => this.getSubDirectories(dir))
-                        }
-                    </List>
+                    {rootDir &&
+                        <List>
+                            {
+                                ([] as IMediaObject[]).concat(mediaObjects).filter(dir => dir.objectType === IMediaObjectType.DIRECTORY && dir.parentId === rootDir.id).map((dir) => this.getSubDirectories(dir))
+                            }
+                        </List>}
                 </Segment>
             </Sidebar>);
     }
@@ -50,14 +52,14 @@ class MediaObjectMenu extends React.Component<IMediaObjectMenuProps> {
                 <List.Icon name={isSelected ? "folder open" : "folder"} />
                 <List.Content>
                     <List.Header>{mediaObject.name}</List.Header>
+                    {
+                        childItems.length > 0 && < List.List >
+                            {
+                                childItems.map((dir) => this.getSubDirectories(dir))
+                            }
+                        </List.List>
+                    }
                 </List.Content>
-                {
-                    childItems.length > 0 && < List.List >
-                        {
-                            childItems.map((dir) => this.getSubDirectories(dir))
-                        }
-                    </List.List>
-                }
             </List.Item>);
     }
 

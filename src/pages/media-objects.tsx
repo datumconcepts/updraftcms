@@ -5,7 +5,7 @@ import { IAppState } from 'store/State';
 import { SELECT_MEDIA_OBJECT } from 'store/actions/MediaObject';
 
 import Layout from 'components/layout';
-import MediaObjectList from 'components/media-objects/MediaObjectList';
+import MediaObjectList from 'components/media-objects/media-object-list';
 
 
 
