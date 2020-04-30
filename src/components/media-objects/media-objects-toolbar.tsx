@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { RouteComponentProps, withRouter, Link } from "react-router-dom";
 
-import { Menu, Icon, Breadcrumb, Popup, Modal, Button, Input} from 'semantic-ui-react';
+import { Menu, Icon, Breadcrumb, Popup, Modal, Button, Input } from 'semantic-ui-react';
 import PageToolbar from 'components/high-order/PageToolbar';
 
 interface IMediaObjectToolbarProps extends RouteComponentProps {
@@ -28,7 +28,7 @@ const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = () => {
         </Menu.Item>
         <Menu.Item style={{ flex: 1 }}>
             <Breadcrumb >
-                <Breadcrumb.Section link={true}>root</Breadcrumb.Section>
+                <Breadcrumb.Section link={true} onClick={() => console.log('root clicked')}>root</Breadcrumb.Section>
                 <Breadcrumb.Divider icon={{ name: 'chevron right', color: 'blue' }} />
                 <Breadcrumb.Section>directory 1</Breadcrumb.Section>
             </Breadcrumb>
