@@ -1,13 +1,8 @@
 import * as React from "react";
 
-
-
-
-import { IObjectModel } from 'models';
-import {  Form } from 'semantic-ui-react';
+import { IObjectModel } from "models";
+import { Form, StrictFormInputProps } from "semantic-ui-react";
 import AppContent from "components/high-order/AppContent";
-
-
 
 export interface IGeneralSettingsTabProps {
   objectModel: IObjectModel;
@@ -16,17 +11,29 @@ export interface IGeneralSettingsTabProps {
 
 export interface IGeneralSettingsTabState {
   objectModel: IObjectModel;
+  nameError?: StrictFormInputProps["error"];
 }
 
 class GeneralSettingsTab extends React.Component<
   IGeneralSettingsTabProps,
   IGeneralSettingsTabState
-  > {
+> {
   public state = {
-    objectModel: this.props.objectModel
+    objectModel: this.props.objectModel,
+    nameError: false,
   };
 
-  public valueChangeHandler = (e: any) => {
+  public nameChangeHandler = (e: any) => {
+    const { name, value } = e.target;
+    this.props.onPropertyUpdate({ ...this.props.objectModel, [name]: value });
+    if (value === '') {
+      this.setState({ nameError: { content: 'Please enter a name', pointing: 'below' } });
+    } else {
+      this.setState({ nameError: false });
+    }
+  };
+
+  public descriptionChangeHandler = (e: any) => {
     const { name, value } = e.target;
     this.props.onPropertyUpdate({ ...this.props.objectModel, [name]: value });
   };
@@ -37,11 +44,13 @@ class GeneralSettingsTab extends React.Component<
       <AppContent>
         <Form>
           <Form.Input
-            onChange={this.valueChangeHandler}
+            onChange={this.nameChangeHandler}
             fluid={true}
             name="name"
             value={objectModel.name}
             label="Object Model Name"
+            required
+            error={this.state.nameError}
           />
           <Form.Input
             name="id"
@@ -52,7 +61,7 @@ class GeneralSettingsTab extends React.Component<
           <Form.TextArea
             label="Description"
             name="description"
-            onChange={this.valueChangeHandler}
+            onChange={this.descriptionChangeHandler}
             value={objectModel.description}
             rows={5}
           />
