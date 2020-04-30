@@ -16,7 +16,6 @@ const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = () => {
     const fileUpload = (files: FileList | null) => {
         if (files) {
 
-
             // Add files to Media Object List
 
             // Handle file upload
@@ -29,7 +28,7 @@ const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = () => {
         </Menu.Item>
         <Menu.Item style={{ flex: 1 }}>
             <Breadcrumb >
-                <Breadcrumb.Section>root</Breadcrumb.Section>
+                <Breadcrumb.Section link={true}>root</Breadcrumb.Section>
                 <Breadcrumb.Divider icon={{ name: 'chevron right', color: 'blue' }} />
                 <Breadcrumb.Section>directory 1</Breadcrumb.Section>
             </Breadcrumb>
