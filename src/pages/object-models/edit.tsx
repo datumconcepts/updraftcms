@@ -30,6 +30,7 @@ const ObjectModelsEditPage: React.FC = () => {
     const { id } = useParams<IRouteParams>();
     const { objectModels } = useSelector((appState: IAppState) => appState.objectModel);
     const [objectModel, updateObjectModel] = React.useState<IObjectModel>(objectModels.get(id) || { ...defaultObjectModel, id });
+    const [errors, setErrors] = React.useState<any[]>([])
 
     const closeObjectModel = React.useCallback(() => history.push(`/object-models`), [history]);
 
@@ -42,6 +43,10 @@ const ObjectModelsEditPage: React.FC = () => {
         }
     }, [id, objectModels, objectModel])
 
+
+    const valueChangeHandler = React.useCallback((updatedModel: IObjectModel) => {
+        updateObjectModel(updatedModel);
+    }, [errors, setErrors, updateObjectModel, objectModel]);
 
     const saveObjectModelHandler = React.useCallback(() => {
         dispatch({
@@ -78,6 +83,7 @@ const ObjectModelsEditPage: React.FC = () => {
     }, [dispatch, objectModels, objectModel, history, saveObjectModelHandler]);
 
 
+
     useShortcuts([
         { key: 's', action: saveObjectModelHandler },
         { key: 'd', action: deleteObjectModelHandler },
@@ -91,7 +97,7 @@ const ObjectModelsEditPage: React.FC = () => {
             cloneObjectModel={cloneObjectModelHandler}
             deleteObjectModel={deleteObjectModelHandler}
             closeObjectModel={closeObjectModel} />
-        <ObjectModelEdit onValueChange={updateObjectModel} objectModel={objectModel} />
+        <ObjectModelEdit onValueChange={valueChangeHandler} objectModel={objectModel} />
     </Layout>
     );
 }
