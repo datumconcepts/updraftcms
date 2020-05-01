@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import guid from "uuid/v4";
 
 import { IAppState } from 'store/State';
-import { IObjectModel, IFormErrors } from 'models';
+import { IObjectModel, FormErrors } from 'models';
 import { defaultObjectModel } from 'store/State/IObjectModel';
 
 import { SAVE_OBJECT_MODEL, DELETE_OBJECT_MODEL } from 'store/actions/ObjectModel';
@@ -30,7 +30,7 @@ const ObjectModelsEditPage: React.FC = () => {
     const { id } = useParams<IRouteParams>();
     const { objectModels } = useSelector((appState: IAppState) => appState.objectModel);
     const [objectModel, updateObjectModel] = React.useState<IObjectModel>(objectModels.get(id) || { ...defaultObjectModel, id });
-    const [errors, setErrors] = React.useState<IFormErrors[]>([])
+    const [errors, setErrors] = React.useState<FormErrors>(new Map<string, string>())
 
     const closeObjectModel = React.useCallback(() => history.push(`/object-models`), [history]);
 
