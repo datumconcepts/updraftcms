@@ -39,7 +39,7 @@ class ShortTextComponent extends React.Component<
           <Card.Header onClick={this.handleExpandClick}>
             <Grid columns="equal">
               <Grid.Column>{propertyMap.name}</Grid.Column>
-              <Grid.Column textAlign="right">
+              <Grid.Column style={{ flex: "0 0 auto", width: "auto" }}>
                 <Icon name="edit outline" color="blue" />
               </Grid.Column>
             </Grid>
