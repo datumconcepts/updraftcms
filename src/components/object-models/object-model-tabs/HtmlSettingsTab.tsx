@@ -56,7 +56,7 @@ const propertyTypes: any[] = [
     propertyType: "draftjs"
   },
   {
-    name: "File Upload",
+    name: "Attachment",
     propertyComponent: (props: any, propertyMap: any) => (
       <FileUploadComponent {...props} propertyMap={propertyMap} />
     ),
