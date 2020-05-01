@@ -13,61 +13,53 @@ export interface IGeneralSettingsTabState {
   objectModel: IObjectModel;
   nameError?: StrictFormInputProps["error"];
 }
+const GeneralSettingsTab: React.FC<IGeneralSettingsTabProps> = ({ objectModel, onPropertyUpdate }) => {
 
-class GeneralSettingsTab extends React.Component<
-  IGeneralSettingsTabProps,
-  IGeneralSettingsTabState
-> {
-  public state = {
-    objectModel: this.props.objectModel,
-    nameError: false,
-  };
+  const [state, setState] = React.useState<IGeneralSettingsTabState>({ objectModel });
 
-  public nameChangeHandler = (e: any) => {
+
+  const nameChangeHandler = (e: any) => {
     const { name, value } = e.target;
-    this.props.onPropertyUpdate({ ...this.props.objectModel, [name]: value });
+    onPropertyUpdate({ ...objectModel, [name]: value });
     if (value === '') {
-      this.setState({ nameError: { content: 'Please enter a name', pointing: 'below' } });
+      setState({ objectModel, nameError: { content: 'Please enter a name', pointing: 'below' } });
     } else {
-      this.setState({ nameError: false });
+      setState({ objectModel, nameError: false });
     }
   };
 
-  public descriptionChangeHandler = (e: any) => {
+  const descriptionChangeHandler = (e: any) => {
     const { name, value } = e.target;
-    this.props.onPropertyUpdate({ ...this.props.objectModel, [name]: value });
+    onPropertyUpdate({ ...objectModel, [name]: value });
   };
 
-  public render() {
-    const { objectModel } = this.props;
-    return (
-      <AppContent>
-        <Form>
-          <Form.Input
-            onChange={this.nameChangeHandler}
-            fluid={true}
-            name="name"
-            value={objectModel.name}
-            label="Object Model Name"
-            required
-            error={this.state.nameError}
-          />
-          <Form.Input
-            name="id"
-            value={objectModel.id}
-            disabled={true}
-            label="Object Model Key"
-          />
-          <Form.TextArea
-            label="Description"
-            name="description"
-            onChange={this.descriptionChangeHandler}
-            value={objectModel.description}
-            rows={5}
-          />
-        </Form>
-      </AppContent>
-    );
-  }
+  return (
+    <AppContent>
+      <Form>
+        <Form.Input
+          onChange={nameChangeHandler}
+          fluid={true}
+          name="name"
+          value={objectModel.name}
+          label="Object Model Name"
+          required
+          error={state.nameError}
+        />
+        <Form.Input
+          name="id"
+          value={objectModel.id}
+          disabled={true}
+          label="Object Model Key"
+        />
+        <Form.TextArea
+          label="Description"
+          name="description"
+          onChange={descriptionChangeHandler}
+          value={objectModel.description}
+          rows={5}
+        />
+      </Form>
+    </AppContent>
+  );
 }
 export default GeneralSettingsTab;
