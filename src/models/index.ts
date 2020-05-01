@@ -37,3 +37,6 @@ export enum IMediaObjectType {
   DIRECTORY = 'directory',
   FILE = 'file'
 }
+export interface IFormErrors {
+  [field: string]: string;
+}
