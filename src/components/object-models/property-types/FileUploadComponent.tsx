@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Icon, Card, Form, Grid } from "semantic-ui-react";
+import { Icon, Card, Grid, Button, Segment } from "semantic-ui-react";
 
 import { IDocumentProperty, IPropertyMap } from "models";
 
@@ -15,7 +15,7 @@ interface IFileUploadComponentState {
 class FileUploadComponent extends React.Component<
   IFileUploadComponentProps,
   IFileUploadComponentState
-> {
+  > {
   public state = {
     expanded: false,
   };
@@ -39,12 +39,11 @@ class FileUploadComponent extends React.Component<
           </Card.Header>
         </Card.Content>
         <Card.Content>
-          <Form.Field label={propertyMap.name}>
-            <label className="file-upload">
-              <Icon name="cloud upload" />
-            </label>
-          </Form.Field>
+          <Segment placeholder>
+            <Button color="blue">Browse</Button>
+          </Segment>
         </Card.Content>
+
       </Card>
     );
   }
