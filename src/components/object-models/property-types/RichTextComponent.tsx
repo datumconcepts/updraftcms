@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Icon, Card, Button } from 'semantic-ui-react';
+import { Icon, Card, Button, Grid } from 'semantic-ui-react';
 
 import { convertFromRaw, convertToRaw, DraftBlockType, Editor, EditorState, RichUtils } from 'draft-js';
 
@@ -142,11 +142,17 @@ class RichTextComponent extends React.Component<IRichTextComponentProps, IRichTe
 
   public render() {
     const { editorState } = this.state;
+    const { propertyMap } = this.props;
     return (
       <Card fluid={true}>
         <Card.Content>
           <Card.Header onClick={this.handleExpandClick}>
-            {this.props.propertyMap.name}
+            <Grid columns="equal">
+              <Grid.Column>{propertyMap.name}</Grid.Column>
+              <Grid.Column style={{ flex: "0 0 auto", width: "auto" }}>
+                <Icon name="edit outline" color="blue" />
+              </Grid.Column>
+            </Grid>
           </Card.Header>
         </Card.Content>
         <Card.Content>

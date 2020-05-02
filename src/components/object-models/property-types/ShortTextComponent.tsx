@@ -1,8 +1,7 @@
 import * as React from "react";
-import { Card, Form } from 'semantic-ui-react';
+import { Card, Form, Icon, Grid } from "semantic-ui-react";
 
-
-import { IPropertyMap } from 'models';
+import { IPropertyMap } from "models";
 
 interface ITextboxComponentProps {
   propertyMap: IPropertyMap;
@@ -15,19 +14,19 @@ interface ITextboxComponentState {
 class ShortTextComponent extends React.Component<
   ITextboxComponentProps,
   ITextboxComponentState
-  > {
+> {
   public state = {
-    expanded: false
+    expanded: false,
   };
 
   public handleExpandClick = () => {
-    this.setState(state => ({ expanded: !state.expanded }));
+    this.setState((state) => ({ expanded: !state.expanded }));
   };
 
   public changeValue = (e: any) => {
     const { propertyMap, onPropertyUpdate } = this.props;
     const {
-      target: { name, value }
+      target: { name, value },
     } = e;
     onPropertyUpdate({ ...propertyMap, [name]: value });
   };
@@ -38,11 +37,17 @@ class ShortTextComponent extends React.Component<
       <Card fluid={true}>
         <Card.Content>
           <Card.Header onClick={this.handleExpandClick}>
-            {propertyMap.name}
+            <Grid columns="equal">
+              <Grid.Column>{propertyMap.name}</Grid.Column>
+              <Grid.Column style={{ flex: "0 0 auto", width: "auto" }}>
+                <Icon name="edit outline" color="blue" />
+              </Grid.Column>
+            </Grid>
           </Card.Header>
         </Card.Content>
         <Card.Content>
-          <Form.Input fluid={true}
+          <Form.Input
+            fluid={true}
             name="defaultValue"
             onChange={this.changeValue}
             value={propertyMap.defaultValue}

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Card, TextArea } from 'semantic-ui-react';
+import { Card, TextArea, Grid, Icon } from 'semantic-ui-react';
 
 import { IPropertyMap } from 'models'
 
@@ -36,8 +36,13 @@ class LongTextComponent extends React.Component<
     return (
       <Card fluid={true}>
         <Card.Content>
-          <Card.Header onClick={this.handleExpandClick}>
-            {propertyMap.name}
+        <Card.Header onClick={this.handleExpandClick}>
+            <Grid columns="equal">
+              <Grid.Column>{propertyMap.name}</Grid.Column>
+              <Grid.Column style={{ flex: "0 0 auto", width: "auto" }}>
+                <Icon name="edit outline" color="blue" />
+              </Grid.Column>
+            </Grid>
           </Card.Header>
         </Card.Content>
         <Card.Content>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Icon, Card, Form, Button, Segment } from "semantic-ui-react";
+import { Icon, Card, Grid, Button, Segment } from "semantic-ui-react";
 
 import { IDocumentProperty, IPropertyMap } from "models";
 
@@ -15,7 +15,7 @@ interface IFileUploadComponentState {
 class FileUploadComponent extends React.Component<
   IFileUploadComponentProps,
   IFileUploadComponentState
-> {
+  > {
   public state = {
     expanded: false,
   };
@@ -30,7 +30,12 @@ class FileUploadComponent extends React.Component<
       <Card fluid={true}>
         <Card.Content>
           <Card.Header onClick={this.handleExpandClick}>
-            {propertyMap.name}
+            <Grid columns="equal">
+              <Grid.Column>{propertyMap.name}</Grid.Column>
+              <Grid.Column style={{ flex: "0 0 auto", width: "auto" }}>
+                <Icon name="edit outline" color="blue" />
+              </Grid.Column>
+            </Grid>
           </Card.Header>
         </Card.Content>
         <Card.Content>
@@ -38,6 +43,7 @@ class FileUploadComponent extends React.Component<
             <Button color="blue">Browse</Button>
           </Segment>
         </Card.Content>
+
       </Card>
     );
   }
