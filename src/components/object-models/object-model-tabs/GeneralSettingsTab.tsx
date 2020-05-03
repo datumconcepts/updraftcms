@@ -6,30 +6,25 @@ import AppContent from "components/high-order/AppContent";
 
 export interface IGeneralSettingsTabProps {
   objectModel: IObjectModel;
+  errors: FormErrors;
   onPropertyUpdate: (objectModel: IObjectModel) => void;
 }
 
 export interface IGeneralSettingsTabState {
   objectModel: IObjectModel;
   errors: FormErrors;
-  // nameError?: StrictFormInputProps["error"];
 }
-const GeneralSettingsTab: React.FC<IGeneralSettingsTabProps> = ({ objectModel, onPropertyUpdate }) => {
+const GeneralSettingsTab: React.FC<IGeneralSettingsTabProps> = ({
+  objectModel,
+  errors,
+  onPropertyUpdate,
+}) => {
+  const [state, setState] = React.useState<IGeneralSettingsTabState>({
+    objectModel,
+    errors,
+  });
 
-  const [state, setState] = React.useState<IGeneralSettingsTabState>({ ...objectModel, errors });
-
-
-  const nameChangeHandler = (e: any) => {
-    const { name, value } = e.target;
-    onPropertyUpdate({ ...objectModel, [name]: value });
-    if (value === '') {
-      setState({ objectModel, nameError: { content: 'Please enter a name', pointing: 'below' } });
-    } else {
-      setState({ objectModel, nameError: false });
-    }
-  };
-
-  const descriptionChangeHandler = (e: any) => {
+  const valueChangeHandler = (e: any) => {
     const { name, value } = e.target;
     onPropertyUpdate({ ...objectModel, [name]: value });
   };
@@ -38,13 +33,13 @@ const GeneralSettingsTab: React.FC<IGeneralSettingsTabProps> = ({ objectModel, o
     <AppContent>
       <Form>
         <Form.Input
-          onChange={nameChangeHandler}
+          onChange={valueChangeHandler}
           fluid={true}
           name="name"
           value={objectModel.name}
           label="Object Model Name"
           required
-          error={state.nameError}
+          error={errors.get("name")}
         />
         <Form.Input
           name="id"
@@ -55,12 +50,12 @@ const GeneralSettingsTab: React.FC<IGeneralSettingsTabProps> = ({ objectModel, o
         <Form.TextArea
           label="Description"
           name="description"
-          onChange={descriptionChangeHandler}
+          onChange={valueChangeHandler}
           value={objectModel.description}
           rows={5}
         />
       </Form>
     </AppContent>
   );
-}
+};
 export default GeneralSettingsTab;
