@@ -66,9 +66,7 @@ once you've changed the errors map you'll need to reassign it to the state (e.g 
   const valueChangeHandler = React.useCallback(
     (updatedModel: IObjectModel) => {
       updateObjectModel(updatedModel);
-      if (id === "") {
-        errors.set("name", "Name is a mandatory field");
-      } else {
+      if (updatedModel.name !== "") {
         errors.delete("name");
       }
       setErrors(errors);
@@ -77,13 +75,16 @@ once you've changed the errors map you'll need to reassign it to the state (e.g 
   );
 
   const saveObjectModelHandler = React.useCallback(() => {
-
-    dispatch({
-      type: SAVE_OBJECT_MODEL,
-      objectModels: objectModels.set(objectModel.id, objectModel),
-      objectModel,
-    });
-    closeObjectModel();
+    if (updateObjectModel.name === "") {
+      errors.set("name", "Name is a mandatory field");
+    } else {
+      dispatch({
+        type: SAVE_OBJECT_MODEL,
+        objectModels: objectModels.set(objectModel.id, objectModel),
+        objectModel,
+      });
+      closeObjectModel();
+    }
   }, [dispatch, objectModels, objectModel, closeObjectModel]);
 
   const deleteObjectModelHandler = React.useCallback(() => {
@@ -97,25 +98,29 @@ once you've changed the errors map you'll need to reassign it to the state (e.g 
   }, [dispatch, objectModels, objectModel, closeObjectModel]);
 
   const cloneObjectModelHandler = React.useCallback(() => {
-    saveObjectModelHandler();
+    if (updateObjectModel.name === "") {
+      errors.set("name", "Name is a mandatory field");
+    } else {
+      saveObjectModelHandler();
 
-    let id = guid().replace(/-/g, "");
-    while (objectModels.get(id)) {
-      id = guid().replace(/-/g, "");
+      let id = guid().replace(/-/g, "");
+      while (objectModels.get(id)) {
+        id = guid().replace(/-/g, "");
+      }
+      const clonedObjecetModel = {
+        ...objectModel,
+        id,
+        name: `Clone of ${objectModel.name}`,
+      };
+
+      dispatch({
+        type: SAVE_OBJECT_MODEL,
+        objectModels: objectModels.set(id, clonedObjecetModel),
+        objectModel: clonedObjecetModel,
+      });
+
+      history.push(`/object-models/${id}/edit`);
     }
-    const clonedObjecetModel = {
-      ...objectModel,
-      id,
-      name: `Clone of ${objectModel.name}`,
-    };
-
-    dispatch({
-      type: SAVE_OBJECT_MODEL,
-      objectModels: objectModels.set(id, clonedObjecetModel),
-      objectModel: clonedObjecetModel,
-    });
-
-    history.push(`/object-models/${id}/edit`);
   }, [dispatch, objectModels, objectModel, history, saveObjectModelHandler]);
 
   useShortcuts([

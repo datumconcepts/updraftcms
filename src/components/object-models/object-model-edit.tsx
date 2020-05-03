@@ -17,7 +17,15 @@ const ObjectModelEdit: React.FC<IObjectModelEditProps> = ({
   errors,
   onValueChange,
 }) => {
+  React.useEffect(() => {
+    if (errors.get("name")) {
+      // menuItem: "General Settings";
+    }
+  }, [errors]);
+
   return (
+    // if errors.get('name') then activate general settings tab
+
     <Tab
       className="tab-container"
       menu={{ color: "olive", inverted: true }}
