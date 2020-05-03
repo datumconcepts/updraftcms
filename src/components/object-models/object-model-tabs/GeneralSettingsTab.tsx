@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { IObjectModel } from "models";
+import { IObjectModel, FormErrors } from "models";
 import { Form, StrictFormInputProps } from "semantic-ui-react";
 import AppContent from "components/high-order/AppContent";
 
@@ -11,11 +11,12 @@ export interface IGeneralSettingsTabProps {
 
 export interface IGeneralSettingsTabState {
   objectModel: IObjectModel;
-  nameError?: StrictFormInputProps["error"];
+  errors: FormErrors;
+  // nameError?: StrictFormInputProps["error"];
 }
 const GeneralSettingsTab: React.FC<IGeneralSettingsTabProps> = ({ objectModel, onPropertyUpdate }) => {
 
-  const [state, setState] = React.useState<IGeneralSettingsTabState>({ objectModel });
+  const [state, setState] = React.useState<IGeneralSettingsTabState>({ ...objectModel, errors });
 
 
   const nameChangeHandler = (e: any) => {
