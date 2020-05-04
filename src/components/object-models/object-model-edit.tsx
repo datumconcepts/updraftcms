@@ -23,28 +23,26 @@ const ObjectModelEdit: React.FC<IObjectModelEditProps> = ({
   errors,
   onValueChange,
 }) => {
-  const [state, setState] = React.useState<IGeneralSettingsTabState>({
-    objectModel,
-    errors,
-    activeIndex: 0,
-  });
+  const [activeIndex, setActiveIndex] = React.useState(0);
+
   React.useEffect(() => {
     if (errors.get("name")) {
-      setState({ objectModel, errors, activeIndex: 0 });
+      setActiveIndex(0);
     }
   }, [errors]);
 
-  const handleTabChange = (e: any) => {
-    const { activeIndex } = e.target;
-    setState({ objectModel, errors, activeIndex });
-  };
+  const handleTabChange = React.useCallback(
+    (e: any, { activeIndex }) => {
+      setActiveIndex(activeIndex);
+    },
+    [setActiveIndex]
+  );
 
   return (
-    // if errors.get('name') then activate general settings tab
 
     <Tab
       className="tab-container"
-      activeIndex={state.activeIndex}
+      activeIndex={activeIndex}
       onTabChange={handleTabChange}
       menu={{ color: "olive", inverted: true }}
       panes={[

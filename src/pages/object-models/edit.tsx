@@ -77,7 +77,6 @@ once you've changed the errors map you'll need to reassign it to the state (e.g 
   const saveObjectModelHandler = React.useCallback(() => {
     if (updateObjectModel.name === "") {
       errors.set("name", "Name is a mandatory field");
-      closeObjectModel();
     } else {
       dispatch({
         type: SAVE_OBJECT_MODEL,
