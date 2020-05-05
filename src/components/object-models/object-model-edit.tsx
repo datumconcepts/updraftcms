@@ -31,7 +31,7 @@ const ObjectModelEdit: React.FC<IObjectModelEditProps> = ({
     if (errors["name"]) {
       setActiveIndex(0);
     }
-  }, [errors, onValueChange]);
+  }, [errors]);
 
   const handleTabChange = React.useCallback(
     (e: any, { activeIndex }) => {
@@ -41,7 +41,6 @@ const ObjectModelEdit: React.FC<IObjectModelEditProps> = ({
   );
 
   return (
-
     <Tab
       className="tab-container"
       activeIndex={activeIndex}

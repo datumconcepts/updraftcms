@@ -37,13 +37,6 @@ const ObjectModelsEditPage: React.FC = () => {
   );
   const [errors, updateErrors] = React.useState<FormErrors>({});
 
-  /*
-    with form errors being a map<stirng,string> when there is an error to be added just call set
-e.g. errors.set('name', 'name is a mandatory field');
-to remove it you can then call errors.delete('name')
-once you've changed the errors map you'll need to reassign it to the state (e.g setErrors(errors)
-    */
-
   const closeObjectModel = React.useCallback(
     () => history.push(`/object-models`),
     [history]
@@ -57,9 +50,6 @@ once you've changed the errors map you'll need to reassign it to the state (e.g 
       }
     }
   }, [id, objectModels, objectModel]);
-
-  //check for errors, don't add but remove them if not needed
-  //if name isn't blank and theres an error remove the error
 
   const valueChangeHandler = React.useCallback(
     (updatedModel: IObjectModel) => {
@@ -106,7 +96,6 @@ once you've changed the errors map you'll need to reassign it to the state (e.g 
 
   const cloneObjectModelHandler = React.useCallback(() => {
     if (saveObjectModelHandler()) {
-
       let id = guid().replace(/-/g, "");
       while (objectModels.get(id)) {
         id = guid().replace(/-/g, "");
@@ -133,7 +122,6 @@ once you've changed the errors map you'll need to reassign it to the state (e.g 
     { key: "q", action: closeObjectModel },
     { key: "c", action: cloneObjectModelHandler },
   ]);
-
 
   return (
     <Layout>

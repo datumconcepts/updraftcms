@@ -19,7 +19,6 @@ const GeneralSettingsTab: React.FC<IGeneralSettingsTabProps> = ({
   errors,
   onPropertyUpdate,
 }) => {
-
   const valueChangeHandler = (e: any) => {
     const { name, value } = e.target;
     onPropertyUpdate({ ...objectModel, [name]: value });
