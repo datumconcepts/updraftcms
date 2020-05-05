@@ -37,4 +37,4 @@ export enum IMediaObjectType {
   DIRECTORY = 'directory',
   FILE = 'file'
 }
-export type FormErrors = Map<string, string>
+export type FormErrors = { [key: string]: string }

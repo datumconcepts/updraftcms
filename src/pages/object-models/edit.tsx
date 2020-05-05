@@ -35,9 +35,7 @@ const ObjectModelsEditPage: React.FC = () => {
   const [objectModel, updateObjectModel] = React.useState<IObjectModel>(
     objectModels.get(id) || { ...defaultObjectModel, id }
   );
-  const [errors, updateErrors] = React.useState<FormErrors>(
-    new Map<string, string>()
-  );
+  const [errors, updateErrors] = React.useState<FormErrors>({});
 
   /*
     with form errors being a map<stirng,string> when there is an error to be added just call set
@@ -67,16 +65,16 @@ once you've changed the errors map you'll need to reassign it to the state (e.g 
     (updatedModel: IObjectModel) => {
       updateObjectModel(updatedModel);
       if (updatedModel.name !== "") {
-        errors.delete("name");
+        delete errors["name"];
       }
       updateErrors(errors);
     },
-    [errors, updateErrors, updateObjectModel, objectModel]
+    [errors, updateErrors, updateObjectModel]
   );
 
   const saveObjectModelHandler = React.useCallback(() => {
     if (objectModel.name === "") {
-      updateErrors(errors.set("name", "Name is a mandatory field"));
+      updateErrors({ ...errors, name: "Name is a mandatory field" });
       return false;
     } else {
       dispatch({
@@ -108,7 +106,6 @@ once you've changed the errors map you'll need to reassign it to the state (e.g 
 
   const cloneObjectModelHandler = React.useCallback(() => {
     if (saveObjectModelHandler()) {
-      saveObjectModelHandler();
 
       let id = guid().replace(/-/g, "");
       while (objectModels.get(id)) {
@@ -136,6 +133,7 @@ once you've changed the errors map you'll need to reassign it to the state (e.g 
     { key: "q", action: closeObjectModel },
     { key: "c", action: cloneObjectModelHandler },
   ]);
+
 
   return (
     <Layout>

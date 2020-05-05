@@ -25,9 +25,10 @@ const ObjectModelEdit: React.FC<IObjectModelEditProps> = ({
 }) => {
   const [activeIndex, setActiveIndex] = React.useState(0);
 
+  console.log(errors);
+
   React.useEffect(() => {
-    if (errors.get("name")) {
-      console.log("test");
+    if (errors["name"]) {
       setActiveIndex(0);
     }
   }, [errors, onValueChange]);

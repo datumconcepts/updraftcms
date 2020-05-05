@@ -19,10 +19,6 @@ const GeneralSettingsTab: React.FC<IGeneralSettingsTabProps> = ({
   errors,
   onPropertyUpdate,
 }) => {
-  const [state, setState] = React.useState<IGeneralSettingsTabState>({
-    objectModel,
-    errors,
-  });
 
   const valueChangeHandler = (e: any) => {
     const { name, value } = e.target;
@@ -39,7 +35,7 @@ const GeneralSettingsTab: React.FC<IGeneralSettingsTabProps> = ({
           value={objectModel.name}
           label="Object Model Name"
           required
-          error={errors.get("name")}
+          error={errors["name"]}
         />
         <Form.Input
           name="id"
