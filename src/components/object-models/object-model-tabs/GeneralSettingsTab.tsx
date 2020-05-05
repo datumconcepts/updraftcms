@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { IObjectModel, FormErrors } from "models";
-import { Form, StrictFormInputProps } from "semantic-ui-react";
+import { Form } from "semantic-ui-react";
 import AppContent from "components/high-order/AppContent";
 
 export interface IGeneralSettingsTabProps {

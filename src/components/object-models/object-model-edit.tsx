@@ -30,7 +30,7 @@ const ObjectModelEdit: React.FC<IObjectModelEditProps> = ({
       console.log("test");
       setActiveIndex(0);
     }
-  }, [errors]);
+  }, [errors, onValueChange]);
 
   const handleTabChange = React.useCallback(
     (e: any, { activeIndex }) => {

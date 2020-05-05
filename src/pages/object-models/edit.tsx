@@ -35,7 +35,7 @@ const ObjectModelsEditPage: React.FC = () => {
   const [objectModel, updateObjectModel] = React.useState<IObjectModel>(
     objectModels.get(id) || { ...defaultObjectModel, id }
   );
-  const [errors, setErrors] = React.useState<FormErrors>(
+  const [errors, updateErrors] = React.useState<FormErrors>(
     new Map<string, string>()
   );
 
@@ -69,14 +69,15 @@ once you've changed the errors map you'll need to reassign it to the state (e.g 
       if (updatedModel.name !== "") {
         errors.delete("name");
       }
-      setErrors(errors);
+      updateErrors(errors);
     },
-    [errors, setErrors, updateObjectModel, objectModel]
+    [errors, updateErrors, updateObjectModel, objectModel]
   );
 
   const saveObjectModelHandler = React.useCallback(() => {
     if (objectModel.name === "") {
-      errors.set("name", "Name is a mandatory field");
+      updateErrors(errors.set("name", "Name is a mandatory field"));
+      return false;
     } else {
       dispatch({
         type: SAVE_OBJECT_MODEL,
@@ -84,8 +85,16 @@ once you've changed the errors map you'll need to reassign it to the state (e.g 
         objectModel,
       });
       closeObjectModel();
+      return true;
     }
-  }, [dispatch, objectModels, objectModel, closeObjectModel]);
+  }, [
+    errors,
+    updateErrors,
+    dispatch,
+    objectModels,
+    objectModel,
+    closeObjectModel,
+  ]);
 
   const deleteObjectModelHandler = React.useCallback(() => {
     objectModels.delete(objectModel.id);
@@ -98,9 +107,7 @@ once you've changed the errors map you'll need to reassign it to the state (e.g 
   }, [dispatch, objectModels, objectModel, closeObjectModel]);
 
   const cloneObjectModelHandler = React.useCallback(() => {
-    if (objectModel.name === "") {
-      errors.set("name", "Name is a mandatory field");
-    } else {
+    if (saveObjectModelHandler()) {
       saveObjectModelHandler();
 
       let id = guid().replace(/-/g, "");
