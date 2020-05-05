@@ -75,7 +75,7 @@ once you've changed the errors map you'll need to reassign it to the state (e.g 
   );
 
   const saveObjectModelHandler = React.useCallback(() => {
-    if (updateObjectModel.name === "") {
+    if (objectModel.name === "") {
       errors.set("name", "Name is a mandatory field");
     } else {
       dispatch({
@@ -98,7 +98,7 @@ once you've changed the errors map you'll need to reassign it to the state (e.g 
   }, [dispatch, objectModels, objectModel, closeObjectModel]);
 
   const cloneObjectModelHandler = React.useCallback(() => {
-    if (updateObjectModel.name === "") {
+    if (objectModel.name === "") {
       errors.set("name", "Name is a mandatory field");
     } else {
       saveObjectModelHandler();
