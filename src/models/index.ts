@@ -37,3 +37,4 @@ export enum IMediaObjectType {
   DIRECTORY = 'directory',
   FILE = 'file'
 }
+export type FormErrors = { [key: string]: string }

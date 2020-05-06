@@ -1,64 +1,56 @@
 import * as React from "react";
 
-
-
-
-import { IObjectModel } from 'models';
-import {  Form } from 'semantic-ui-react';
+import { IObjectModel, FormErrors } from "models";
+import { Form } from "semantic-ui-react";
 import AppContent from "components/high-order/AppContent";
-
-
 
 export interface IGeneralSettingsTabProps {
   objectModel: IObjectModel;
+  errors: FormErrors;
   onPropertyUpdate: (objectModel: IObjectModel) => void;
 }
 
 export interface IGeneralSettingsTabState {
   objectModel: IObjectModel;
+  errors: FormErrors;
 }
-
-class GeneralSettingsTab extends React.Component<
-  IGeneralSettingsTabProps,
-  IGeneralSettingsTabState
-  > {
-  public state = {
-    objectModel: this.props.objectModel
-  };
-
-  public valueChangeHandler = (e: any) => {
+const GeneralSettingsTab: React.FC<IGeneralSettingsTabProps> = ({
+  objectModel,
+  errors,
+  onPropertyUpdate,
+}) => {
+  const valueChangeHandler = (e: any) => {
     const { name, value } = e.target;
-    this.props.onPropertyUpdate({ ...this.props.objectModel, [name]: value });
+    onPropertyUpdate({ ...objectModel, [name]: value });
   };
 
-  public render() {
-    const { objectModel } = this.props;
-    return (
-      <AppContent>
-        <Form>
-          <Form.Input
-            onChange={this.valueChangeHandler}
-            fluid={true}
-            name="name"
-            value={objectModel.name}
-            label="Object Model Name"
-          />
-          <Form.Input
-            name="id"
-            value={objectModel.id}
-            disabled={true}
-            label="Object Model Key"
-          />
-          <Form.TextArea
-            label="Description"
-            name="description"
-            onChange={this.valueChangeHandler}
-            value={objectModel.description}
-            rows={5}
-          />
-        </Form>
-      </AppContent>
-    );
-  }
-}
+  return (
+    <AppContent>
+      <Form>
+        <Form.Input
+          onChange={valueChangeHandler}
+          fluid={true}
+          name="name"
+          value={objectModel.name}
+          label="Object Model Name"
+          required
+          error={errors["name"]}
+        />
+        <Form.Input
+          name="id"
+          value={objectModel.id}
+          disabled={true}
+          label="Object Model Key"
+        />
+        <Form.TextArea
+          label="Description"
+          name="description"
+          onChange={valueChangeHandler}
+          value={objectModel.description}
+          rows={5}
+        />
+      </Form>
+    </AppContent>
+  );
+};
 export default GeneralSettingsTab;
