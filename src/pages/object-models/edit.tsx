@@ -37,6 +37,8 @@ const ObjectModelsEditPage: React.FC = () => {
   );
   const [errors, updateErrors] = React.useState<FormErrors>({});
 
+  const [dirty, setDirty] = React.useState(false);
+
   const closeObjectModel = React.useCallback(
     () => history.push(`/object-models`),
     [history]
@@ -58,6 +60,7 @@ const ObjectModelsEditPage: React.FC = () => {
         delete errors["name"];
       }
       updateErrors(errors);
+      setDirty(true);
     },
     [errors, updateErrors, updateObjectModel]
   );
@@ -72,6 +75,7 @@ const ObjectModelsEditPage: React.FC = () => {
         objectModels: objectModels.set(objectModel.id, objectModel),
         objectModel,
       });
+      setDirty(false);
       closeObjectModel();
       return true;
     }
@@ -131,6 +135,9 @@ const ObjectModelsEditPage: React.FC = () => {
         cloneObjectModel={cloneObjectModelHandler}
         deleteObjectModel={deleteObjectModelHandler}
         closeObjectModel={closeObjectModel}
+        dirty = {dirty}
+
+
       />
       <ObjectModelEdit
         errors={errors}

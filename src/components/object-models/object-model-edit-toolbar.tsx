@@ -8,6 +8,7 @@ interface IObjectModelEditToolbarProps {
   deleteObjectModel: () => void;
   closeObjectModel: () => void;
   isNew: boolean;
+  dirty: boolean;
 }
 
 interface IObjectModelEditToolbarState {
@@ -22,17 +23,18 @@ class ObjectModelEditToolbar extends React.Component<
     closeOpen: false,
   };
 
-  public handleCloseCancel = () => {
-    this.setState((state) => ({ closeOpen: !state.closeOpen }));
-
+  public showClose = () => {
+    if (this.props.dirty) {
+    this.setState({ closeOpen: true });
+    }
   };
 
-  public showClose = () => {
-    this.setState({ closeOpen: true });
+  public handleCloseCancel = () => {
+    this.setState({ closeOpen: false });
   };
 
   public handleCloseConfirm = () => {
-    this.setState((state) => ({ closeOpen: !state.closeOpen }));
+    this.setState({ closeOpen: false });
     this.props.closeObjectModel();
   };
 
@@ -43,7 +45,9 @@ class ObjectModelEditToolbar extends React.Component<
       deleteObjectModel,
       closeObjectModel,
       isNew,
+      dirty
     } = this.props;
+    const state = this.state;
     return (
       <PageToolbar>
         <Menu.Item>
@@ -70,7 +74,7 @@ class ObjectModelEditToolbar extends React.Component<
           <Menu.Item icon={true} onClick={this.showClose}>
             <Icon name="close" />
             <Confirm
-              open={this.state.closeOpen}
+              open={state.closeOpen}
               content="This is a custom message"
               onCancel={this.handleCloseCancel}
               // onConfirm={closeObjectModel}
