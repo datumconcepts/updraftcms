@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Menu, Breadcrumb, Icon, Confirm } from "semantic-ui-react";
+import { Menu, Breadcrumb, Icon } from "semantic-ui-react";
 import PageToolbar from "components/high-order/PageToolbar";
 
 interface IObjectModelEditToolbarProps {
@@ -8,49 +8,12 @@ interface IObjectModelEditToolbarProps {
   deleteObjectModel: () => void;
   closeObjectModel: () => void;
   isNew: boolean;
-  dirty: boolean;
 }
 
-interface IObjectModelEditToolbarState {
-  closeOpen: boolean;
-}
+const ObjectModelEditToolbar: React.FC<IObjectModelEditToolbarProps> = ({ cloneObjectModel, saveObjectModel, deleteObjectModel, closeObjectModel, isNew }) => {
 
-class ObjectModelEditToolbar extends React.Component<
-  IObjectModelEditToolbarProps,
-  IObjectModelEditToolbarState
-> {
-  public state = {
-    closeOpen: false,
-  };
-
-  public showClose = () => {
-    if (this.props.dirty) {
-    this.setState({ closeOpen: true });
-    }
-  };
-
-  public handleCloseCancel = () => {
-    this.setState({ closeOpen: false });
-  };
-
-  public handleCloseConfirm = () => {
-    this.setState({ closeOpen: false });
-    this.props.closeObjectModel();
-  };
-
-  public render() {
-    const {
-      cloneObjectModel,
-      saveObjectModel,
-      deleteObjectModel,
-      closeObjectModel,
-      isNew,
-      dirty
-    } = this.props;
-    const state = this.state;
-    return (
-      <PageToolbar>
-        <Menu.Item>
+  return <PageToolbar>
+      <Menu.Item>
           <Breadcrumb.Section>Object Models</Breadcrumb.Section>
           <Breadcrumb.Divider
             icon={{ name: "angle right" }}
@@ -71,20 +34,11 @@ class ObjectModelEditToolbar extends React.Component<
               <Icon name="trash alternate outline" color="red" />
             </Menu.Item>
           )}
-          <Menu.Item icon={true} onClick={this.showClose}>
+          <Menu.Item icon={true} onClick={closeObjectModel}>
             <Icon name="close" />
-            <Confirm
-              open={state.closeOpen}
-              content="This is a custom message"
-              onCancel={this.handleCloseCancel}
-              // onConfirm={closeObjectModel}
-              onConfirm={this.handleCloseConfirm}
-            />
           </Menu.Item>
         </Menu.Menu>
       </PageToolbar>
-    );
-  }
 }
 
 export default ObjectModelEditToolbar;

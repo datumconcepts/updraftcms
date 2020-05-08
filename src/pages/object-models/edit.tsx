@@ -19,8 +19,19 @@ import Layout from "components/layout";
 import ObjectModelEditToolbar from "components/object-models/object-model-edit-toolbar";
 import ObjectModelEdit from "components/object-models/object-model-edit";
 
+import { Confirm } from "semantic-ui-react";
+
 interface IRouteParams {
   id: string;
+}
+
+export interface IGeneralSettingsTabState {
+  objectModel: IObjectModel;
+  errors: FormErrors;
+  dirty: boolean;
+  setDirty: boolean;
+  closeConfirmOpen: boolean;
+  setCloseConfirmOpen: boolean;
 }
 
 const ObjectModelsEditPage: React.FC = () => {
@@ -39,10 +50,23 @@ const ObjectModelsEditPage: React.FC = () => {
 
   const [dirty, setDirty] = React.useState(false);
 
-  const closeObjectModel = React.useCallback(
-    () => history.push(`/object-models`),
-    [history]
-  );
+  const [closeOpen, setCloseOpen] = React.useState(false);
+
+  const closeObjectModel = React.useCallback(() => {
+    if (dirty) {
+      setCloseOpen(true);
+    } else {
+      history.push(`/object-models`);
+    }
+  }, [history, dirty]);
+
+  const handleCloseCancel = () => {
+    setCloseOpen(false);
+  };
+
+  const handleCloseConfirm = React.useCallback(() => {
+    history.push(`/object-models`);
+  }, [history]);
 
   React.useEffect(() => {
     if (id !== objectModel.id) {
@@ -129,15 +153,20 @@ const ObjectModelsEditPage: React.FC = () => {
 
   return (
     <Layout>
+      <Confirm
+        open={closeOpen}
+        content="Are you sure you want to exit without saving?"
+        onCancel={handleCloseCancel}
+        // onConfirm={closeObjectModel}
+        onConfirm={handleCloseConfirm}
+      />
+
       <ObjectModelEditToolbar
         isNew={objectModels.get(id) ? false : true}
         saveObjectModel={saveObjectModelHandler}
         cloneObjectModel={cloneObjectModelHandler}
         deleteObjectModel={deleteObjectModelHandler}
         closeObjectModel={closeObjectModel}
-        dirty = {dirty}
-
-
       />
       <ObjectModelEdit
         errors={errors}
