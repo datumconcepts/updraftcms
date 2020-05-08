@@ -19,8 +19,15 @@ import Layout from "components/layout";
 import ObjectModelEditToolbar from "components/object-models/object-model-edit-toolbar";
 import ObjectModelEdit from "components/object-models/object-model-edit";
 
+import { Confirm } from "semantic-ui-react";
+
 interface IRouteParams {
   id: string;
+}
+
+export interface IGeneralSettingsTabState {
+  deleteOpen: boolean;
+  setDeleteOpen: boolean;
 }
 
 const ObjectModelsEditPage: React.FC = () => {
@@ -36,6 +43,8 @@ const ObjectModelsEditPage: React.FC = () => {
     objectModels.get(id) || { ...defaultObjectModel, id }
   );
   const [errors, updateErrors] = React.useState<FormErrors>({});
+
+  const [deleteOpen, setDeleteOpen] = React.useState(false);
 
   const closeObjectModel = React.useCallback(
     () => history.push(`/object-models`),
@@ -84,7 +93,15 @@ const ObjectModelsEditPage: React.FC = () => {
     closeObjectModel,
   ]);
 
-  const deleteObjectModelHandler = React.useCallback(() => {
+  const deleteObjectModelHandler = () => {
+    setDeleteOpen(true);
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteOpen(false);
+  };
+
+  const handleDeleteConfirm = React.useCallback(() => {
     objectModels.delete(objectModel.id);
     dispatch({
       type: DELETE_OBJECT_MODEL,
@@ -125,6 +142,13 @@ const ObjectModelsEditPage: React.FC = () => {
 
   return (
     <Layout>
+      <Confirm
+        open={deleteOpen}
+        content="Are you sure you want to delete?"
+        onCancel={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+      />
+
       <ObjectModelEditToolbar
         isNew={objectModels.get(id) ? false : true}
         saveObjectModel={saveObjectModelHandler}
