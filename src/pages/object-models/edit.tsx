@@ -185,7 +185,7 @@ const ObjectModelsEditPage: React.FC = () => {
         saveObjectModel={saveObjectModelHandler}
         cloneObjectModel={cloneObjectModelHandler}
         deleteObjectModel={deleteObjectModelHandler}
-        closeObjectModel={closeObjectModel}
+        closeObjectModel={closeObjectModelHandler}
       />
       <ObjectModelEdit
         errors={errors}
