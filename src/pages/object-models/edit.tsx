@@ -94,23 +94,16 @@ const ObjectModelsEditPage: React.FC = () => {
       updateErrors({ ...errors, name: "Name is a mandatory field" });
       return false;
     } else {
+      setDirty(false);
       dispatch({
         type: SAVE_OBJECT_MODEL,
         objectModels: objectModels.set(objectModel.id, objectModel),
         objectModel,
       });
-      setDirty(false);
-      closeObjectModel();
+      // closeObjectModel();
       return true;
     }
-  }, [
-    errors,
-    updateErrors,
-    dispatch,
-    objectModels,
-    objectModel,
-    closeObjectModel,
-  ]);
+  }, [errors, updateErrors, dispatch, objectModels, objectModel]);
 
   const deleteObjectModelHandler = React.useCallback(() => {
     objectModels.delete(objectModel.id);
