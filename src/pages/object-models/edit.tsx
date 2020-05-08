@@ -30,8 +30,8 @@ export interface IGeneralSettingsTabState {
   errors: FormErrors;
   dirty: boolean;
   setDirty: boolean;
-  closeConfirmOpen: boolean;
-  setCloseConfirmOpen: boolean;
+  closeOpen: boolean;
+  setCloseOpen: boolean;
 }
 
 const ObjectModelsEditPage: React.FC = () => {
