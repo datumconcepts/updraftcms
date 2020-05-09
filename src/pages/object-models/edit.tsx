@@ -18,8 +18,11 @@ import useShortcuts from "hooks/useShortcuts";
 import Layout from "components/layout";
 import ObjectModelEditToolbar from "components/object-models/object-model-edit-toolbar";
 import ObjectModelEdit from "components/object-models/object-model-edit";
-import ConfirmDialog, { IConfirmDialogProps } from "components/high-order/confirm-dialog";
+import ConfirmDialog, {
+  IConfirmDialogProps,
+} from "components/high-order/confirm-dialog";
 
+import { Button, Modal, Form } from "semantic-ui-react";
 
 interface IRouteParams {
   id: string;
@@ -32,8 +35,8 @@ export interface IGeneralSettingsTabState {
   errors: FormErrors;
   dirty: boolean;
   setDirty: boolean;
-  closeOpen: boolean;
-  setCloseOpen: boolean;
+  cloneFormOpen: boolean;
+  setCloneFormOpen: boolean;
 }
 
 const ObjectModelsEditPage: React.FC = () => {
@@ -52,11 +55,13 @@ const ObjectModelsEditPage: React.FC = () => {
   const [dirty, setDirty] = React.useState(false);
   const [errors, updateErrors] = React.useState<FormErrors>({});
 
+  const [cloneFormOpen, setCloneFormOpen] = React.useState(false);
+
   const [dialog, confirm] = React.useState<IConfirmDialogProps>();
 
-  const closeObjectModel = React.useCallback(() => { history.push(`/object-models`); }, [history]);
-
-
+  const closeObjectModel = React.useCallback(() => {
+    history.push(`/object-models`);
+  }, [history]);
 
   const saveObjectModel = React.useCallback(() => {
     if (objectModel.name === "") {
@@ -73,7 +78,6 @@ const ObjectModelsEditPage: React.FC = () => {
     }
   }, [errors, updateErrors, dispatch, objectModels, objectModel]);
 
-
   const deleteObjectModel = React.useCallback(() => {
     objectModels.delete(objectModel.id);
     dispatch({
@@ -83,7 +87,6 @@ const ObjectModelsEditPage: React.FC = () => {
     });
     closeObjectModel();
   }, [dispatch, objectModels, objectModel, closeObjectModel]);
-
 
   const cloneObjectModel = React.useCallback(() => {
     let id = guid().replace(/-/g, "");
@@ -104,8 +107,6 @@ const ObjectModelsEditPage: React.FC = () => {
 
     history.push(`/object-models/${id}/edit`);
   }, [dispatch, objectModels, objectModel, history]);
-
-
 
   React.useEffect(() => {
     if (id !== objectModel.id) {
@@ -128,46 +129,54 @@ const ObjectModelsEditPage: React.FC = () => {
     [errors, updateErrors, updateObjectModel]
   );
 
-
   const saveObjectModelHandler = React.useCallback(() => {
     if (saveObjectModel()) {
       closeObjectModel();
     }
   }, [saveObjectModel, closeObjectModel]);
 
+  const cloneNameHandler = (e: any) => {
+    const { name, value } = e.target;
+    valueChangeHandler({ ...objectModel, [name]: value });
+  };
 
   const cloneObjectModelHandler = React.useCallback(() => {
-    if (saveObjectModel()) {
-      cloneObjectModel();
-    }
+    setCloneFormOpen(true);
+    // if (saveObjectModel()) {
+    //   cloneObjectModel();
+    // }
   }, [saveObjectModel, cloneObjectModel]);
 
+  const cloneCancelHandler = () => {
+    setCloneFormOpen(false);
+  };
+
+  const cloneSubmitHandler = () => {
+    setCloneFormOpen(false);
+  };
 
   const closeObjectModelHandler = React.useCallback(() => {
     if (dirty) {
       confirm({
-        message: 'Do you wish to save changes',
-        confirmText: 'Save',
+        message: "Do you wish to save changes",
+        confirmText: "Save",
         confirmAction: saveObjectModelHandler,
-        cancelText: 'Discard',
+        cancelText: "Discard",
         cancelAction: () => {
           closeObjectModel();
           confirm(undefined);
-        }
-      })
+        },
+      });
     } else closeObjectModel();
   }, [saveObjectModelHandler, closeObjectModel, dirty]);
 
-
   const deleteObjectModelHandler = React.useCallback(() => {
     confirm({
-      message: 'Are you sure you want to delete?',
+      message: "Are you sure you want to delete?",
       confirmAction: deleteObjectModel,
-      cancelAction: () => confirm(undefined)
-    })
+      cancelAction: () => confirm(undefined),
+    });
   }, [deleteObjectModel, confirm]);
-
-
 
   useShortcuts([
     { key: "s", action: saveObjectModelHandler },
@@ -178,6 +187,24 @@ const ObjectModelsEditPage: React.FC = () => {
 
   return (
     <Layout>
+      <Modal as={Form} open={cloneFormOpen}>
+        <Modal.Header>Do you want to clone the object model?</Modal.Header>
+        <Modal.Content>
+          <Form.Input
+            label="Name"
+            name="name"
+            value={objectModel.name}
+            onChange={cloneNameHandler}
+          />
+        </Modal.Content>
+        <Modal.Actions>
+          <Button negative onClick={cloneCancelHandler}>
+            Cancel
+          </Button>
+          <Button onClick={cloneSubmitHandler}>OK</Button>
+        </Modal.Actions>
+      </Modal>
+
       {dialog && <ConfirmDialog {...dialog} />}
 
       <ObjectModelEditToolbar
