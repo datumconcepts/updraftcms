@@ -54,9 +54,9 @@ const ObjectModelsEditPage: React.FC = () => {
 
   const [dialog, confirm] = React.useState<IConfirmDialogProps>();
 
+
+  
   const closeObjectModel = React.useCallback(() => { history.push(`/object-models`); }, [history]);
-
-
 
   const saveObjectModel = React.useCallback(() => {
     if (objectModel.name === "") {
