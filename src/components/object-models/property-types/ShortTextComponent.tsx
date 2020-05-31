@@ -1,11 +1,9 @@
 import * as React from "react";
-import { Card, Form, Icon, Grid } from "semantic-ui-react";
+import { Card, Form, Icon, Grid, Checkbox } from "semantic-ui-react";
 
 import { IPropertyMap } from "models";
 
-import ModalDialog, {
-  IModalDialogProps,
-} from "components/high-order/modal-dialog/index";
+import ModalDialog from "components/high-order/modal-dialog/index";
 
 interface ITextboxComponentProps {
   propertyMap: IPropertyMap;
@@ -19,9 +17,13 @@ const ShortTextComponent: React.FC<ITextboxComponentProps> = ({
   propertyMap,
   onPropertyUpdate,
 }) => {
-  const [dialog, confirm] = React.useState<IModalDialogProps>();
+  const [modalOpen, setModalOpen] = React.useState(false);
 
   const [expanded, setExpanded] = React.useState(false);
+
+  const [name, setName] = React.useState("");
+
+  const [required, setRequired] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -35,45 +37,43 @@ const ShortTextComponent: React.FC<ITextboxComponentProps> = ({
   };
 
   const editButtonHandler = () => {
-    confirm({
-      modalOpen: true,
-      name: "",
-      required: false,
-      header: "Element Options",
-      changeValue: changeValue,
-      confirmText: "Save",
-      confirmAction: handleConfirm,
-      cancelText: "Discard",
-      cancelAction: handleCancel,
-    });
+    setModalOpen(true);
   };
 
   const handleCancel = () => {
-    // confirm({...confirm, modalOpen: false})
+    setModalOpen(false);
   };
 
-  const handleConfirm = () => {};
+  const handleConfirm = () => {
+    setModalOpen(false);
+  };
 
   return (
     <>
-      {dialog && <ModalDialog {...dialog} />}
-
-      {/* <ModalDialog
-        name=""
-        required={false}
+      <ModalDialog
+        modalOpen={modalOpen}
         header="Element Options"
         changeValue={changeValue}
         cancelAction={handleCancel}
         confirmAction={handleConfirm}
         confirmText="OK"
         cancelText="Cancel"
-      /> */}
-
+      >
+        <Form.Input
+          label="Name"
+          name="name"
+          value={name}
+          onChange={changeValue}
+        />
+        <Checkbox label="Required" onChange={changeValue} checked={required} />
+      </ModalDialog>
       <Card fluid={true}>
         <Card.Content>
-          <Card.Header onClick={handleExpandClick}>
+          <Card.Header>
             <Grid columns="equal">
-              <Grid.Column>{propertyMap.name}</Grid.Column>
+              <Grid.Column onClick={handleExpandClick}>
+                {propertyMap.name}
+              </Grid.Column>
               <Grid.Column style={{ flex: "0 0 auto", width: "auto" }}>
                 <Icon
                   name="edit outline"
