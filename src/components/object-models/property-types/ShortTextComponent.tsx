@@ -21,7 +21,7 @@ const ShortTextComponent: React.FC<ITextboxComponentProps> = ({
 
   const [expanded, setExpanded] = React.useState(false);
 
-  const [name, setName] = React.useState("");
+  const [name, setName] = React.useState(propertyMap.name);
 
   const [required, setRequired] = React.useState(false);
 
@@ -36,17 +36,24 @@ const ShortTextComponent: React.FC<ITextboxComponentProps> = ({
     onPropertyUpdate({ ...propertyMap, [name]: value });
   };
 
-  const editButtonHandler = () => {
+  const editButtonHandler = React.useCallback(() => {
     setModalOpen(true);
-  };
+  }, [setModalOpen]);
 
-  const handleCancel = () => {
+  const handleCancel = React.useCallback(() => {
     setModalOpen(false);
-  };
+    setName(propertyMap.name);
+    setRequired(propertyMap.required);
+  }, [setModalOpen,setName,setRequired,propertyMap]);
 
-  const handleConfirm = () => {
+  const handleConfirm = React.useCallback(() => {
+    onPropertyUpdate({
+      ...propertyMap,
+      name: name,
+      required: required ?? false,
+    });
     setModalOpen(false);
-  };
+  }, [onPropertyUpdate, propertyMap, name, required, setModalOpen]);
 
   return (
     <>
@@ -63,9 +70,13 @@ const ShortTextComponent: React.FC<ITextboxComponentProps> = ({
           label="Name"
           name="name"
           value={name}
-          onChange={changeValue}
+          onChange={(e, { value }) => setName(value)}
         />
-        <Checkbox label="Required" onChange={changeValue} checked={required} />
+        <Checkbox
+          label="Required"
+          onChange={(e, { checked }) => setRequired(checked!)}
+          checked={required}
+        />
       </ModalDialog>
       <Card fluid={true}>
         <Card.Content>

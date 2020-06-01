@@ -17,6 +17,7 @@ import AppContent from "components/high-order/AppContent";
 const propertyTypes: any[] = [
   {
     name: "Short Text",
+    required: false,
     propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
       <ShortTextComponent
         onPropertyUpdate={onPropertyUpdate}
