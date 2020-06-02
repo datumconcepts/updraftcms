@@ -23,7 +23,7 @@ const ShortTextComponent: React.FC<ITextboxComponentProps> = ({
 
   const [name, setName] = React.useState(propertyMap.name);
 
-  const [required, setRequired] = React.useState(false);
+  const [required, setRequired] = React.useState(propertyMap.required);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -44,7 +44,7 @@ const ShortTextComponent: React.FC<ITextboxComponentProps> = ({
     setModalOpen(false);
     setName(propertyMap.name);
     setRequired(propertyMap.required);
-  }, [setModalOpen,setName,setRequired,propertyMap]);
+  }, [setModalOpen, setName, setRequired, propertyMap]);
 
   const handleConfirm = React.useCallback(() => {
     onPropertyUpdate({
@@ -80,13 +80,12 @@ const ShortTextComponent: React.FC<ITextboxComponentProps> = ({
       </ModalDialog>
       <Card fluid={true}>
         <Card.Content>
-          <Card.Header>
+          <Card.Header onClick={handleExpandClick}>
             <Grid columns="equal">
-              <Grid.Column onClick={handleExpandClick}>
-                {propertyMap.name}
-              </Grid.Column>
+              <Grid.Column>{propertyMap.name}</Grid.Column>
               <Grid.Column style={{ flex: "0 0 auto", width: "auto" }}>
                 <Icon
+                  style={{ cursor: "pointer" }}
                   name="edit outline"
                   color="blue"
                   onClick={editButtonHandler}

@@ -23,7 +23,13 @@ const ModalDialog: React.FC<IModalDialogProps> = ({
   children,
 }) => {
   return (
-    <Modal as={Form} open={modalOpen}>
+    <Modal
+      as={Form}
+      open={modalOpen}
+      closeOnEscape={true}
+      closeOnDimmerClick={true}
+      onClose={cancelAction}
+    >
       <Modal.Header>{header}</Modal.Header>
       <Modal.Content>{children}</Modal.Content>
       <Modal.Actions>
