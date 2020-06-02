@@ -87,9 +87,8 @@ const ObjectModelsEditPage: React.FC = () => {
   }, [dispatch, objectModels, objectModel, closeObjectModel]);
 
 
-  const cloneObjectModel = React.useCallback(() => {
+  const cloneObjectModel = React.useCallback((name) => {
     let id = guid().replace(/-/g, "");
-    let name = cloneName;
     while (objectModels.get(id)) {
       id = guid().replace(/-/g, "");
     }
@@ -146,10 +145,11 @@ const ObjectModelsEditPage: React.FC = () => {
 
   const cloneSubmitHandler = React.useCallback(() => {
     if (saveObjectModel()) {
-      cloneObjectModel();
+      let name = cloneName;
+      cloneObjectModel(name);
     }
     setCloneModalOpen(false);
-  }, [saveObjectModel, cloneObjectModel, setCloneModalOpen]);
+  }, [saveObjectModel, cloneName, cloneObjectModel, setCloneModalOpen]);
 
   const closeObjectModelHandler = React.useCallback(() => {
     if (dirty) {
