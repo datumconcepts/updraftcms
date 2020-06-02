@@ -5,7 +5,6 @@ import { Button, Modal, Form } from "semantic-ui-react";
 export interface IModalDialogProps {
   modalOpen: boolean;
   header: string;
-  changeValue: (e: any) => void;
   cancelAction: () => void;
   confirmAction: () => void;
   confirmText?: string;
@@ -15,7 +14,6 @@ export interface IModalDialogProps {
 const ModalDialog: React.FC<IModalDialogProps> = ({
   modalOpen,
   header,
-  changeValue,
   cancelAction,
   confirmAction,
   confirmText,
@@ -33,10 +31,10 @@ const ModalDialog: React.FC<IModalDialogProps> = ({
       <Modal.Header>{header}</Modal.Header>
       <Modal.Content>{children}</Modal.Content>
       <Modal.Actions>
-        <Button negative onClick={cancelAction}>
-          {cancelText}
+        <Button onClick={cancelAction}>{cancelText}</Button>
+        <Button color="blue" onClick={confirmAction}>
+          {confirmText}
         </Button>
-        <Button onClick={confirmAction}>{confirmText}</Button>
       </Modal.Actions>
     </Modal>
   );

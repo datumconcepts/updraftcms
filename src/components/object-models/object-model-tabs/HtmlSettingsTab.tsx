@@ -28,6 +28,7 @@ const propertyTypes: any[] = [
   },
   {
     name: "Long Text",
+    required: false,
     propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
       <LongTextComponent
         onPropertyUpdate={onPropertyUpdate}
@@ -38,6 +39,7 @@ const propertyTypes: any[] = [
   },
   {
     name: "Option Select",
+    required: false,
     propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
       <OptionSelectComponent
         onPropertyUpdate={onPropertyUpdate}
@@ -48,6 +50,7 @@ const propertyTypes: any[] = [
   },
   {
     name: "Rich Text",
+    required: false,
     propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
       <RichTextComponent
         propertyMap={propertyMap}
@@ -58,6 +61,7 @@ const propertyTypes: any[] = [
   },
   {
     name: "Attachment",
+    required: false,
     propertyComponent: (props: any, propertyMap: any) => (
       <FileUploadComponent {...props} propertyMap={propertyMap} />
     ),

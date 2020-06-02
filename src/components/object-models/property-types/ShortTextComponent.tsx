@@ -9,20 +9,15 @@ interface ITextboxComponentProps {
   propertyMap: IPropertyMap;
   onPropertyUpdate: (propertyMap: IPropertyMap) => void;
 }
-interface ITextboxComponentState {
-  expanded: boolean;
-}
 
 const ShortTextComponent: React.FC<ITextboxComponentProps> = ({
   propertyMap,
   onPropertyUpdate,
 }) => {
-  const [modalOpen, setModalOpen] = React.useState(false);
 
   const [expanded, setExpanded] = React.useState(false);
-
+  const [modalOpen, setModalOpen] = React.useState(false);
   const [name, setName] = React.useState(propertyMap.name);
-
   const [required, setRequired] = React.useState(propertyMap.required);
 
   const handleExpandClick = () => {
@@ -60,10 +55,9 @@ const ShortTextComponent: React.FC<ITextboxComponentProps> = ({
       <ModalDialog
         modalOpen={modalOpen}
         header="Element Options"
-        changeValue={changeValue}
         cancelAction={handleCancel}
         confirmAction={handleConfirm}
-        confirmText="OK"
+        confirmText="Update"
         cancelText="Cancel"
       >
         <Form.Input

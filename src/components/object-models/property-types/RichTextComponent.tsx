@@ -1,18 +1,11 @@
 import * as React from "react";
-import { Icon, Card, Button, Grid } from 'semantic-ui-react';
+import { Icon, Card, Button, Grid, Form, Checkbox } from 'semantic-ui-react';
 
 import { convertFromRaw, convertToRaw, DraftBlockType, Editor, EditorState, RichUtils } from 'draft-js';
 
+import { IPropertyMap } from 'models';
 
-
-
-import { IPropertyMap } from 'models'
-
-
-
-
-
-
+import ModalDialog from "components/high-order/modal-dialog/index";
 
 import 'draft-js/dist/Draft.css'
 import StyleButton from "components/high-order/HtmlEditor/StyleButton";
@@ -20,10 +13,6 @@ import StyleButton from "components/high-order/HtmlEditor/StyleButton";
 interface IRichTextComponentProps {
   propertyMap: IPropertyMap;
   onPropertyUpdate: (propertyMap: IPropertyMap) => void;
-}
-interface IRichTextComponentState {
-  editorState: EditorState;
-  expanded: boolean;
 }
 
 const BLOCK_TYPES = [
@@ -88,81 +77,122 @@ const InlineStyleControls = (props: any) => {
 };
 
 
+const RichTextComponent: React.FC<IRichTextComponentProps> = ({
+  propertyMap,
+  onPropertyUpdate,
+}) => {
 
-class RichTextComponent extends React.Component<IRichTextComponentProps, IRichTextComponentState> {
-  public state = {
-    editorState: EditorState.createEmpty(),
-    expanded: false
-  }
-  public componentDidMount() {
-    const { propertyMap } = this.props;
+  const [editorState, setEditorState] = React.useState(EditorState.createEmpty());
+  const [expanded, setExpanded] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [name, setName] = React.useState(propertyMap.name);
+  const [required, setRequired] = React.useState(propertyMap.required);
+
+  React.useEffect(() => {
     if (propertyMap.defaultValue) {
       const contentState = convertFromRaw(propertyMap.defaultValue);
       const editorState = EditorState.createWithContent(contentState);
-      this.setState({ editorState });
+      setEditorState(editorState);
     }
-  }
-  public handleExpandClick = () => {
-    this.setState(state => ({ expanded: !state.expanded }));
+  }, [propertyMap]);
+  
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
   };
-  public changeDefaultValue = (editorState: EditorState) => {
-    const { propertyMap, onPropertyUpdate } = this.props;
+  const changeDefaultValue = (editorState: EditorState) => {
     const contentState = editorState.getCurrentContent();
-    this.setState({ editorState }, () => {
-      onPropertyUpdate({ ...propertyMap, 'defaultValue': convertToRaw(contentState) });
-    });
-  };
-  public changeValue = (e: any) => {
-    const { propertyMap, onPropertyUpdate } = this.props;
-    const {
-      target: { name, value }
-    } = e;
-    onPropertyUpdate({ ...propertyMap, [name]: value });
+    // this.setState({ editorState }, () => {
+    //   onPropertyUpdate({ ...propertyMap, 'defaultValue': convertToRaw(contentState) });
+    // });
   };
 
-  public onChange = (editorState: EditorState) => this.setState({ editorState });
+  const onChange = (editorState: EditorState) => setEditorState(editorState);
+  ;
 
-  public toggleBlockType = (blockType: DraftBlockType) => {
-    this.onChange(
+  const toggleBlockType = (blockType: DraftBlockType) => {
+    onChange(
       RichUtils.toggleBlockType(
-        this.state.editorState,
+        editorState,
         blockType
       )
     );
   }
 
-  public toggleInlineStyle = (inlineStyle: string) => {
-    this.onChange(
+  const toggleInlineStyle = (inlineStyle: string) => {
+    onChange(
       RichUtils.toggleInlineStyle(
-        this.state.editorState,
+        editorState,
         inlineStyle
       )
     );
   }
 
-  public render() {
-    const { editorState } = this.state;
-    const { propertyMap } = this.props;
+  const editButtonHandler = React.useCallback(() => {
+    setModalOpen(true);
+  }, [setModalOpen]);
+
+  const handleCancel = React.useCallback(() => {
+    setModalOpen(false);
+    setName(propertyMap.name);
+    setRequired(propertyMap.required);
+  }, [setModalOpen, setName, setRequired, propertyMap]);
+
+  const handleConfirm = React.useCallback(() => {
+    onPropertyUpdate({
+      ...propertyMap,
+      name: name,
+      required: required ?? false,
+    });
+    setModalOpen(false);
+  }, [onPropertyUpdate, propertyMap, name, required, setModalOpen]);
+
     return (
+      <>
+      <ModalDialog
+        modalOpen={modalOpen}
+        header="Element Options"
+        cancelAction={handleCancel}
+        confirmAction={handleConfirm}
+        confirmText="Update"
+        cancelText="Cancel"
+      >
+        <Form.Input
+          label="Name"
+          name="name"
+          value={name}
+          onChange={(e, { value }) => setName(value)}
+        />
+        <Checkbox
+          label="Required"
+          onChange={(e, { checked }) => setRequired(checked!)}
+          checked={required}
+        />
+      </ModalDialog>
       <Card fluid={true}>
         <Card.Content>
-          <Card.Header onClick={this.handleExpandClick}>
+          <Card.Header onClick={handleExpandClick}>
             <Grid columns="equal">
               <Grid.Column>{propertyMap.name}</Grid.Column>
               <Grid.Column style={{ flex: "0 0 auto", width: "auto" }}>
-                <Icon name="edit outline" color="blue" />
+                <Icon
+                  style={{ cursor: "pointer" }}
+                  name="edit outline"
+                  color="blue"
+                  onClick={editButtonHandler}
+                />
               </Grid.Column>
             </Grid>
           </Card.Header>
         </Card.Content>
         <Card.Content>
-          <div style={{ flex: 1 }} className="editor-container">
-            <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType} />
-            <InlineStyleControls editorState={editorState} onToggle={this.toggleInlineStyle} />
-            <Editor editorState={editorState} onChange={this.changeDefaultValue} />
+        <div style={{ flex: 1 }} className="editor-container">
+            <BlockStyleControls editorState={editorState} onToggle={toggleBlockType} />
+            <InlineStyleControls editorState={editorState} onToggle={toggleInlineStyle} />
+            <Editor editorState={editorState} onChange={changeDefaultValue} />
           </div>
         </Card.Content>
-      </Card>);
+      </Card>
+    </>
+    )
   }
-}
 export default RichTextComponent;
