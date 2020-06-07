@@ -1,5 +1,15 @@
 import * as React from "react";
-import { Card, Select, Form, Icon, Grid, Checkbox } from "semantic-ui-react";
+import {
+  Card,
+  Select,
+  Form,
+  Icon,
+  Grid,
+  Checkbox,
+  Button,
+  List,
+  Input,
+} from "semantic-ui-react";
 
 import { IPropertyMap } from "models";
 
@@ -18,6 +28,20 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
   const [modalOpen, setModalOpen] = React.useState(false);
   const [name, setName] = React.useState(propertyMap.name);
   const [required, setRequired] = React.useState(propertyMap.required);
+  const [properties, setProperties] = React.useState({
+    multiple: false,
+    options: [{ text: "display text", value: 1, edit: false }],
+  });
+  const [newOptionName, setNewOptionName] = React.useState("");
+  // const [editOption, setEditOption] = React.useState(false);
+  const [editOptionName, setEditOptionName] = React.useState("");
+
+  if (typeof propertyMap.properties == "undefined") {
+    propertyMap.properties = {
+      multiple: false,
+      options: [],
+    };
+  }
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -31,6 +55,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
     setModalOpen(false);
     setName(propertyMap.name);
     setRequired(propertyMap.required);
+    setProperties(propertyMap.properties);
   }, [setModalOpen, setName, setRequired, propertyMap]);
 
   const handleConfirm = React.useCallback(() => {
@@ -38,9 +63,35 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
       ...propertyMap,
       name: name,
       required: required ?? false,
+      properties: {
+        multiple: properties.multiple,
+        options: [...properties.options],
+      },
     });
     setModalOpen(false);
-  }, [onPropertyUpdate, propertyMap, name, required, setModalOpen]);
+  }, [onPropertyUpdate, propertyMap, name, required, properties, setModalOpen]);
+
+  const addOption = React.useCallback(
+    (name) => {
+      setProperties({
+        ...properties,
+        options: [
+          ...properties.options,
+          { text: name, value: properties.options.length + 1, edit: false },
+        ],
+      });
+      setNewOptionName("");
+    },
+    [setProperties, properties]
+  );
+
+  const handleEditOption = React.useCallback(
+    (editOptionName, index) => {
+      setProperties({...properties})
+      setEditOptionName(editOptionName);
+    },
+    [setProperties, properties]
+  );
 
   return (
     <>
@@ -63,6 +114,48 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
           onChange={(e, { checked }) => setRequired(checked!)}
           checked={required}
         />
+        <List label="Options">
+          {properties.options.map((option, index) => (
+            <List.Item key={index.toString()}>
+              <List.Content floated="right">
+                <Button onClick={() => handleEditOption(editOptionName,index)}>
+                  Edit
+                </Button>
+              </List.Content>
+              <List.Content>
+                {option.edit ? (
+                  <Input
+                    value={editOptionName}
+                    onChange={(e, { value }) => setEditOptionName(value)}
+                  />
+                ) : (
+                  option.text
+                )}
+              </List.Content>
+            </List.Item>
+          ))}
+          <List.Item>
+            <List.Content floated="right">
+              <Button onClick={() => addOption(newOptionName)}>Add</Button>
+            </List.Content>
+            <List.Content>
+              <Input
+                value={newOptionName}
+                onChange={(e, { value }) => setNewOptionName(value)}
+              />
+            </List.Content>
+          </List.Item>
+        </List>
+        <Checkbox
+          label="Multiple"
+          onChange={(e, { checked }) =>
+            setProperties({
+              ...properties,
+              multiple: !properties.multiple,
+            })
+          }
+          checked={properties.multiple}
+        />
       </ModalDialog>
 
       <Card fluid={true}>
@@ -82,7 +175,12 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
           </Card.Header>
         </Card.Content>
         <Card.Content>
-          <Select fluid={true} label={propertyMap.name} options={[]} />
+          <Select
+            fluid={true}
+            label={propertyMap.name}
+            multiple={propertyMap.properties.multiple}
+            options={propertyMap.properties.options}
+          />
         </Card.Content>
       </Card>
     </>
