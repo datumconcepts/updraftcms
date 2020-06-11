@@ -37,12 +37,6 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
     },
   });
 
-  if (typeof propertyMap.properties == "undefined") {
-    propertyMap.properties = {
-      multiple: false,
-      options: [],
-    };
-  }
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -213,8 +207,8 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
             closeOnEscape
             fluid={true}
             label={propertyMap.name}
-            multiple={propertyMap.properties!.multiple ?? false}
-            options={propertyMap.properties!.options ?? []}
+            multiple={propertyMap.properties?.multiple ?? false}
+            options={propertyMap.properties?.options ?? []}
           />
         </Card.Content>
       </Card>
