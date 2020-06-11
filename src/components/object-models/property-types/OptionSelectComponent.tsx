@@ -8,7 +8,6 @@ import {
   Checkbox,
   Button,
   List,
-  Input,
 } from "semantic-ui-react";
 
 import { IPropertyMap } from "models";
@@ -26,15 +25,16 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
 }) => {
   const [expanded, setExpanded] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
-  const [name, setName] = React.useState(propertyMap.name);
-  const [required, setRequired] = React.useState(propertyMap.required);
-  const [properties, setProperties] = React.useState({
-    multiple: false,
-    options: [{ text: "display text", value: 1, edit: false }],
+
+  const [obj, setObj] = React.useState<IPropertyMap>({
+    ...propertyMap,
+    name: propertyMap.name,
+    required: propertyMap.required,
+    properties: propertyMap.properties ?? {
+      multiple: false,
+      options: [],
+    },
   });
-  const [newOptionName, setNewOptionName] = React.useState("");
-  // const [editOption, setEditOption] = React.useState(false);
-  const [editOptionName, setEditOptionName] = React.useState("");
 
   if (typeof propertyMap.properties == "undefined") {
     propertyMap.properties = {
@@ -53,44 +53,46 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
 
   const handleCancel = React.useCallback(() => {
     setModalOpen(false);
-    setName(propertyMap.name);
-    setRequired(propertyMap.required);
-    setProperties(propertyMap.properties);
-  }, [setModalOpen, setName, setRequired, propertyMap]);
+    setObj({
+      ...propertyMap,
+      name: propertyMap.name,
+      required: propertyMap.required,
+      properties: { ...propertyMap.properties },
+    });
+  }, [setModalOpen, setObj, propertyMap]);
 
   const handleConfirm = React.useCallback(() => {
     onPropertyUpdate({
       ...propertyMap,
-      name: name,
-      required: required ?? false,
+      name: obj.name,
+      required: obj.required ?? false,
       properties: {
-        multiple: properties.multiple,
-        options: [...properties.options],
+        multiple: obj.properties!.multiple,
+        options: [...obj!.properties!.options!],
       },
     });
     setModalOpen(false);
-  }, [onPropertyUpdate, propertyMap, name, required, properties, setModalOpen]);
+  }, [obj, onPropertyUpdate, propertyMap, setModalOpen]);
 
-  const addOption = React.useCallback(
-    (name) => {
-      setProperties({
-        ...properties,
-        options: [
-          ...properties.options,
-          { text: name, value: properties.options.length + 1, edit: false },
-        ],
+  const addOption = React.useCallback(() => {
+    let newArr = [...obj.properties!.options!];
+    newArr.push({ text: "", value: "" });
+    setObj({
+      ...obj,
+      properties: { ...obj.properties, options: [...newArr] },
+    });
+  }, [obj]);
+
+  const deleteOption = React.useCallback(
+    (index) => {
+      let newArr = [...obj.properties!.options!];
+      newArr.splice(index, 1);
+      setObj({
+        ...obj,
+        properties: { ...obj.properties, options: [...newArr] },
       });
-      setNewOptionName("");
     },
-    [setProperties, properties]
-  );
-
-  const handleEditOption = React.useCallback(
-    (editOptionName, index) => {
-      setProperties({...properties})
-      setEditOptionName(editOptionName);
-    },
-    [setProperties, properties]
+    [obj]
   );
 
   return (
@@ -106,55 +108,82 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
         <Form.Input
           label="Name"
           name="name"
-          value={name}
-          onChange={(e, { value }) => setName(value)}
+          value={obj.name}
+          onChange={(e, { value }) => setObj({ ...obj, name: value })}
         />
         <Checkbox
           label="Required"
-          onChange={(e, { checked }) => setRequired(checked!)}
-          checked={required}
+          onChange={(e, { checked }) => setObj({ ...obj, required: checked! })}
+          checked={obj.required}
         />
+
         <List label="Options">
-          {properties.options.map((option, index) => (
+          {obj.properties!.options!.map((option: any, index: any) => (
             <List.Item key={index.toString()}>
               <List.Content floated="right">
-                <Button onClick={() => handleEditOption(editOptionName,index)}>
-                  Edit
-                </Button>
+                <Button onClick={() => deleteOption(index)}>Delete</Button>
               </List.Content>
               <List.Content>
-                {option.edit ? (
-                  <Input
-                    value={editOptionName}
-                    onChange={(e, { value }) => setEditOptionName(value)}
-                  />
-                ) : (
-                  option.text
-                )}
+                <Form style={{ maxWidth: "0" }}>
+                  <Form.Group inline>
+                    <Form.Input
+                      inline
+                      label="Name"
+                      value={option.text}
+                      onChange={(e, { value }) => {
+                        let textCopy = [...obj.properties!.options!];
+                        textCopy[index] = { ...textCopy[index], text: value };
+                        setObj({
+                          ...obj,
+                          properties: {
+                            ...obj.properties,
+                            options: [...textCopy],
+                          },
+                        });
+                      }}
+                    />
+                    <Form.Input
+                      inline
+                      label="Value"
+                      value={option.value}
+                      onChange={(e, { value }) => {
+                        let valueCopy = [...obj.properties!.options!];
+                        valueCopy[index] = {
+                          ...valueCopy[index],
+                          value: value,
+                        };
+                        setObj({
+                          ...obj,
+                          properties: {
+                            ...obj.properties,
+                            options: [...valueCopy],
+                          },
+                        });
+                      }}
+                    />
+                  </Form.Group>
+                </Form>
               </List.Content>
             </List.Item>
           ))}
           <List.Item>
-            <List.Content floated="right">
-              <Button onClick={() => addOption(newOptionName)}>Add</Button>
-            </List.Content>
             <List.Content>
-              <Input
-                value={newOptionName}
-                onChange={(e, { value }) => setNewOptionName(value)}
-              />
+              <Button onClick={() => addOption()}>Add</Button>
             </List.Content>
           </List.Item>
         </List>
         <Checkbox
           label="Multiple"
           onChange={(e, { checked }) =>
-            setProperties({
-              ...properties,
-              multiple: !properties.multiple,
+            setObj({
+              ...obj,
+              properties: {
+                ...obj.properties,
+                multiple: !obj.properties!.multiple,
+              },
             })
           }
-          checked={properties.multiple}
+          checked={obj.properties!.multiple}
         />
       </ModalDialog>
 
@@ -178,8 +207,8 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
           <Select
             fluid={true}
             label={propertyMap.name}
-            multiple={propertyMap.properties.multiple}
-            options={propertyMap.properties.options}
+            multiple={propertyMap.properties!.multiple ?? false}
+            options={propertyMap.properties!.options ?? []}
           />
         </Card.Content>
       </Card>

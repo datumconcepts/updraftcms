@@ -40,6 +40,10 @@ const propertyTypes: any[] = [
   {
     name: "Option Select",
     required: false,
+    properites: {
+      multiple: false,
+      options: []
+    },
     propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
       <OptionSelectComponent
         onPropertyUpdate={onPropertyUpdate}
