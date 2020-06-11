@@ -7,7 +7,8 @@ import {
   Grid,
   Checkbox,
   Button,
-  List,
+  Table,
+  Input,
 } from "semantic-ui-react";
 
 import { IPropertyMap } from "models";
@@ -79,7 +80,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
     newArr.push({ text: "", value: "" });
     setObj({
       ...obj,
-      properties: { ...obj.properties, options: [...newArr] },
+      properties: { ...obj.properties, options: newArr },
     });
   }, [obj]);
 
@@ -89,7 +90,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
       newArr.splice(index, 1);
       setObj({
         ...obj,
-        properties: { ...obj.properties, options: [...newArr] },
+        properties: { ...obj.properties, options: newArr },
       });
     },
     [obj]
@@ -116,62 +117,63 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
           onChange={(e, { checked }) => setObj({ ...obj, required: checked! })}
           checked={obj.required}
         />
-
-        <List label="Options">
-          {obj.properties!.options!.map((option: any, index: any) => (
-            <List.Item key={index.toString()}>
-              <List.Content floated="right">
-                <Button onClick={() => deleteOption(index)}>Delete</Button>
-              </List.Content>
-              <List.Content>
-                <Form style={{ maxWidth: "0" }}>
-                  <Form.Group inline>
-                    <Form.Input
-                      inline
-                      label="Name"
-                      value={option.text}
-                      onChange={(e, { value }) => {
-                        let textCopy = [...obj.properties!.options!];
-                        textCopy[index] = { ...textCopy[index], text: value };
-                        setObj({
-                          ...obj,
-                          properties: {
-                            ...obj.properties,
-                            options: [...textCopy],
-                          },
-                        });
-                      }}
-                    />
-                    <Form.Input
-                      inline
-                      label="Value"
-                      value={option.value}
-                      onChange={(e, { value }) => {
-                        let valueCopy = [...obj.properties!.options!];
-                        valueCopy[index] = {
-                          ...valueCopy[index],
-                          value: value,
-                        };
-                        setObj({
-                          ...obj,
-                          properties: {
-                            ...obj.properties,
-                            options: [...valueCopy],
-                          },
-                        });
-                      }}
-                    />
-                  </Form.Group>
-                </Form>
-              </List.Content>
-            </List.Item>
-          ))}
-          <List.Item>
-            <List.Content>
-              <Button onClick={() => addOption()}>Add</Button>
-            </List.Content>
-          </List.Item>
-        </List>
+        <Table basic="very">
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell width={5} verticalAlign='middle'>Value</Table.HeaderCell>
+              <Table.HeaderCell width={5} verticalAlign='middle'>Name</Table.HeaderCell>
+              <Table.HeaderCell textAlign="right">
+                <Button onClick={() => addOption()}>Add</Button>
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {obj.properties!.options!.map((option: any, index: any) => (
+              <Table.Row key={index.toString()}>
+                <Table.Cell>
+                  <Input
+                    style={{ width: "100%" }}
+                    value={option.value}
+                    onChange={(e, { value }) => {
+                      let valueCopy = [...obj.properties!.options!];
+                      valueCopy[index] = { ...valueCopy[index], value: value };
+                      setObj({
+                        ...obj,
+                        properties: {
+                          ...obj.properties,
+                          options: valueCopy,
+                        },
+                      });
+                    }}
+                  />
+                </Table.Cell>
+                <Table.Cell>
+                  <Input
+                    style={{ width: "100%" }}
+                    value={option.text}
+                    onChange={(e, { value }) => {
+                      let textCopy = [...obj.properties!.options!];
+                      textCopy[index] = {
+                        ...textCopy[index],
+                        text: value,
+                      };
+                      setObj({
+                        ...obj,
+                        properties: {
+                          ...obj.properties,
+                          options: textCopy,
+                        },
+                      });
+                    }}
+                  />
+                </Table.Cell>
+                <Table.Cell textAlign="right">
+                  <Button onClick={() => deleteOption(index)}>Delete</Button>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
         <Checkbox
           label="Multiple"
           onChange={(e, { checked }) =>
@@ -205,6 +207,10 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
         </Card.Content>
         <Card.Content>
           <Select
+            closeOnChange
+            openOnFocus
+            closeOnBlur
+            closeOnEscape
             fluid={true}
             label={propertyMap.name}
             multiple={propertyMap.properties!.multiple ?? false}
