@@ -25,7 +25,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
   onPropertyUpdate,
 }) => {
   const [expanded, setExpanded] = React.useState(false);
-  const [modalOpen, setModalOpen] = React.useState(false);
+  const [active, setActive] = React.useState(false);
 
   const [obj, setObj] = React.useState<IPropertyMap>({
     ...propertyMap,
@@ -37,6 +37,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
     },
   });
 
+  const [modalOpen, setModalOpen] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -114,8 +115,12 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
         <Table basic="very">
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell width={5} verticalAlign='middle'>Value</Table.HeaderCell>
-              <Table.HeaderCell width={5} verticalAlign='middle'>Name</Table.HeaderCell>
+              <Table.HeaderCell width={5} verticalAlign="middle">
+                Value
+              </Table.HeaderCell>
+              <Table.HeaderCell width={5} verticalAlign="middle">
+                Name
+              </Table.HeaderCell>
               <Table.HeaderCell textAlign="right">
                 <Button onClick={() => addOption()}>Add</Button>
               </Table.HeaderCell>
@@ -201,13 +206,13 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
         </Card.Content>
         <Card.Content>
           <Select
-            closeOnChange
-            openOnFocus
-            closeOnBlur
-            closeOnEscape
+            open={active}
+            onChange={() => setActive(!active)}
+            onClick={() => setActive(!active)}
+            onClose={() => setActive(false)}
             fluid={true}
             label={propertyMap.name}
-            multiple={propertyMap.properties?.multiple ?? false}
+            multiple={propertyMap.properties?.multiple}
             options={propertyMap.properties?.options ?? []}
           />
         </Card.Content>
