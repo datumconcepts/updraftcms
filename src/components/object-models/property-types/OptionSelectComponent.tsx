@@ -11,7 +11,7 @@ import {
   Input,
 } from "semantic-ui-react";
 
-import { IPropertyMap } from "models";
+import { IPropertyMap, FormErrors } from "models";
 
 import ModalDialog from "components/high-order/modal-dialog/index";
 
@@ -26,6 +26,8 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
 }) => {
   const [expanded, setExpanded] = React.useState(false);
   const [active, setActive] = React.useState(false);
+
+  const [errors, updateErrors] = React.useState<FormErrors>({});
 
   const [obj, setObj] = React.useState<IPropertyMap>({
     ...propertyMap,
@@ -58,6 +60,22 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
   }, [setModalOpen, setObj, propertyMap]);
 
   const handleConfirm = React.useCallback(() => {
+    if (obj.name === "") {
+      updateErrors({ ...errors, name: "Name is a mandatory field" });
+      return false;
+    }
+
+    if (obj.properties?.options?.length === 0 || !obj.properties?.options) {
+      return false;
+    }
+
+    // for (const p in obj.properties?.options){
+    //   if (p.text === "") {
+    //   }
+    //   if (p.value === "") {
+    //   }
+    // }
+
     onPropertyUpdate({
       ...propertyMap,
       name: obj.name,
@@ -68,7 +86,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
       },
     });
     setModalOpen(false);
-  }, [obj, onPropertyUpdate, propertyMap, setModalOpen]);
+  }, [errors, obj, onPropertyUpdate, propertyMap, setModalOpen]);
 
   const addOption = React.useCallback(() => {
     let newArr = [...obj.properties!.options!];
@@ -105,7 +123,14 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
           label="Name"
           name="name"
           value={obj.name}
-          onChange={(e, { value }) => setObj({ ...obj, name: value })}
+          onChange={(e, { value }) => {
+            setObj({ ...obj, name: value });
+            if (value !== "") {
+              delete errors["name"];
+            }
+            updateErrors(errors);
+          }}
+          error={errors["name"]}
         />
         <Checkbox
           label="Required"
@@ -127,50 +152,54 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {obj.properties!.options!.map((option: any, index: any) => (
-              <Table.Row key={index.toString()}>
-                <Table.Cell>
-                  <Input
-                    style={{ width: "100%" }}
-                    value={option.value}
-                    onChange={(e, { value }) => {
-                      let valueCopy = [...obj.properties!.options!];
-                      valueCopy[index] = { ...valueCopy[index], value: value };
-                      setObj({
-                        ...obj,
-                        properties: {
-                          ...obj.properties,
-                          options: valueCopy,
-                        },
-                      });
-                    }}
-                  />
-                </Table.Cell>
-                <Table.Cell>
-                  <Input
-                    style={{ width: "100%" }}
-                    value={option.text}
-                    onChange={(e, { value }) => {
-                      let textCopy = [...obj.properties!.options!];
-                      textCopy[index] = {
-                        ...textCopy[index],
-                        text: value,
-                      };
-                      setObj({
-                        ...obj,
-                        properties: {
-                          ...obj.properties,
-                          options: textCopy,
-                        },
-                      });
-                    }}
-                  />
-                </Table.Cell>
-                <Table.Cell textAlign="right">
-                  <Button onClick={() => deleteOption(index)}>Delete</Button>
-                </Table.Cell>
-              </Table.Row>
-            ))}
+            {obj.properties?.options &&
+              obj.properties!.options!.map((option: any, index: any) => (
+                <Table.Row key={index.toString()}>
+                  <Table.Cell>
+                    <Input
+                      style={{ width: "100%" }}
+                      value={option.value}
+                      onChange={(e, { value }) => {
+                        let valueCopy = [...obj.properties!.options!];
+                        valueCopy[index] = {
+                          ...valueCopy[index],
+                          value: value,
+                        };
+                        setObj({
+                          ...obj,
+                          properties: {
+                            ...obj.properties,
+                            options: valueCopy,
+                          },
+                        });
+                      }}
+                    />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Input
+                      style={{ width: "100%" }}
+                      value={option.text}
+                      onChange={(e, { value }) => {
+                        let textCopy = [...obj.properties!.options!];
+                        textCopy[index] = {
+                          ...textCopy[index],
+                          text: value,
+                        };
+                        setObj({
+                          ...obj,
+                          properties: {
+                            ...obj.properties,
+                            options: textCopy,
+                          },
+                        });
+                      }}
+                    />
+                  </Table.Cell>
+                  <Table.Cell textAlign="right">
+                    <Button onClick={() => deleteOption(index)}>Delete</Button>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
           </Table.Body>
         </Table>
         <Checkbox
