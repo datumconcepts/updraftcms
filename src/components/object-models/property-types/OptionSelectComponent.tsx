@@ -9,6 +9,7 @@ import {
   Button,
   Table,
   Input,
+  Message,
 } from "semantic-ui-react";
 
 import { IPropertyMap, FormErrors } from "models";
@@ -29,6 +30,8 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
 
   const [errors, updateErrors] = React.useState<FormErrors>({});
 
+  const [empty, setEmpty] = React.useState(false);
+
   const [obj, setObj] = React.useState<IPropertyMap>({
     ...propertyMap,
     name: propertyMap.name,
@@ -47,6 +50,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
 
   const editButtonHandler = React.useCallback(() => {
     setModalOpen(true);
+    setEmpty(false);
   }, [setModalOpen]);
 
   const handleCancel = React.useCallback(() => {
@@ -55,7 +59,10 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
       ...propertyMap,
       name: propertyMap.name,
       required: propertyMap.required,
-      properties: { ...propertyMap.properties },
+      properties: {
+        ...propertyMap.properties,
+        options: [...propertyMap.properties?.options ?? []],
+      },
     });
   }, [setModalOpen, setObj, propertyMap]);
 
@@ -66,6 +73,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
     }
 
     if (obj.properties?.options?.length === 0 || !obj.properties?.options) {
+      setEmpty(true);
       return false;
     }
 
@@ -86,6 +94,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
       },
     });
     setModalOpen(false);
+    setEmpty(false);
   }, [errors, obj, onPropertyUpdate, propertyMap, setModalOpen]);
 
   const addOption = React.useCallback(() => {
@@ -95,6 +104,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
       ...obj,
       properties: { ...obj.properties, options: newArr },
     });
+    setEmpty(false);
   }, [obj]);
 
   const deleteOption = React.useCallback(
@@ -118,6 +128,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
         confirmAction={handleConfirm}
         confirmText="Update"
         cancelText="Cancel"
+        error={empty}
       >
         <Form.Input
           label="Name"
@@ -214,6 +225,11 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
             })
           }
           checked={obj.properties!.multiple}
+        />
+        <Message
+          error
+          header="Action Forbidden"
+          content="Option Select cannot be empty"
         />
       </ModalDialog>
 

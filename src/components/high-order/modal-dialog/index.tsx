@@ -9,6 +9,7 @@ export interface IModalDialogProps {
   confirmAction: () => void;
   confirmText?: string;
   cancelText?: string;
+  error?: boolean;
 }
 
 const ModalDialog: React.FC<IModalDialogProps> = ({
@@ -19,6 +20,7 @@ const ModalDialog: React.FC<IModalDialogProps> = ({
   confirmText,
   cancelText,
   children,
+  error
 }) => {
   return (
     <Modal
@@ -27,6 +29,7 @@ const ModalDialog: React.FC<IModalDialogProps> = ({
       closeOnEscape={true}
       closeOnDimmerClick={true}
       onClose={cancelAction}
+      error={error}
     >
       <Modal.Header>{header}</Modal.Header>
       <Modal.Content>{children}</Modal.Content>
