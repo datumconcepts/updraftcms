@@ -30,7 +30,10 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
 
   const [errors, updateErrors] = React.useState<FormErrors>({});
 
-  const [empty, setEmpty] = React.useState(false);
+  const [emptyError, setEmptyError] = React.useState(false);
+  const [fieldError, setFieldError] = React.useState(false);
+  const [inputError, setInputError] = React.useState<Array<any>>([]);
+  const [loading, setLoading] = React.useState(true);
 
   const [obj, setObj] = React.useState<IPropertyMap>({
     ...propertyMap,
@@ -50,21 +53,32 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
 
   const editButtonHandler = React.useCallback(() => {
     setModalOpen(true);
-    setEmpty(false);
-  }, [setModalOpen]);
+    setEmptyError(false);
+    let newArr = new Array(obj.properties!.options!.length).fill({
+      value: false,
+      text: false,
+    });
+    setInputError([...newArr]);
+  }, [setModalOpen, obj]);
 
   const handleCancel = React.useCallback(() => {
+    setObj({
+      ...obj,
+      properties: { ...obj.properties, options: [] },
+    });
     setModalOpen(false);
+    setEmptyError(false);
+    setFieldError(false);
     setObj({
       ...propertyMap,
       name: propertyMap.name,
       required: propertyMap.required,
       properties: {
         ...propertyMap.properties,
-        options: [...propertyMap.properties?.options ?? []],
+        options: [...(propertyMap.properties?.options ?? [])],
       },
     });
-  }, [setModalOpen, setObj, propertyMap]);
+  }, [setModalOpen, obj, propertyMap]);
 
   const handleConfirm = React.useCallback(() => {
     if (obj.name === "") {
@@ -73,29 +87,45 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
     }
 
     if (obj.properties?.options?.length === 0 || !obj.properties?.options) {
-      setEmpty(true);
+      setEmptyError(true);
       return false;
     }
-
-    // for (const p in obj.properties?.options){
-    //   if (p.text === "") {
-    //   }
-    //   if (p.value === "") {
-    //   }
-    // }
-
-    onPropertyUpdate({
-      ...propertyMap,
-      name: obj.name,
-      required: obj.required ?? false,
-      properties: {
-        multiple: obj.properties!.multiple,
-        options: [...obj!.properties!.options!],
-      },
-    });
-    setModalOpen(false);
-    setEmpty(false);
-  }, [errors, obj, onPropertyUpdate, propertyMap, setModalOpen]);
+    let inputErrorReturn = false;
+    for (const [index, option] of obj.properties?.options.entries()) {
+      console.log(option);
+      let inputErrorCopy = [...inputError];
+      if (option.value === "") {
+        console.log("1");
+        inputErrorCopy[index] = { ...inputErrorCopy[index], value: true };
+        setInputError(inputErrorCopy);
+        inputErrorReturn = true;
+        setFieldError(true);
+      }
+      if (option.text === "") {
+        console.log("2");
+        inputErrorCopy[index] = { ...inputErrorCopy[index], text: true };
+        setInputError(inputErrorCopy);
+        inputErrorReturn = true;
+        setFieldError(true);
+      }
+    }
+    if (!inputErrorReturn) {
+      onPropertyUpdate({
+        ...propertyMap,
+        name: obj.name,
+        required: obj.required ?? false,
+        properties: {
+          multiple: obj.properties!.multiple,
+          options: [...obj!.properties!.options!],
+        },
+      });
+      setModalOpen(false);
+      setEmptyError(false);
+      setFieldError(false);
+    } else {
+      return false;
+    }
+  }, [errors, inputError, obj, onPropertyUpdate, propertyMap, setModalOpen]);
 
   const addOption = React.useCallback(() => {
     let newArr = [...obj.properties!.options!];
@@ -104,8 +134,10 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
       ...obj,
       properties: { ...obj.properties, options: newArr },
     });
-    setEmpty(false);
-  }, [obj]);
+    setEmptyError(false);
+    setInputError([...inputError, { value: false, text: false }]);
+    setLoading(false);
+  }, [obj, inputError]);
 
   const deleteOption = React.useCallback(
     (index) => {
@@ -115,8 +147,11 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
         ...obj,
         properties: { ...obj.properties, options: newArr },
       });
+      let errorArr = [...inputError];
+      errorArr.splice(index, 1);
+      setInputError(errorArr);
     },
-    [obj]
+    [obj, inputError]
   );
 
   return (
@@ -128,7 +163,6 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
         confirmAction={handleConfirm}
         confirmText="Update"
         cancelText="Cancel"
-        error={empty}
       >
         <Form.Input
           label="Name"
@@ -158,59 +192,71 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
                 Name
               </Table.HeaderCell>
               <Table.HeaderCell textAlign="right">
-                <Button onClick={() => addOption()}>Add</Button>
+                <Button
+                  onClick={() => {
+                    setLoading(true);
+                    addOption();
+                  }}
+                >
+                  Add
+                </Button>
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {obj.properties?.options &&
-              obj.properties!.options!.map((option: any, index: any) => (
-                <Table.Row key={index.toString()}>
-                  <Table.Cell>
-                    <Input
-                      style={{ width: "100%" }}
-                      value={option.value}
-                      onChange={(e, { value }) => {
-                        let valueCopy = [...obj.properties!.options!];
-                        valueCopy[index] = {
-                          ...valueCopy[index],
-                          value: value,
-                        };
-                        setObj({
-                          ...obj,
-                          properties: {
-                            ...obj.properties,
-                            options: valueCopy,
-                          },
-                        });
-                      }}
-                    />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Input
-                      style={{ width: "100%" }}
-                      value={option.text}
-                      onChange={(e, { value }) => {
-                        let textCopy = [...obj.properties!.options!];
-                        textCopy[index] = {
-                          ...textCopy[index],
-                          text: value,
-                        };
-                        setObj({
-                          ...obj,
-                          properties: {
-                            ...obj.properties,
-                            options: textCopy,
-                          },
-                        });
-                      }}
-                    />
-                  </Table.Cell>
-                  <Table.Cell textAlign="right">
-                    <Button onClick={() => deleteOption(index)}>Delete</Button>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
+            {obj.properties!.options!.length > 0 && !loading
+              ? obj.properties!.options!.map((option: any, index: any) => (
+                  <Table.Row key={index.toString()}>
+                    <Table.Cell>
+                      <Input
+                        error={inputError[index].value ?? false}
+                        style={{ width: "100%" }}
+                        value={option.value}
+                        onChange={(e, { value }) => {
+                          let valueCopy = [...obj.properties!.options!];
+                          valueCopy[index] = {
+                            ...valueCopy[index],
+                            value: value,
+                          };
+                          setObj({
+                            ...obj,
+                            properties: {
+                              ...obj.properties,
+                              options: valueCopy,
+                            },
+                          });
+                        }}
+                      />
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Input
+                        error={inputError[index].text ?? false}
+                        style={{ width: "100%" }}
+                        value={option.text}
+                        onChange={(e, { value }) => {
+                          let textCopy = [...obj.properties!.options!];
+                          textCopy[index] = {
+                            ...textCopy[index],
+                            text: value,
+                          };
+                          setObj({
+                            ...obj,
+                            properties: {
+                              ...obj.properties,
+                              options: textCopy,
+                            },
+                          });
+                        }}
+                      />
+                    </Table.Cell>
+                    <Table.Cell textAlign="right">
+                      <Button onClick={() => deleteOption(index)}>
+                        Delete
+                      </Button>
+                    </Table.Cell>
+                  </Table.Row>
+                ))
+              : null}
           </Table.Body>
         </Table>
         <Checkbox
@@ -228,6 +274,13 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
         />
         <Message
           error
+          visible={fieldError}
+          header="Action Forbidden"
+          content="Fields cannot be empty"
+        />
+        <Message
+          error
+          visible={emptyError}
           header="Action Forbidden"
           content="Option Select cannot be empty"
         />
