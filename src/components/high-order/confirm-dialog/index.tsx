@@ -11,6 +11,7 @@ export interface IConfirmDialogProps {
 }
 
 const ConfirmDialog: React.FC<IConfirmDialogProps> = ({ message, cancelAction, confirmAction, confirmText, cancelText }) => {
+    
     return (
         <Confirm
             open={true}

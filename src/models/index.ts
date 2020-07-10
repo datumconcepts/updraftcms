@@ -5,7 +5,10 @@ export interface IPropertyMap {
   propertyType: string;
   defaultValue?: any;
   required: boolean;
-  properties?: any;
+  properties?: {
+    multiple?: boolean,
+    options?: any[],
+  }
 }
 export interface IObjectModel {
   id: string;
