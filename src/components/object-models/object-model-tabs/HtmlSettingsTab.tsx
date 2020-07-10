@@ -38,10 +38,13 @@ const propertyTypes: any[] = [
   {
     name: "Option Select",
     required: false,
+<<<<<<< HEAD
+=======
     properites: {
       multiple: false,
       options: [],
     },
+>>>>>>> 29845570e23a9a4b2211180730f51d7b0f6f9ebc
     propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
       <OptionSelectComponent
         onPropertyUpdate={onPropertyUpdate}
@@ -64,11 +67,16 @@ const propertyTypes: any[] = [
   {
     name: "Attachment",
     required: false,
+<<<<<<< HEAD
+    propertyComponent: (props: any, propertyMap: any) => (
+      <FileUploadComponent {...props} propertyMap={propertyMap} />
+=======
     propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
       <FileUploadComponent
         propertyMap={propertyMap}
         onPropertyUpdate={onPropertyUpdate}
       />
+>>>>>>> 29845570e23a9a4b2211180730f51d7b0f6f9ebc
     ),
     propertyType: "file",
   },

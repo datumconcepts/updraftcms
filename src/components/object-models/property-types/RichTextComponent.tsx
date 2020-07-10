@@ -117,7 +117,6 @@ const RichTextComponent: React.FC<IRichTextComponentProps> = ({
       setEditorState(editorState);
     }
   }, [propertyMap]);
-
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };

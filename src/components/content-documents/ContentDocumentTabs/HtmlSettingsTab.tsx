@@ -44,10 +44,13 @@ const propertyTypes: any[] = [
     {
         name: "Option Select",
         required: false,
+<<<<<<< HEAD
+=======
         properties: {
             multiple: false,
             options: []
         },
+>>>>>>> 29845570e23a9a4b2211180730f51d7b0f6f9ebc
         propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
             <OptionSelectComponent key={key}
                 documentProperty={documentProperty}
