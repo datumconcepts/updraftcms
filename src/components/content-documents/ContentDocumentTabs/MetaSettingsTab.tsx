@@ -16,6 +16,7 @@ import AppContent from "components/high-order/AppContent";
 const propertyTypes: any[] = [
     {
         name: "Short Text",
+        required: false,
         propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
             <ShortTextComponent key={key}
                 onPropertyUpdate={onPropertyUpdate}
@@ -27,6 +28,7 @@ const propertyTypes: any[] = [
     },
     {
         name: "Long Text",
+        required: false,
         propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
             <LongTextComponent key={key}
                 onPropertyUpdate={onPropertyUpdate}
@@ -38,6 +40,7 @@ const propertyTypes: any[] = [
     },
     {
         name: "Option Select",
+        required: false,
         propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
             <OptionSelectComponent key={key}
                 onPropertyUpdate={onPropertyUpdate}

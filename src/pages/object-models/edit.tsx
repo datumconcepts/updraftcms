@@ -21,8 +21,8 @@ import ObjectModelEdit from "components/object-models/object-model-edit";
 import ConfirmDialog, {
   IConfirmDialogProps,
 } from "components/high-order/confirm-dialog";
-
-import { Button, Modal, Form } from "semantic-ui-react";
+import { Form } from "semantic-ui-react";
+import ModalDialog from "components/high-order/modal-dialog/index";
 
 interface IRouteParams {
   id: string;
@@ -35,8 +35,8 @@ export interface IGeneralSettingsTabState {
   errors: FormErrors;
   dirty: boolean;
   setDirty: boolean;
-  cloneFormOpen: boolean;
-  setCloneFormOpen: boolean;
+  cloneModalOpen: boolean;
+  setcloneModalOpen: boolean;
 }
 
 const ObjectModelsEditPage: React.FC = () => {
@@ -55,8 +55,8 @@ const ObjectModelsEditPage: React.FC = () => {
   const [dirty, setDirty] = React.useState(false);
   const [errors, updateErrors] = React.useState<FormErrors>({});
 
-  const [cloneFormOpen, setCloneFormOpen] = React.useState(false);
-
+  const [cloneModalOpen, setCloneModalOpen] = React.useState(false);
+  const [cloneName, setCloneName] = React.useState("");
   const [dialog, confirm] = React.useState<IConfirmDialogProps>();
 
   const closeObjectModel = React.useCallback(() => {
@@ -88,25 +88,28 @@ const ObjectModelsEditPage: React.FC = () => {
     closeObjectModel();
   }, [dispatch, objectModels, objectModel, closeObjectModel]);
 
-  const cloneObjectModel = React.useCallback(() => {
-    let id = guid().replace(/-/g, "");
-    while (objectModels.get(id)) {
-      id = guid().replace(/-/g, "");
-    }
-    const clonedObjecetModel = {
-      ...objectModel,
-      id,
-      name: `Clone of ${objectModel.name}`,
-    };
+  const cloneObjectModel = React.useCallback(
+    (name) => {
+      let id = guid().replace(/-/g, "");
+      while (objectModels.get(id)) {
+        id = guid().replace(/-/g, "");
+      }
+      const clonedObjectModel = {
+        ...objectModel,
+        id,
+        name,
+      };
 
-    dispatch({
-      type: SAVE_OBJECT_MODEL,
-      objectModels: objectModels.set(id, clonedObjecetModel),
-      objectModel: clonedObjecetModel,
-    });
+      dispatch({
+        type: SAVE_OBJECT_MODEL,
+        objectModels: objectModels.set(id, clonedObjectModel),
+        objectModel: clonedObjectModel,
+      });
 
-    history.push(`/object-models/${id}/edit`);
-  }, [dispatch, objectModels, objectModel, history]);
+      history.push(`/object-models/${id}/edit`);
+    },
+    [dispatch, objectModels, objectModel, history]
+  );
 
   React.useEffect(() => {
     if (id !== objectModel.id) {
@@ -135,25 +138,22 @@ const ObjectModelsEditPage: React.FC = () => {
     }
   }, [saveObjectModel, closeObjectModel]);
 
-  const cloneNameHandler = (e: any) => {
-    const { name, value } = e.target;
-    valueChangeHandler({ ...objectModel, [name]: value });
-  };
-
   const cloneObjectModelHandler = React.useCallback(() => {
-    setCloneFormOpen(true);
-    // if (saveObjectModel()) {
-    //   cloneObjectModel();
-    // }
-  }, [saveObjectModel, cloneObjectModel]);
+    setCloneModalOpen(true);
+  }, [setCloneModalOpen]);
 
-  const cloneCancelHandler = () => {
-    setCloneFormOpen(false);
-  };
+  const cloneCancelHandler = React.useCallback(() => {
+    setCloneModalOpen(false);
+    setCloneName("");
+  }, [setCloneModalOpen, setCloneName]);
 
-  const cloneSubmitHandler = () => {
-    setCloneFormOpen(false);
-  };
+  const cloneSubmitHandler = React.useCallback(() => {
+    if (saveObjectModel()) {
+      let name = cloneName;
+      cloneObjectModel(name);
+    }
+    setCloneModalOpen(false);
+  }, [saveObjectModel, cloneName, cloneObjectModel, setCloneModalOpen]);
 
   const closeObjectModelHandler = React.useCallback(() => {
     if (dirty) {
@@ -187,23 +187,21 @@ const ObjectModelsEditPage: React.FC = () => {
 
   return (
     <Layout>
-      <Modal as={Form} open={cloneFormOpen}>
-        <Modal.Header>Do you want to clone the object model?</Modal.Header>
-        <Modal.Content>
-          <Form.Input
-            label="Name"
-            name="name"
-            value={objectModel.name}
-            onChange={cloneNameHandler}
-          />
-        </Modal.Content>
-        <Modal.Actions>
-          <Button negative onClick={cloneCancelHandler}>
-            Cancel
-          </Button>
-          <Button onClick={cloneSubmitHandler}>OK</Button>
-        </Modal.Actions>
-      </Modal>
+      <ModalDialog
+        modalOpen={cloneModalOpen}
+        header="Clone Object Model"
+        cancelAction={cloneCancelHandler}
+        confirmAction={cloneSubmitHandler}
+        confirmText="Confirm"
+        cancelText="Cancel"
+      >
+        <Form.Input
+          label="Name"
+          name="name"
+          value={cloneName}
+          onChange={(e, { value }) => setCloneName(value)}
+        />
+      </ModalDialog>
 
       {dialog && <ConfirmDialog {...dialog} />}
 

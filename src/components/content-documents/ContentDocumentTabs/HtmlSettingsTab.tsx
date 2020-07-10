@@ -19,6 +19,7 @@ import AppContent from "components/high-order/AppContent";
 const propertyTypes: any[] = [
     {
         name: "Short Text",
+        required: false,
         propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
             <ShortTextComponent key={key}
                 onPropertyUpdate={onPropertyUpdate}
@@ -30,6 +31,7 @@ const propertyTypes: any[] = [
     },
     {
         name: "Long Text",
+        required: false,
         propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
             <LongTextComponent key={key}
                 documentProperty={documentProperty}
@@ -41,6 +43,14 @@ const propertyTypes: any[] = [
     },
     {
         name: "Option Select",
+        required: false,
+<<<<<<< HEAD
+=======
+        properties: {
+            multiple: false,
+            options: []
+        },
+>>>>>>> 29845570e23a9a4b2211180730f51d7b0f6f9ebc
         propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
             <OptionSelectComponent key={key}
                 documentProperty={documentProperty}
@@ -52,6 +62,7 @@ const propertyTypes: any[] = [
     },
     {
         name: "Rich Text",
+        required: false,
         propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
             <RichTextComponent key={key}
                 propertyMap={propertyMap}
@@ -63,6 +74,7 @@ const propertyTypes: any[] = [
     },
     {
         name: "Single File",
+        required: false,
         propertyComponent: (key: string, onPropertyUpdate: any, propertyMap: IPropertyMap, documentProperty: IDocumentProperty) => (
             <SingleFileComponent key={key}
                 onPropertyUpdate={onPropertyUpdate}
@@ -74,6 +86,7 @@ const propertyTypes: any[] = [
     },
     {
         name: "Multiple Files",
+        required: false,
         propertyComponent: (key: string, props: any, propertyMap: any) => (
             <ShortTextComponent key={key} {...props} propertyMap={propertyMap} />
         ),

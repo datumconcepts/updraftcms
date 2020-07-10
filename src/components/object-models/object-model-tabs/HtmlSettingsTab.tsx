@@ -1,12 +1,10 @@
 import * as React from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { Grid, Segment, List, Divider, Form, } from 'semantic-ui-react';
-
-
+import { Grid, Segment, List, Divider, Form } from "semantic-ui-react";
 
 import id from "uuid/v4";
 
-import { IObjectModel, IPropertyMap } from 'models'
+import { IObjectModel, IPropertyMap } from "models";
 import ShortTextComponent from "../property-types/ShortTextComponent";
 import LongTextComponent from "../property-types/LongTextComponent";
 import OptionSelectComponent from "../property-types/OptionSelectComponent";
@@ -17,51 +15,71 @@ import AppContent from "components/high-order/AppContent";
 const propertyTypes: any[] = [
   {
     name: "Short Text",
+    required: false,
     propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
       <ShortTextComponent
         onPropertyUpdate={onPropertyUpdate}
         propertyMap={propertyMap}
       />
     ),
-    propertyType: "textbox"
+    propertyType: "textbox",
   },
   {
     name: "Long Text",
+    required: false,
     propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
       <LongTextComponent
         onPropertyUpdate={onPropertyUpdate}
         propertyMap={propertyMap}
       />
     ),
-    propertyType: "textarea"
+    propertyType: "textarea",
   },
   {
     name: "Option Select",
+    required: false,
+<<<<<<< HEAD
+=======
+    properites: {
+      multiple: false,
+      options: [],
+    },
+>>>>>>> 29845570e23a9a4b2211180730f51d7b0f6f9ebc
     propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
       <OptionSelectComponent
         onPropertyUpdate={onPropertyUpdate}
         propertyMap={propertyMap}
       />
     ),
-    propertyType: "select"
+    propertyType: "select",
   },
   {
     name: "Rich Text",
+    required: false,
     propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
       <RichTextComponent
         propertyMap={propertyMap}
         onPropertyUpdate={onPropertyUpdate}
       />
     ),
-    propertyType: "draftjs"
+    propertyType: "draftjs",
   },
   {
     name: "Attachment",
+    required: false,
+<<<<<<< HEAD
     propertyComponent: (props: any, propertyMap: any) => (
       <FileUploadComponent {...props} propertyMap={propertyMap} />
+=======
+    propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
+      <FileUploadComponent
+        propertyMap={propertyMap}
+        onPropertyUpdate={onPropertyUpdate}
+      />
+>>>>>>> 29845570e23a9a4b2211180730f51d7b0f6f9ebc
     ),
-    propertyType: "file"
-  }
+    propertyType: "file",
+  },
 ];
 
 interface IHtmlSettingsTabProps {
@@ -72,7 +90,7 @@ interface IHtmlSettingsTabProps {
 class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
   public onDragEnd = (result: any) => {
     const {
-      objectModel: { htmlProperties }
+      objectModel: { htmlProperties },
     } = this.props;
 
     if (!result.destination) {
@@ -81,7 +99,7 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
 
     if (result.source.droppableId === "available_html_property_types") {
       const property = propertyTypes.find(
-        x => x.propertyType === result.draggableId
+        (x) => x.propertyType === result.draggableId
       );
       if (!property) {
         return;
@@ -94,13 +112,13 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
         0,
         Object.assign({}, property, {
           id: id().replace(/-/g, ""),
-          sortOrder: index
+          sortOrder: index,
         })
       );
     } else {
       const {
         source: { index: startIndex },
-        destination: { index: endIndex }
+        destination: { index: endIndex },
       } = result;
       const [removed] = htmlProperties.splice(startIndex, 1);
       htmlProperties.splice(endIndex, 0, removed);
@@ -113,29 +131,35 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
 
   public valueChangeHandler = (htmlProperty: IPropertyMap) => {
     const { htmlProperties } = this.props.objectModel;
-    this.updateHtmlProperties([
-      ...htmlProperties.filter(x => x.id !== htmlProperty.id),
-      htmlProperty
-    ].sort((a, b) => a.sortOrder - b.sortOrder));
+    this.updateHtmlProperties(
+      [
+        ...htmlProperties.filter((x) => x.id !== htmlProperty.id),
+        htmlProperty,
+      ].sort((a, b) => a.sortOrder - b.sortOrder)
+    );
   };
 
   public updateHtmlProperties = (htmlProperties: IPropertyMap[]) => {
-    this.props.onPropertyUpdate({ ...this.props.objectModel, 'htmlProperties': htmlProperties });
+    this.props.onPropertyUpdate({
+      ...this.props.objectModel,
+      htmlProperties: htmlProperties,
+    });
   };
 
   public render() {
     const {
-      objectModel: { htmlProperties }
+      objectModel: { htmlProperties },
     } = this.props;
     return (
       <AppContent>
         <DragDropContext onDragEnd={this.onDragEnd}>
-          <Grid style={{ display: 'flex', flex: 1 }}>
+          <Grid style={{ display: "flex", flex: 1 }}>
             <Grid.Column stretched={true} width={13}>
               <Segment as={Form} attached={true}>
                 <Droppable droppableId="object_model_properties">
                   {(dropProvider, dropSnapshot) => (
-                    <div ref={dropProvider.innerRef}
+                    <div
+                      ref={dropProvider.innerRef}
                       className={"property-editor"}
                     >
                       {htmlProperties.map((propItem, propKey) => (
@@ -152,7 +176,8 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
                             >
                               {propertyTypes
                                 .find(
-                                  x => x.propertyType === propItem.propertyType
+                                  (x) =>
+                                    x.propertyType === propItem.propertyType
                                 )
                                 .propertyComponent(
                                   this.valueChangeHandler,
@@ -168,39 +193,39 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
                 </Droppable>
               </Segment>
             </Grid.Column>
-            <Grid.Column stretched={true} width={3}><Segment attached={true}>
-              <List relaxed={true} celled={true}>
-                <Droppable
-                  isDropDisabled={true}
-                  droppableId="available_html_property_types"
-                >
-                  {(dropProvider, dropSnapshot) => (
-                    <div ref={dropProvider.innerRef}>
-                      {propertyTypes.map((propType, typeKey) => (
-                        <Draggable
-                          key={propType.propertyType}
-                          draggableId={propType.propertyType}
-                          index={typeKey}
-                        >
-                          {(dragProvider, drapdropSnapshot) => (
-                            <div
-                              ref={dragProvider.innerRef}
-                              {...dragProvider.draggableProps}
-                              {...dragProvider.dragHandleProps}
-                            >
-                              <List.Item>
-                                {propType.name}
-                              </List.Item>
-                              <Divider />
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {dropProvider.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </List></Segment>
+            <Grid.Column stretched={true} width={3}>
+              <Segment attached={true}>
+                <List relaxed={true} celled={true}>
+                  <Droppable
+                    isDropDisabled={true}
+                    droppableId="available_html_property_types"
+                  >
+                    {(dropProvider, dropSnapshot) => (
+                      <div ref={dropProvider.innerRef}>
+                        {propertyTypes.map((propType, typeKey) => (
+                          <Draggable
+                            key={propType.propertyType}
+                            draggableId={propType.propertyType}
+                            index={typeKey}
+                          >
+                            {(dragProvider, drapdropSnapshot) => (
+                              <div
+                                ref={dragProvider.innerRef}
+                                {...dragProvider.draggableProps}
+                                {...dragProvider.dragHandleProps}
+                              >
+                                <List.Item>{propType.name}</List.Item>
+                                <Divider />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {dropProvider.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </List>
+              </Segment>
             </Grid.Column>
           </Grid>
         </DragDropContext>
