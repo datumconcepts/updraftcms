@@ -1,13 +1,20 @@
 import * as React from "react";
-import { Icon, Card, Button, Grid, Form, Checkbox } from 'semantic-ui-react';
+import { Icon, Card, Button, Grid, Form, Checkbox } from "semantic-ui-react";
 
-import { convertFromRaw, convertToRaw, DraftBlockType, Editor, EditorState, RichUtils } from 'draft-js';
+import {
+  convertFromRaw,
+  convertToRaw,
+  DraftBlockType,
+  Editor,
+  EditorState,
+  RichUtils,
+} from "draft-js";
 
-import { IPropertyMap } from 'models';
+import { IPropertyMap } from "models";
 
 import ModalDialog from "components/high-order/modal-dialog/index";
 
-import 'draft-js/dist/Draft.css'
+import "draft-js/dist/Draft.css";
 import StyleButton from "components/high-order/HtmlEditor/StyleButton";
 
 interface IRichTextComponentProps {
@@ -22,10 +29,22 @@ const BLOCK_TYPES = [
   // { label: 'H4', style: 'header-four' },
   // { label: 'H5', style: 'header-five' },
   // { label: 'H6', style: 'header-six' },
-  { label: 'Blockquote', style: 'blockquote', icon: <Icon name="quote left" /> },
-  { label: 'UL', style: 'unordered-list-item', icon: <Icon name="unordered list" /> },
-  { label: 'OL', style: 'ordered-list-item', icon: <Icon name="ordered list" /> },
-  { label: 'Code Block', style: 'code-block', icon: <Icon name="code" /> },
+  {
+    label: "Blockquote",
+    style: "blockquote",
+    icon: <Icon name="quote left" />,
+  },
+  {
+    label: "UL",
+    style: "unordered-list-item",
+    icon: <Icon name="unordered list" />,
+  },
+  {
+    label: "OL",
+    style: "ordered-list-item",
+    icon: <Icon name="ordered list" />,
+  },
+  { label: "Code Block", style: "code-block", icon: <Icon name="code" /> },
 ];
 
 const BlockStyleControls = (props: any) => {
@@ -38,7 +57,7 @@ const BlockStyleControls = (props: any) => {
 
   return (
     <Button.Group>
-      {BLOCK_TYPES.map((type) =>
+      {BLOCK_TYPES.map((type) => (
         <StyleButton
           key={type.label}
           icon={type.icon}
@@ -47,22 +66,22 @@ const BlockStyleControls = (props: any) => {
           onToggle={props.onToggle}
           style={type.style}
         />
-      )}
+      ))}
     </Button.Group>
   );
 };
 
 const INLINE_STYLES = [
-  { label: 'Bold', style: 'BOLD', icon: <Icon name="bold" /> },
-  { label: 'Italic', style: 'ITALIC', icon: <Icon name="italic" /> },
-  { label: 'Underline', style: 'UNDERLINE', icon: <Icon name="underline" /> },
+  { label: "Bold", style: "BOLD", icon: <Icon name="bold" /> },
+  { label: "Italic", style: "ITALIC", icon: <Icon name="italic" /> },
+  { label: "Underline", style: "UNDERLINE", icon: <Icon name="underline" /> },
 ];
 
 const InlineStyleControls = (props: any) => {
   const currentStyle = props.editorState.getCurrentInlineStyle();
   return (
     <Button.Group>
-      {INLINE_STYLES.map(type =>
+      {INLINE_STYLES.map((type) => (
         <StyleButton
           key={type.label}
           icon={type.icon}
@@ -71,22 +90,25 @@ const InlineStyleControls = (props: any) => {
           onToggle={props.onToggle}
           style={type.style}
         />
-      )}
+      ))}
     </Button.Group>
   );
 };
-
 
 const RichTextComponent: React.FC<IRichTextComponentProps> = ({
   propertyMap,
   onPropertyUpdate,
 }) => {
-
-  const [editorState, setEditorState] = React.useState(EditorState.createEmpty());
+  const [editorState, setEditorState] = React.useState(
+    EditorState.createEmpty()
+  );
   const [expanded, setExpanded] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
-  const [name, setName] = React.useState(propertyMap.name);
-  const [required, setRequired] = React.useState(propertyMap.required);
+  const [obj, setObj] = React.useState<IPropertyMap>({
+    ...propertyMap,
+    name: propertyMap.name,
+    required: propertyMap.required,
+  });
 
   React.useEffect(() => {
     if (propertyMap.defaultValue) {
@@ -95,7 +117,6 @@ const RichTextComponent: React.FC<IRichTextComponentProps> = ({
       setEditorState(editorState);
     }
   }, [propertyMap]);
-  
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -107,25 +128,13 @@ const RichTextComponent: React.FC<IRichTextComponentProps> = ({
   };
 
   const onChange = (editorState: EditorState) => setEditorState(editorState);
-  ;
-
   const toggleBlockType = (blockType: DraftBlockType) => {
-    onChange(
-      RichUtils.toggleBlockType(
-        editorState,
-        blockType
-      )
-    );
-  }
+    onChange(RichUtils.toggleBlockType(editorState, blockType));
+  };
 
   const toggleInlineStyle = (inlineStyle: string) => {
-    onChange(
-      RichUtils.toggleInlineStyle(
-        editorState,
-        inlineStyle
-      )
-    );
-  }
+    onChange(RichUtils.toggleInlineStyle(editorState, inlineStyle));
+  };
 
   const editButtonHandler = React.useCallback(() => {
     setModalOpen(true);
@@ -133,21 +142,21 @@ const RichTextComponent: React.FC<IRichTextComponentProps> = ({
 
   const handleCancel = React.useCallback(() => {
     setModalOpen(false);
-    setName(propertyMap.name);
-    setRequired(propertyMap.required);
-  }, [setModalOpen, setName, setRequired, propertyMap]);
+    setObj({ ...obj, name: propertyMap.name });
+    setObj({ ...obj, required: propertyMap.required });
+  }, [setModalOpen, setObj, obj, propertyMap]);
 
   const handleConfirm = React.useCallback(() => {
     onPropertyUpdate({
       ...propertyMap,
-      name: name,
-      required: required ?? false,
+      name: obj.name,
+      required: obj.required ?? false,
     });
     setModalOpen(false);
-  }, [onPropertyUpdate, propertyMap, name, required, setModalOpen]);
+  }, [onPropertyUpdate, propertyMap, obj, setModalOpen]);
 
-    return (
-      <>
+  return (
+    <>
       <ModalDialog
         modalOpen={modalOpen}
         header="Element Options"
@@ -159,13 +168,15 @@ const RichTextComponent: React.FC<IRichTextComponentProps> = ({
         <Form.Input
           label="Name"
           name="name"
-          value={name}
-          onChange={(e, { value }) => setName(value)}
+          value={obj.name}
+          onChange={(e, { value }) =>
+            setObj({ ...obj, name: value })
+          }
         />
         <Checkbox
           label="Required"
-          onChange={(e, { checked }) => setRequired(checked!)}
-          checked={required}
+          onChange={(e, { checked }) => setObj({ ...obj, required: checked! })}
+          checked={obj.required}
         />
       </ModalDialog>
       <Card fluid={true}>
@@ -185,14 +196,20 @@ const RichTextComponent: React.FC<IRichTextComponentProps> = ({
           </Card.Header>
         </Card.Content>
         <Card.Content>
-        <div style={{ flex: 1 }} className="editor-container">
-            <BlockStyleControls editorState={editorState} onToggle={toggleBlockType} />
-            <InlineStyleControls editorState={editorState} onToggle={toggleInlineStyle} />
+          <div style={{ flex: 1 }} className="editor-container">
+            <BlockStyleControls
+              editorState={editorState}
+              onToggle={toggleBlockType}
+            />
+            <InlineStyleControls
+              editorState={editorState}
+              onToggle={toggleInlineStyle}
+            />
             <Editor editorState={editorState} onChange={changeDefaultValue} />
           </div>
         </Card.Content>
       </Card>
     </>
-    )
-  }
+  );
+};
 export default RichTextComponent;

@@ -16,8 +16,12 @@ const LongTextComponent: React.FC<ILongTextComponentProps> = ({
 }) => {
   const [expanded, setExpanded] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
-  const [name, setName] = React.useState(propertyMap.name);
-  const [required, setRequired] = React.useState(propertyMap.required);
+
+  const [obj, setObj] = React.useState<IPropertyMap>({
+    ...propertyMap,
+    name: propertyMap.name,
+    required: propertyMap.required,
+  });
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -36,18 +40,18 @@ const LongTextComponent: React.FC<ILongTextComponentProps> = ({
 
   const handleCancel = React.useCallback(() => {
     setModalOpen(false);
-    setName(propertyMap.name);
-    setRequired(propertyMap.required);
-  }, [setModalOpen, setName, setRequired, propertyMap]);
+    setObj({ ...obj, name: propertyMap.name });
+    setObj({ ...obj, required: propertyMap.required });
+  }, [setModalOpen, setObj, obj, propertyMap]);
 
   const handleConfirm = React.useCallback(() => {
     onPropertyUpdate({
       ...propertyMap,
-      name: name,
-      required: required ?? false,
+      name: obj.name,
+      required: obj.required ?? false,
     });
     setModalOpen(false);
-  }, [onPropertyUpdate, propertyMap, name, required, setModalOpen]);
+  }, [onPropertyUpdate, propertyMap, obj, setModalOpen]);
 
   return (
     <>
@@ -62,13 +66,13 @@ const LongTextComponent: React.FC<ILongTextComponentProps> = ({
         <Form.Input
           label="Name"
           name="name"
-          value={name}
-          onChange={(e, { value }) => setName(value)}
+          value={obj.name}
+          onChange={(e, { value }) => setObj({ ...obj, name: value })}
         />
         <Checkbox
           label="Required"
-          onChange={(e, { checked }) => setRequired(checked!)}
-          checked={required}
+          onChange={(e, { checked }) => setObj({ ...obj, required: checked! })}
+          checked={obj.required}
         />
       </ModalDialog>
       <Card fluid={true}>
