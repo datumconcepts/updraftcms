@@ -81,6 +81,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
   }, [setModalOpen, obj, propertyMap]);
 
   const handleConfirm = React.useCallback(() => {
+    setLoading(true);
     if (obj.name === "") {
       updateErrors({ ...errors, name: "Name is a mandatory field" });
       return false;
@@ -92,18 +93,16 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
     }
     let inputErrorReturn = false;
     for (const [index, option] of obj.properties?.options.entries()) {
-      console.log(option);
       let inputErrorCopy = [...inputError];
       if (option.value === "") {
-        console.log("1");
         inputErrorCopy[index] = { ...inputErrorCopy[index], value: true };
         setInputError(inputErrorCopy);
         inputErrorReturn = true;
         setFieldError(true);
       }
       if (option.text === "") {
-        console.log("2");
         inputErrorCopy[index] = { ...inputErrorCopy[index], text: true };
+        setLoading(false);
         setInputError(inputErrorCopy);
         inputErrorReturn = true;
         setFieldError(true);
@@ -122,7 +121,9 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
       setModalOpen(false);
       setEmptyError(false);
       setFieldError(false);
+      setLoading(false);
     } else {
+      setLoading(false);
       return false;
     }
   }, [errors, inputError, obj, onPropertyUpdate, propertyMap, setModalOpen]);
@@ -150,6 +151,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
       let errorArr = [...inputError];
       errorArr.splice(index, 1);
       setInputError(errorArr);
+      setLoading(false);
     },
     [obj, inputError]
   );
@@ -209,10 +211,17 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
                   <Table.Row key={index.toString()}>
                     <Table.Cell>
                       <Input
-                        error={inputError[index].value ?? false}
+                        error={inputError[index].value}
                         style={{ width: "100%" }}
                         value={option.value}
                         onChange={(e, { value }) => {
+                          let inputErrorCopy = [...inputError];
+                          inputErrorCopy[index] = {
+                            ...inputErrorCopy[index],
+                            value: true,
+                          };
+                          setInputError(inputErrorCopy);
+
                           let valueCopy = [...obj.properties!.options!];
                           valueCopy[index] = {
                             ...valueCopy[index],
@@ -230,10 +239,17 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
                     </Table.Cell>
                     <Table.Cell>
                       <Input
-                        error={inputError[index].text ?? false}
+                        error={inputError[index].text}
                         style={{ width: "100%" }}
                         value={option.text}
                         onChange={(e, { value }) => {
+                          let inputErrorCopy = [...inputError];
+                          inputErrorCopy[index] = {
+                            ...inputErrorCopy[index],
+                            text: true,
+                          };
+                          setInputError(inputErrorCopy);
+
                           let textCopy = [...obj.properties!.options!];
                           textCopy[index] = {
                             ...textCopy[index],
@@ -250,7 +266,12 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
                       />
                     </Table.Cell>
                     <Table.Cell textAlign="right">
-                      <Button onClick={() => deleteOption(index)}>
+                      <Button
+                        onClick={() => {
+                          setLoading(true);
+                          deleteOption(index);
+                        }}
+                      >
                         Delete
                       </Button>
                     </Table.Cell>
