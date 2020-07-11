@@ -229,7 +229,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
                       />
                     </Table.Cell>
                     <Table.Cell>
-                      <Input
+                      <Form.Input
                         error={inputError[index].text ?? false}
                         style={{ width: "100%" }}
                         value={option.text}
