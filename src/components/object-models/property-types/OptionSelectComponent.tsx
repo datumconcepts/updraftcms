@@ -68,7 +68,6 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
     setModalOpen(false);
     setEmptyError(false);
     setInputError(false);
-    setInputErrorArray([]);
     setLoading(false);
     setObj({
       ...propertyMap,
