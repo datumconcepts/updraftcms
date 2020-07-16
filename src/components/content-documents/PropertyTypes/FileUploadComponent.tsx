@@ -38,7 +38,7 @@ class FileUploadComponent extends React.Component<
         </Card.Header>
       </Card.Content>
       <Card.Content>
-        <Form.Field label={propertyMap.name}>
+        <Form.Field required={propertyMap.required} label={propertyMap.name}>
           <label className="file-upload">
             <Icon name="cloud upload" />
           </label>
