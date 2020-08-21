@@ -64,7 +64,6 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
       ...obj,
       properties: { ...obj.properties, options: [] },
     });
-
     setModalOpen(false);
     setEmptyError(false);
     setInputError(false);
@@ -89,6 +88,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
 
     if (obj.properties?.options?.length === 0 || !obj.properties?.options) {
       setEmptyError(true);
+      setEmptyError(true);
       setInputError(false);
       setLoading(false);
       return false;
@@ -110,6 +110,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
       }
     }
     if (!inputErrorReturn && obj.name) {
+
       onPropertyUpdate({
         ...propertyMap,
         name: obj.name,
@@ -276,6 +277,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
                           deleteOption(index);
                         }}
                       >
+
                         Delete
                       </Button>
                     </Table.Cell>

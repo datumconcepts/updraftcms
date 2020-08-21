@@ -110,7 +110,7 @@ const RichTextComponent: React.FC<IRichTextComponentProps> = ({
     required: propertyMap.required,
   });
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if (propertyMap.defaultValue) {
       const contentState = convertFromRaw(propertyMap.defaultValue);
       const editorState = EditorState.createWithContent(contentState);
