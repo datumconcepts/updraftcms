@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { Segment, Sidebar} from 'semantic-ui-react';
+import { Segment, Sidebar } from 'semantic-ui-react';
 
-
-
-import { IMediaObject } from 'models';
+import { IMediaObject, IMediaObjectType } from 'models';
 
 import MediaObjectToolbar from './media-objects-toolbar';
 
@@ -22,8 +20,8 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
 
     return (
         <>
-            
-            <MediaObjectToolbar selectedMediaObjectId={selectedMediaObjectId}  />
+
+            <MediaObjectToolbar selectedMediaObjectId={selectedMediaObjectId} />
             <Sidebar.Pushable as={Segment} className="workspace" attached={true}>
                 <MediaObjectMenu mediaObjects={mediaObjects} selectedMediaObjectId={selectedMediaObjectId} setSelectedMediaObject={setSelectedMediaObject} />
                 <Sidebar.Pusher>
@@ -34,7 +32,13 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                                 title="It looks like you have no media objects yet. Click here to add a new one"
                             />
                         ) : (
-                                <div>Here is the content library</div>
+                            <>
+                                    {mediaObjects.filter(dir => (dir.objectType === IMediaObjectType.DIRECTORY || dir.objectType === IMediaObjectType.FILE) && dir.parentId === selectedMediaObjectId).map((object: any, index: any) => (
+                                <div>
+                                    {object.name}
+                                </div>
+                            ))}
+                                </>
                             )
                         }
                     </AppContent>
