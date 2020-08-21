@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Sidebar, List, Segment } from 'semantic-ui-react';
+import { Sidebar, List, Segment, Button, Icon, Grid } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 
@@ -51,19 +51,21 @@ class MediaObjectMenu extends React.Component<IMediaObjectMenuProps> {
             <List.Item key={mediaObject.id}>
                 <List.Icon name={isSelected ? "folder open" : "folder"} />
                 <List.Content>
-                    <List.Header>{mediaObject.name}</List.Header>
-                    {
-                        childItems.length > 0 && < List.List >
-                            {
-                                childItems.map((dir) => this.getSubDirectories(dir))
-                            }
-                        </List.List>
-                    }
+                    <Grid columns="equal" verticalAlign='middle'>
+                        <Grid.Column>
+                            <List.Header>{mediaObject.name}</List.Header>
+                        </Grid.Column>
+                        <Grid.Column verticalAlign='middle' style={{ flex: "0 0 auto", width: "auto" }}>
+                            <Icon name='edit' style={{ fontSize: "inherit" }} />
+                            <Icon name='delete' style={{ fontSize: "inherit" }} />
+                        </Grid.Column>
+                    </Grid>
+                    {childItems.length > 0 && <List.List style={{ width: "100%" }}>
+                        {childItems.map((dir) => this.getSubDirectories(dir))}
+                    </List.List>}
                 </List.Content>
             </List.Item>);
     }
-
-
 }
 
 

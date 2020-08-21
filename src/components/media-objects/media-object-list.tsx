@@ -32,12 +32,12 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                                 title="It looks like you have no media objects yet. Click here to add a new one"
                             />
                         ) : (
-                            <>
+                                <>
                                     {mediaObjects.filter(dir => (dir.objectType === IMediaObjectType.DIRECTORY || dir.objectType === IMediaObjectType.FILE) && dir.parentId === selectedMediaObjectId).map((object: any, index: any) => (
-                                <div>
-                                    {object.name}
-                                </div>
-                            ))}
+                                        <div>
+                                            {object.name}
+                                        </div>
+                                    ))}
                                 </>
                             )
                         }
