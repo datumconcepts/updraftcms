@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { Segment, Sidebar } from 'semantic-ui-react';
+import { Segment, Sidebar, Grid, Icon } from 'semantic-ui-react';
 
 import { IMediaObject, IMediaObjectType } from 'models';
 
 import MediaObjectToolbar from './media-objects-toolbar';
+
+import "./Hover.css";
 
 import MediaObjectMenu from './MediaObjectMenu';
 import AppContent from 'components/high-order/AppContent';
@@ -32,13 +34,21 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                                 title="It looks like you have no media objects yet. Click here to add a new one"
                             />
                         ) : (
-                                <>
+                                <Grid>
                                     {mediaObjects.filter(dir => (dir.objectType === IMediaObjectType.DIRECTORY || dir.objectType === IMediaObjectType.FILE) && dir.parentId === selectedMediaObjectId).map((object: any, index: any) => (
-                                        <div>
-                                            {object.name}
-                                        </div>
+                                        <Grid.Column className="parent" style={{ minWidth: "200px" }}>
+                                            <Grid centered>
+                                                <Grid.Row>
+                                                    {object.name}
+                                                </Grid.Row>
+                                                <Grid.Row container className="child" justify="center" style={{ width: "100%" }}>
+                                                    <Icon name='edit' style={{ fontSize: "inherit" }} />
+                                                    <Icon name='delete' style={{ fontSize: "inherit", margin: 0 }} />
+                                                </Grid.Row>
+                                            </Grid>
+                                        </Grid.Column>
                                     ))}
-                                </>
+                                </Grid>
                             )
                         }
                     </AppContent>

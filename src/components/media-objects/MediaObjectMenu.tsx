@@ -5,7 +5,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { IMediaObject, IMediaObjectType } from 'models';
 
-import "./Menu.css";
+import "./Hover.css";
 
 interface IMediaObjectMenuProps extends RouteComponentProps {
     mediaObjects: IMediaObject[];
