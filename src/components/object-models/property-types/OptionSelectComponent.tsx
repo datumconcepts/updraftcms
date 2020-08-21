@@ -8,7 +8,6 @@ import {
   Checkbox,
   Button,
   Table,
-  Input,
   Message,
 } from "semantic-ui-react";
 
@@ -31,8 +30,8 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
   const [errors, updateErrors] = React.useState<FormErrors>({});
 
   const [emptyError, setEmptyError] = React.useState(false);
-  const [fieldError, setFieldError] = React.useState(false);
-  const [inputError, setInputError] = React.useState<Array<any>>([]);
+  const [inputError, setInputError] = React.useState(false);
+  const [inputErrorArray, setInputErrorArray] = React.useState<Array<any>>([]);
   const [loading, setLoading] = React.useState(true);
 
   const [obj, setObj] = React.useState<IPropertyMap>({
@@ -53,13 +52,12 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
 
   const editButtonHandler = React.useCallback(() => {
     setModalOpen(true);
-    setEmptyError(false);
     let newArr = new Array(obj.properties!.options!.length).fill({
       value: false,
       text: false,
     });
-    setInputError([...newArr]);
-  }, [setModalOpen, obj]);
+    setInputErrorArray([...newArr]);
+  }, [obj]);
 
   const handleCancel = React.useCallback(() => {
     setObj({
@@ -68,7 +66,8 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
     });
     setModalOpen(false);
     setEmptyError(false);
-    setFieldError(false);
+    setInputError(false);
+    setLoading(false);
     setObj({
       ...propertyMap,
       name: propertyMap.name,
@@ -78,38 +77,40 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
         options: [...(propertyMap.properties?.options ?? [])],
       },
     });
-  }, [setModalOpen, obj, propertyMap]);
+  }, [obj, propertyMap]);
 
   const handleConfirm = React.useCallback(() => {
+    setLoading(true);
+    setInputError(false);
     if (obj.name === "") {
       updateErrors({ ...errors, name: "Name is a mandatory field" });
-      return false;
     }
 
     if (obj.properties?.options?.length === 0 || !obj.properties?.options) {
       setEmptyError(true);
+      setEmptyError(true);
+      setInputError(false);
+      setLoading(false);
       return false;
     }
     let inputErrorReturn = false;
-    for (const [index, option] of obj.properties?.options.entries()) {
-      console.log(option);
-      let inputErrorCopy = [...inputError];
+    let inputErrorCopy = [...inputErrorArray];
+    for (const [index, option] of obj.properties?.options?.entries()) {
       if (option.value === "") {
-        console.log("1");
         inputErrorCopy[index] = { ...inputErrorCopy[index], value: true };
-        setInputError(inputErrorCopy);
+        setInputErrorArray(inputErrorCopy);
         inputErrorReturn = true;
-        setFieldError(true);
+        setInputError(true);
       }
       if (option.text === "") {
-        console.log("2");
         inputErrorCopy[index] = { ...inputErrorCopy[index], text: true };
-        setInputError(inputErrorCopy);
+        setInputErrorArray(inputErrorCopy);
         inputErrorReturn = true;
-        setFieldError(true);
+        setInputError(true);
       }
     }
-    if (!inputErrorReturn) {
+    if (!inputErrorReturn && obj.name) {
+
       onPropertyUpdate({
         ...propertyMap,
         name: obj.name,
@@ -121,11 +122,13 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
       });
       setModalOpen(false);
       setEmptyError(false);
-      setFieldError(false);
+      setInputError(false);
+      setLoading(false);
     } else {
+      setLoading(false);
       return false;
     }
-  }, [errors, inputError, obj, onPropertyUpdate, propertyMap, setModalOpen]);
+  }, [errors, inputErrorArray, obj, onPropertyUpdate, propertyMap]);
 
   const addOption = React.useCallback(() => {
     let newArr = [...obj.properties!.options!];
@@ -135,9 +138,9 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
       properties: { ...obj.properties, options: newArr },
     });
     setEmptyError(false);
-    setInputError([...inputError, { value: false, text: false }]);
+    setInputErrorArray([...inputErrorArray, { value: false, text: false }]);
     setLoading(false);
-  }, [obj, inputError]);
+  }, [obj, inputErrorArray]);
 
   const deleteOption = React.useCallback(
     (index) => {
@@ -147,11 +150,51 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
         ...obj,
         properties: { ...obj.properties, options: newArr },
       });
-      let errorArr = [...inputError];
+      let errorArr = [...inputErrorArray];
       errorArr.splice(index, 1);
-      setInputError(errorArr);
+      setInputErrorArray(errorArr);
+      setInputError(false);
+      for (const option of errorArr) {
+        if (option.value || option.text) {
+          setInputError(true);
+        }
+      }
+      setLoading(false);
     },
-    [obj, inputError]
+    [obj, inputErrorArray]
+  );
+
+  const inputChangeHandler = React.useCallback(
+    (e, { value }, index, field) => {
+      let inputErrorCopy = [...inputErrorArray];
+      inputErrorCopy[index] = {
+        ...inputErrorCopy[index],
+        [field]: false,
+      };
+      setInputErrorArray(inputErrorCopy);
+
+      let fieldCopy = [...obj.properties!.options!];
+      fieldCopy[index] = {
+        ...fieldCopy[index],
+        [field]: value,
+      };
+
+      setInputError(false);
+      for (const option of inputErrorCopy) {
+        if (option.value || option.text) {
+          setInputError(true);
+        }
+      }
+
+      setObj({
+        ...obj,
+        properties: {
+          ...obj.properties,
+          options: fieldCopy,
+        },
+      });
+    },
+    [inputErrorArray, obj]
   );
 
   return (
@@ -208,49 +251,33 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
               ? obj.properties!.options!.map((option: any, index: any) => (
                   <Table.Row key={index.toString()}>
                     <Table.Cell>
-                      <Input
-                        error={inputError[index].value ?? false}
+                      <Form.Input
+                        error={inputErrorArray[index].value}
                         style={{ width: "100%" }}
                         value={option.value}
-                        onChange={(e, { value }) => {
-                          let valueCopy = [...obj.properties!.options!];
-                          valueCopy[index] = {
-                            ...valueCopy[index],
-                            value: value,
-                          };
-                          setObj({
-                            ...obj,
-                            properties: {
-                              ...obj.properties,
-                              options: valueCopy,
-                            },
-                          });
-                        }}
+                        onChange={(e, { value }) =>
+                          inputChangeHandler(e, { value }, index, "value")
+                        }
                       />
                     </Table.Cell>
                     <Table.Cell>
-                      <Input
-                        error={inputError[index].text ?? false}
+                      <Form.Input
+                        error={inputErrorArray[index].text}
                         style={{ width: "100%" }}
                         value={option.text}
-                        onChange={(e, { value }) => {
-                          let textCopy = [...obj.properties!.options!];
-                          textCopy[index] = {
-                            ...textCopy[index],
-                            text: value,
-                          };
-                          setObj({
-                            ...obj,
-                            properties: {
-                              ...obj.properties,
-                              options: textCopy,
-                            },
-                          });
-                        }}
+                        onChange={(e, { value }) =>
+                          inputChangeHandler(e, { value }, index, "text")
+                        }
                       />
                     </Table.Cell>
                     <Table.Cell textAlign="right">
-                      <Button onClick={() => deleteOption(index)}>
+                      <Button
+                        onClick={() => {
+                          setLoading(true);
+                          deleteOption(index);
+                        }}
+                      >
+
                         Delete
                       </Button>
                     </Table.Cell>
@@ -274,7 +301,7 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
         />
         <Message
           error
-          visible={fieldError}
+          visible={inputError}
           header="Action Forbidden"
           content="Fields cannot be empty"
         />

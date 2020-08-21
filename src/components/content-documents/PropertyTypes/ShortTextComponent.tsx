@@ -1,11 +1,10 @@
 import * as React from "react";
-import { Card, Form,InputOnChangeData } from 'semantic-ui-react';
+import { Card, Form, InputOnChangeData } from "semantic-ui-react";
 
-
-import { IPropertyMap, IDocumentProperty } from 'models';
+import { IPropertyMap, IDocumentProperty } from "models";
 
 interface ITextboxComponentProps {
-  documentProperty: IDocumentProperty
+  documentProperty: IDocumentProperty;
   propertyMap: IPropertyMap;
   onPropertyUpdate: (documentProperty: IDocumentProperty) => void;
 }
@@ -16,13 +15,13 @@ interface ITextboxComponentState {
 class ShortTextComponent extends React.Component<
   ITextboxComponentProps,
   ITextboxComponentState
-  > {
+> {
   public state = {
-    expanded: false
+    expanded: false,
   };
 
   public handleExpandClick = () => {
-    this.setState(state => ({ expanded: !state.expanded }));
+    this.setState((state) => ({ expanded: !state.expanded }));
   };
 
   public changeValue = (e: any, { value }: InputOnChangeData) => {
@@ -40,7 +39,9 @@ class ShortTextComponent extends React.Component<
           </Card.Header>
         </Card.Content>
         <Card.Content>
-          <Form.Input fluid={true}
+          <Form.Input
+            required={propertyMap.required}
+            fluid={true}
             name="value"
             onChange={this.changeValue}
             value={documentProperty.value}
