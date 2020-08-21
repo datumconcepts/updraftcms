@@ -5,7 +5,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { IMediaObject, IMediaObjectType } from 'models';
 
-
+import "./Menu.css";
 
 interface IMediaObjectMenuProps extends RouteComponentProps {
     mediaObjects: IMediaObject[];
@@ -50,14 +50,14 @@ class MediaObjectMenu extends React.Component<IMediaObjectMenuProps> {
         return (
             <List.Item key={mediaObject.id}>
                 <List.Icon name={isSelected ? "folder open" : "folder"} />
-                <List.Content>
-                    <Grid columns="equal" verticalAlign='middle'>
-                        <Grid.Column>
+                <List.Content >
+                    <Grid className="parent" columns="equal" verticalAlign='middle' style={{ margin: "-3px" }}>
+                        <Grid.Column style={{ padding: "3px" }}>
                             <List.Header>{mediaObject.name}</List.Header>
                         </Grid.Column>
-                        <Grid.Column verticalAlign='middle' style={{ flex: "0 0 auto", width: "auto" }}>
+                        <Grid.Column className="child" verticalAlign='middle' style={{ flex: "0 0 auto", width: "auto", padding: "3px" }}>
                             <Icon name='edit' style={{ fontSize: "inherit" }} />
-                            <Icon name='delete' style={{ fontSize: "inherit" }} />
+                            <Icon name='delete' style={{ fontSize: "inherit", margin: 0 }} />
                         </Grid.Column>
                     </Grid>
                     {childItems.length > 0 && <List.List style={{ width: "100%" }}>
