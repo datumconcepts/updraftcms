@@ -117,6 +117,7 @@ const RichTextComponent: React.FC<IRichTextComponentProps> = ({
       setEditorState(editorState);
     }
   }, [propertyMap]);
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -125,7 +126,16 @@ const RichTextComponent: React.FC<IRichTextComponentProps> = ({
     // this.setState({ editorState }, () => {
     //   onPropertyUpdate({ ...propertyMap, 'defaultValue': convertToRaw(contentState) });
     // });
+    setEditorState(editorState);
   };
+
+  // React.useEffect(() => {
+  //   const contentState = editorState.getCurrentContent();
+  //   onPropertyUpdate({
+  //     ...propertyMap,
+  //     defaultValue: convertToRaw(contentState),
+  //   });
+  // }, [editorState, onPropertyUpdate, propertyMap]);
 
   const onChange = (editorState: EditorState) => setEditorState(editorState);
   const toggleBlockType = (blockType: DraftBlockType) => {
@@ -169,9 +179,7 @@ const RichTextComponent: React.FC<IRichTextComponentProps> = ({
           label="Name"
           name="name"
           value={obj.name}
-          onChange={(e, { value }) =>
-            setObj({ ...obj, name: value })
-          }
+          onChange={(e, { value }) => setObj({ ...obj, name: value })}
         />
         <Checkbox
           label="Required"

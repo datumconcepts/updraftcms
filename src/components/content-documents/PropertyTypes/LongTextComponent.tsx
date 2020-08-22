@@ -41,6 +41,7 @@ class LongTextComponent extends React.Component<
         </Card.Content>
         <Card.Content>
           <TextArea
+          required={propertyMap.required}
             name="value" rows={5}
             onChange={this.changeValue}
             value={documentProperty.value}
