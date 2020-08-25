@@ -41,7 +41,7 @@ class OptionSelectComponent extends React.Component<
       </Card.Content>
       <Card.Content>
 
-        <Select fluid={true} label={propertyMap.name} options={[]} />
+        <Select required={propertyMap.required} fluid={true} label={propertyMap.name} options={[]} />
       </Card.Content>
     </Card>
     );
