@@ -35,7 +35,6 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
     const handleClick = (e: any) => {
         if (selection && selection.current) {
             if (selection.current.contains(e.target)) {
-                // inside click
                 return;
             }
         }
@@ -87,7 +86,8 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                                                         : object.name}
                                                 </Grid.Row>
                                                 <Grid.Row container className="child" justify="center" style={{ width: "100%" }}>
-                                                    {editField === index ? <Icon name='checkmark' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={confirmButtonHandler} />
+                                                    {editField === index ? null
+                                                    // <Icon name='checkmark' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={confirmButtonHandler} />
                                                         :
                                                         <>
                                                             <Icon name='edit' style={{ cursor: "pointer", fontSize: "inherit" }} onClick={() => editButtonHandler(index, object.name)} />

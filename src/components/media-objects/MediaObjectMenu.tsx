@@ -31,7 +31,6 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
     const handleClick = (e: any) => {
         if (menuSelection && menuSelection.current) {
             if (menuSelection.current.contains(e.target)) {
-                // inside click
                 return;
             }
         }
@@ -86,7 +85,9 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
                             </List.Header>
                         </Grid.Column>
                         <Grid.Column className={editField === mediaObject.id || isSelected ? "" : "child"} verticalAlign='middle' style={{ flex: "0 0 auto", width: "auto", padding: "3px" }}>
-                            {editField === mediaObject.id ? <Icon name='checkmark' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={confirmButtonHandler} /> :
+                            {editField === mediaObject.id ? null
+                            // <Icon name='checkmark' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={confirmButtonHandler} /> 
+                            :
                                 <>
                                     <Icon name='edit' style={{ cursor: "pointer", fontSize: "inherit" }} onClick={() => editButtonHandler(mediaObject.id, mediaObject.name)} />
                                     <Icon name='delete' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={() => deleteButtonHandler(mediaObject.id)} />
