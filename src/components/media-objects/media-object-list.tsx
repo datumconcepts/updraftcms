@@ -11,6 +11,7 @@ import MediaObjectMenu from './MediaObjectMenu';
 import AppContent from 'components/high-order/AppContent';
 import EmptyListDisplay from 'components/high-order/EmptyListDisplay';
 
+import ConfirmDialog, { IConfirmDialogProps } from "components/high-order/confirm-dialog";
 
 interface IMediaObjectListProps {
     mediaObjects: IMediaObject[];
@@ -22,6 +23,7 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
 
     const [editField, setEditField] = React.useState(-1);
     const [editFieldValue, setEditFieldValue] = React.useState("");
+    const [dialog, confirm] = React.useState<IConfirmDialogProps>();
 
     React.useEffect(() => {
         document.addEventListener("mousedown", handleClick);
@@ -47,19 +49,24 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
             setEditFieldValue(value)
         }, [])
 
-    const deleteButtonHandler = React.useCallback(
-        (index) => {
-
-        }, [])
-
-    const confirmButtonHandler = React.useCallback(
-        () => {
-            setEditField(-1)
-        }, [])
+    const deleteButtonHandler = React.useCallback((mediaObject) => {
+        console.log("delete");
+        confirm({
+            message: "Are you sure you want to delete " + mediaObject.name + "?",
+            confirmAction: () => {
+                setEditField(-1);
+                confirm(undefined);
+            },
+            cancelAction: () => {
+                setEditField(-1);
+                confirm(undefined);
+            },
+        });
+    }, []);
 
     return (
         <>
-
+            {dialog && <ConfirmDialog {...dialog} />}
             <MediaObjectToolbar selectedMediaObjectId={selectedMediaObjectId} />
             <Sidebar.Pushable as={Segment} className="workspace" attached={true}>
                 <MediaObjectMenu mediaObjects={mediaObjects} selectedMediaObjectId={selectedMediaObjectId} setSelectedMediaObject={setSelectedMediaObject} />
@@ -79,15 +86,15 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                                                     {editField === index ?
                                                         <Ref innerRef={selection}>
                                                             <Input autoFocus value={editFieldValue}
-                                                                onChange={(e) => { setEditFieldValue(e.target.value) }} 
-                                                                onKeyPress={(e:any) => {if (e.key === 'Enter') {setEditField(-1);}}}
+                                                                onChange={(e) => { setEditFieldValue(e.target.value) }}
+                                                                onKeyPress={(e: any) => { if (e.key === 'Enter') { setEditField(-1); } }}
                                                             />
                                                         </Ref>
                                                         : object.name}
                                                 </Grid.Row>
                                                 <Grid.Row container className="child" justify="center" style={{ width: "100%" }}>
                                                     {editField === index ? null
-                                                    // <Icon name='checkmark' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={confirmButtonHandler} />
+                                                        // <Icon name='checkmark' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={confirmButtonHandler} />
                                                         :
                                                         <>
                                                             <Icon name='edit' style={{ cursor: "pointer", fontSize: "inherit" }} onClick={() => editButtonHandler(index, object.name)} />

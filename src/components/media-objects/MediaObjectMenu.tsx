@@ -8,6 +8,8 @@ import { IMediaObject, IMediaObjectType } from 'models';
 
 import "./Hover.css";
 
+import ConfirmDialog, { IConfirmDialogProps } from "components/high-order/confirm-dialog";
+
 interface IMediaObjectMenuProps extends RouteComponentProps {
     mediaObjects: IMediaObject[];
     selectedMediaObjectId: string;
@@ -18,6 +20,7 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
 
     const [editField, setEditField] = React.useState("");
     const [editFieldValue, setEditFieldValue] = React.useState("");
+    const [dialog, confirm] = React.useState<IConfirmDialogProps>();
 
     React.useEffect(() => {
         document.addEventListener("mousedown", handleClick);
@@ -43,15 +46,20 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
             setEditFieldValue(value)
         }, [])
 
-    const deleteButtonHandler = React.useCallback(
-        (index) => {
-
-        }, [])
-
-    const confirmButtonHandler = React.useCallback(
-        () => {
-            setEditField("")
-        }, [])
+    const deleteButtonHandler = React.useCallback((mediaObject) => {
+        console.log("delete");
+        confirm({
+            message: "Are you sure you want to delete " + mediaObject.name + "?",
+            confirmAction: () => {
+                setEditField("");
+                confirm(undefined);
+            },
+            cancelAction: () => {
+                setEditField("");
+                confirm(undefined);
+            },
+        });
+    }, []);
 
     const getSelectedDirectory: () => string = () => {
         const selectedMediaObject = mediaObjects.find(o => o.id === selectedMediaObjectId);
@@ -63,10 +71,10 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
         return selectedMediaObjectId;
     }
 
-    const rootDir = ([] as IMediaObject[]).concat(mediaObjects).find(dir => (dir.objectType === IMediaObjectType.DIRECTORY || dir.objectType === IMediaObjectType.FILE) && !dir.parentId)
+    const rootDir = ([] as IMediaObject[]).concat(mediaObjects).find(dir => (dir.objectType === IMediaObjectType.DIRECTORY) && !dir.parentId)
 
     const getSubDirectories = (mediaObject: IMediaObject) => {
-        const childItems = mediaObjects.filter(dir => (dir.objectType === IMediaObjectType.DIRECTORY || dir.objectType === IMediaObjectType.FILE) && dir.parentId === mediaObject.id);
+        const childItems = mediaObjects.filter(dir => (dir.objectType === IMediaObjectType.DIRECTORY) && dir.parentId === mediaObject.id);
         const isSelected = mediaObject.id === getSelectedDirectory();
         return (
             <List.Item key={mediaObject.id} >
@@ -86,11 +94,11 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
                         </Grid.Column>
                         <Grid.Column className={editField === mediaObject.id || isSelected ? "" : "child"} verticalAlign='middle' style={{ flex: "0 0 auto", width: "auto", padding: "3px" }}>
                             {editField === mediaObject.id ? null
-                            // <Icon name='checkmark' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={confirmButtonHandler} /> 
-                            :
+                                // <Icon name='checkmark' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={confirmButtonHandler} /> 
+                                :
                                 <>
                                     <Icon name='edit' style={{ cursor: "pointer", fontSize: "inherit" }} onClick={() => editButtonHandler(mediaObject.id, mediaObject.name)} />
-                                    <Icon name='delete' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={() => deleteButtonHandler(mediaObject.id)} />
+                                    <Icon name='delete' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={() => deleteButtonHandler(mediaObject)} />
                                 </>}
                         </Grid.Column>
                     </Grid>
@@ -102,16 +110,19 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
     }
 
     return (
-        <Sidebar visible={true}>
-            <Segment circular={false}>
-                {rootDir &&
-                    <List>
-                        {
-                            ([] as IMediaObject[]).concat(mediaObjects).filter(dir => (dir.objectType === IMediaObjectType.DIRECTORY || dir.objectType === IMediaObjectType.FILE) && dir.parentId === rootDir.id).map((dir) => getSubDirectories(dir))
-                        }
-                    </List>}
-            </Segment>
-        </Sidebar>
+        <>
+            {dialog && <ConfirmDialog {...dialog} />}
+            <Sidebar visible={true}>
+                <Segment circular={false}>
+                    {rootDir &&
+                        <List>
+                            {
+                                ([] as IMediaObject[]).concat(mediaObjects).filter(dir => (dir.objectType === IMediaObjectType.DIRECTORY) && dir.parentId === rootDir.id).map((dir) => getSubDirectories(dir))
+                            }
+                        </List>}
+                </Segment>
+            </Sidebar>
+        </>
     )
 }
 

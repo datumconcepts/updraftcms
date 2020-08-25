@@ -13,6 +13,7 @@ export const unloadedMediaObjectState: IMediaObjectState = {
     isLoading: false, mediaObjects: new Map<string, IMediaObject>([
         ['342', { id: '342', name: '/', objectType: IMediaObjectType.DIRECTORY, path: '/' }],
         ['654', { id: '654', name: 'directory 1', objectType: IMediaObjectType.DIRECTORY, parentId: '342', path: '/directory1' }],
+        ['667', { id: '667', name: 'file 4', objectType: IMediaObjectType.FILE, parentId: '654', path: '/file4' }],
         ['345', { id: '345', name: 'directory 2', objectType: IMediaObjectType.DIRECTORY, parentId: '342', path: '/directory2' }],
         ['357', { id: '357', name: 'file 2', objectType: IMediaObjectType.FILE, parentId: '345', path: '/file2' }],
         ['346', { id: '346', name: 'directory 4', objectType: IMediaObjectType.DIRECTORY, parentId: '342', path: '/directory4' }],

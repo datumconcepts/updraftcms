@@ -158,7 +158,7 @@ const ObjectModelsEditPage: React.FC = () => {
   const closeObjectModelHandler = React.useCallback(() => {
     if (dirty) {
       confirm({
-        message: "Do you wish to save changes",
+        message: "Do you wish to save changes?",
         confirmText: "Save",
         confirmAction: saveObjectModelHandler,
         cancelText: "Discard",
