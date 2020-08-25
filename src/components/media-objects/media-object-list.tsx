@@ -49,10 +49,10 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
             setEditFieldValue(value)
         }, [])
 
-    const deleteButtonHandler = React.useCallback((mediaObject) => {
+    const deleteButtonHandler = React.useCallback((index, object) => {
         console.log("delete");
         confirm({
-            message: "Are you sure you want to delete " + mediaObject.name + "?",
+            message: "Are you sure you want to delete " + object.name + "?",
             confirmAction: () => {
                 setEditField(-1);
                 confirm(undefined);
@@ -98,7 +98,7 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                                                         :
                                                         <>
                                                             <Icon name='edit' style={{ cursor: "pointer", fontSize: "inherit" }} onClick={() => editButtonHandler(index, object.name)} />
-                                                            <Icon name='delete' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={() => deleteButtonHandler(index)} />
+                                                            <Icon name='delete' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={() => deleteButtonHandler(index, object)} />
                                                         </>}
                                                 </Grid.Row>
                                             </Grid>
