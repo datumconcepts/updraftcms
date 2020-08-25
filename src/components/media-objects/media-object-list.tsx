@@ -79,7 +79,10 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                                                 <Grid.Row >
                                                     {editField === index ?
                                                         <Ref innerRef={selection}>
-                                                            <Input autoFocus value={editFieldValue} onChange={(e) => { setEditFieldValue(e.target.value) }} />
+                                                            <Input autoFocus value={editFieldValue}
+                                                                onChange={(e) => { setEditFieldValue(e.target.value) }} 
+                                                                onKeyPress={(e:any) => {if (e.key === 'Enter') {setEditField(-1);}}}
+                                                            />
                                                         </Ref>
                                                         : object.name}
                                                 </Grid.Row>

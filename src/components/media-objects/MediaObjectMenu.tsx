@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Sidebar, List, Segment, Button, Icon, Grid, Input, Ref } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
+import useShortcuts from 'hooks/useShortcuts';
 
 import { IMediaObject, IMediaObjectType } from 'models';
 
@@ -77,7 +78,10 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
                             <List.Header>
                                 {editField === mediaObject.id ?
                                     <Ref innerRef={menuSelection}>
-                                        <Input autoFocus transparent fluid value={editFieldValue} onChange={(e) => { setEditFieldValue(e.target.value) }} />
+                                        <Input autoFocus transparent fluid value={editFieldValue}
+                                            onChange={(e) => { setEditFieldValue(e.target.value) }}
+                                            onKeyPress={(e: any) => { if (e.key === 'Enter') { setEditField("") } }}
+                                        />
                                     </Ref> : mediaObject.name}
                             </List.Header>
                         </Grid.Column>
