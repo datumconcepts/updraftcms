@@ -5,3 +5,7 @@
 .parent:hover .child {
     visibility: visible;
 }
+
+.ui.fluid.input > input {
+  font-weight: 700;
+}

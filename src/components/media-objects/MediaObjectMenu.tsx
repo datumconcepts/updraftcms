@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Sidebar, List, Segment, Button, Icon, Grid } from 'semantic-ui-react';
+import { Sidebar, List, Segment, Button, Icon, Grid, Input } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 
@@ -14,6 +14,25 @@ interface IMediaObjectMenuProps extends RouteComponentProps {
 }
 
 const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, selectedMediaObjectId, setSelectedMediaObject }) => {
+
+    const [editField, setEditField] = React.useState("");
+    const [editFieldValue, setEditFieldValue] = React.useState("");
+
+    const editButtonHandler = React.useCallback(
+        (id, value) => {
+            setEditField(id)
+            setEditFieldValue(value)
+        }, [])
+
+    const deleteButtonHandler = React.useCallback(
+        (index) => {
+
+        }, [])
+
+    const confirmButtonHandler = React.useCallback(
+        () => {
+            setEditField("")
+        }, [])
 
     const getSelectedDirectory: () => string = () => {
         const selectedMediaObject = mediaObjects.find(o => o.id === selectedMediaObjectId);
@@ -31,16 +50,22 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
         const childItems = mediaObjects.filter(dir => (dir.objectType === IMediaObjectType.DIRECTORY || dir.objectType === IMediaObjectType.FILE) && dir.parentId === mediaObject.id);
         const isSelected = mediaObject.id === getSelectedDirectory();
         return (
-            <List.Item key={mediaObject.id}>
-                <List.Icon name={isSelected ? "folder open" : "folder"} />
-                <List.Content >
+            <List.Item key={mediaObject.id} >
+                <List.Icon name={isSelected ? "folder open" : "folder"} onClick={() => setSelectedMediaObject(mediaObject.id)} />
+                <List.Content onClick={() => setSelectedMediaObject(mediaObject.id)} >
                     <Grid className="parent" columns="equal" verticalAlign='middle' style={{ margin: "-3px" }}>
                         <Grid.Column style={{ padding: "3px" }}>
-                            <List.Header>{mediaObject.name}</List.Header>
+                            <List.Header>
+                                {editField === mediaObject.id ?
+                                    <Input autoFocus transparent fluid value={editFieldValue} onChange={(e) => { setEditFieldValue(e.target.value) }} /> : mediaObject.name}
+                            </List.Header>
                         </Grid.Column>
-                        <Grid.Column className="child" verticalAlign='middle' style={{ flex: "0 0 auto", width: "auto", padding: "3px" }}>
-                            <Icon name='edit' style={{ fontSize: "inherit" }} />
-                            <Icon name='delete' style={{ fontSize: "inherit", margin: 0 }} />
+                        <Grid.Column className={editField === mediaObject.id || isSelected ? "" : "child"} verticalAlign='middle' style={{ flex: "0 0 auto", width: "auto", padding: "3px" }}>
+                            {editField === mediaObject.id ? <Icon name='checkmark' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={confirmButtonHandler} /> :
+                                <>
+                                    <Icon name='edit' style={{ cursor: "pointer", fontSize: "inherit" }} onClick={() => editButtonHandler(mediaObject.id, mediaObject.name)} />
+                                    <Icon name='delete' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={() => deleteButtonHandler(mediaObject.id)} />
+                                </>}
                         </Grid.Column>
                     </Grid>
                     {childItems.length > 0 && <List.List style={{ width: "100%" }}>

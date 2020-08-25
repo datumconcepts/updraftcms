@@ -34,6 +34,11 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
 
         }, [])
 
+    const confirmButtonHandler = React.useCallback(
+        () => {
+            setEditField(-1)
+        }, [])
+
     return (
         <>
 
@@ -50,15 +55,19 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                         ) : (
                                 <Grid>
                                     {mediaObjects.filter(dir => (dir.objectType === IMediaObjectType.DIRECTORY || dir.objectType === IMediaObjectType.FILE) && dir.parentId === selectedMediaObjectId).map((object: any, index: any) => (
-                                        <Grid.Column className="parent" style={{ minWidth: "200px" }}>
+                                        <Grid.Column className="parent" style={{ width: "200px" }} >
                                             <Grid centered>
-                                                <Grid.Row>
+                                                <Grid.Row onClick={() => setSelectedMediaObject(object.id)}>
                                                     {editField === index ?
-                                                        <Input style={{border:0,padding:0}} value={editFieldValue} onChange={(e) => { setEditFieldValue(e.target.value) }} /> : object.name}
+                                                        <Input autoFocus value={editFieldValue} onChange={(e) => { setEditFieldValue(e.target.value) }} /> : object.name}
                                                 </Grid.Row>
-                                                <Grid.Row container className="child" justify="center" style={{ width: "100%" }}>
-                                                    <Icon name='edit' style={{ cursor: "pointer", fontSize: "inherit" }} onClick={() => editButtonHandler(index, object.name)} />
-                                                    <Icon name='delete' style={{ fontSize: "inherit", margin: 0 }} />
+                                                    <Grid.Row container className="child" justify="center" style={{ width: "100%" }}>
+                                                    {editField === index ? <Icon name='checkmark' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={confirmButtonHandler} />
+                                                        :
+                                                        <>
+                                                            <Icon name='edit' style={{ cursor: "pointer", fontSize: "inherit" }} onClick={() => editButtonHandler(index, object.name)} />
+                                                            <Icon name='delete' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={() => deleteButtonHandler(index)} />
+                                                        </>}
                                                 </Grid.Row>
                                             </Grid>
                                         </Grid.Column>
