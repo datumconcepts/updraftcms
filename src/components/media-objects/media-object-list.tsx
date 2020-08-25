@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Segment, Sidebar, Grid, Icon, Input } from 'semantic-ui-react';
+import { Segment, Sidebar, Grid, Icon, Input, Ref } from 'semantic-ui-react';
 
 import { IMediaObject, IMediaObjectType } from 'models';
 
@@ -22,6 +22,25 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
 
     const [editField, setEditField] = React.useState(-1);
     const [editFieldValue, setEditFieldValue] = React.useState("");
+
+    React.useEffect(() => {
+        document.addEventListener("mousedown", handleClick);
+        return () => {
+            document.removeEventListener("mousedown", handleClick);
+        };
+    }, []);
+
+    const selection = React.useRef<HTMLInputElement | null>(null);
+
+    const handleClick = (e: any) => {
+        if (selection && selection.current) {
+            if (selection.current.contains(e.target)) {
+                // inside click
+                return;
+            }
+        }
+        setEditField(-1)
+    };
 
     const editButtonHandler = React.useCallback(
         (index, value) => {
@@ -57,11 +76,14 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                                     {mediaObjects.filter(dir => (dir.objectType === IMediaObjectType.DIRECTORY || dir.objectType === IMediaObjectType.FILE) && dir.parentId === selectedMediaObjectId).map((object: any, index: any) => (
                                         <Grid.Column className="parent" style={{ width: "200px" }} >
                                             <Grid centered>
-                                                <Grid.Row onClick={() => setSelectedMediaObject(object.id)}>
+                                                <Grid.Row >
                                                     {editField === index ?
-                                                        <Input autoFocus value={editFieldValue} onChange={(e) => { setEditFieldValue(e.target.value) }} /> : object.name}
+                                                        <Ref innerRef={selection}>
+                                                            <Input autoFocus value={editFieldValue} onChange={(e) => { setEditFieldValue(e.target.value) }} />
+                                                        </Ref>
+                                                        : object.name}
                                                 </Grid.Row>
-                                                    <Grid.Row container className="child" justify="center" style={{ width: "100%" }}>
+                                                <Grid.Row container className="child" justify="center" style={{ width: "100%" }}>
                                                     {editField === index ? <Icon name='checkmark' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={confirmButtonHandler} />
                                                         :
                                                         <>

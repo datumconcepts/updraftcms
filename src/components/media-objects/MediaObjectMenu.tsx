@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Sidebar, List, Segment, Button, Icon, Grid, Input } from 'semantic-ui-react';
+import { Sidebar, List, Segment, Button, Icon, Grid, Input, Ref } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 
@@ -17,6 +17,25 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
 
     const [editField, setEditField] = React.useState("");
     const [editFieldValue, setEditFieldValue] = React.useState("");
+
+    React.useEffect(() => {
+        document.addEventListener("mousedown", handleClick);
+        return () => {
+            document.removeEventListener("mousedown", handleClick);
+        };
+    }, []);
+
+    const menuSelection = React.useRef<HTMLInputElement | null>(null);
+
+    const handleClick = (e: any) => {
+        if (menuSelection && menuSelection.current) {
+            if (menuSelection.current.contains(e.target)) {
+                // inside click
+                return;
+            }
+        }
+        setEditField("");
+    };
 
     const editButtonHandler = React.useCallback(
         (id, value) => {
@@ -57,7 +76,9 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
                         <Grid.Column style={{ padding: "3px" }}>
                             <List.Header>
                                 {editField === mediaObject.id ?
-                                    <Input autoFocus transparent fluid value={editFieldValue} onChange={(e) => { setEditFieldValue(e.target.value) }} /> : mediaObject.name}
+                                    <Ref innerRef={menuSelection}>
+                                        <Input autoFocus transparent fluid value={editFieldValue} onChange={(e) => { setEditFieldValue(e.target.value) }} />
+                                    </Ref> : mediaObject.name}
                             </List.Header>
                         </Grid.Column>
                         <Grid.Column className={editField === mediaObject.id || isSelected ? "" : "child"} verticalAlign='middle' style={{ flex: "0 0 auto", width: "auto", padding: "3px" }}>
