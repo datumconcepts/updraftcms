@@ -61,6 +61,10 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
         });
     }, []);
 
+    const confirmButtonHandler = React.useCallback(() => {
+        setEditField("");
+    }, [])
+
     const getSelectedDirectory: () => string = () => {
         const selectedMediaObject = mediaObjects.find(o => o.id === selectedMediaObjectId);
         if (selectedMediaObject) {
@@ -85,7 +89,7 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
                             <List.Header>
                                 {editField === mediaObject.id ?
                                     <Ref innerRef={menuSelection}>
-                                        <Input autoFocus transparent fluid value={editFieldValue}
+                                        <Input className='bold' autoFocus transparent fluid value={editFieldValue}
                                             onChange={(e) => { setEditFieldValue(e.target.value) }}
                                             onKeyPress={(e: any) => { if (e.key === 'Enter') { setEditField("") } }}
                                         />
@@ -93,13 +97,11 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
                             </List.Header>
                         </Grid.Column>
                         <Grid.Column className={editField === mediaObject.id || isSelected ? "" : "child"} verticalAlign='middle' style={{ flex: "0 0 auto", width: "auto", padding: "3px" }}>
-                            {editField === mediaObject.id ? null
-                                // <Icon name='checkmark' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={confirmButtonHandler} /> 
-                                :
+                            {!(editField === mediaObject.id) ?
                                 <>
                                     <Icon name='edit' style={{ cursor: "pointer", fontSize: "inherit" }} onClick={() => editButtonHandler(mediaObject.id, mediaObject.name)} />
                                     <Icon name='delete' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={() => deleteButtonHandler(mediaObject)} />
-                                </>}
+                                </> : null}
                         </Grid.Column>
                     </Grid>
                     {childItems.length > 0 && <List.List style={{ width: "100%" }}>

@@ -83,25 +83,23 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                                         <Grid.Column className="parent" style={{ width: "200px" }} >
                                             <Grid centered>
                                                 <Grid.Row >
-                                                    <Icon size='huge' name={object.objectType === IMediaObjectType.DIRECTORY ? 'folder': 'file'} />
+                                                    <Icon onClick={object.objectType === IMediaObjectType.DIRECTORY ? () => { setSelectedMediaObject(object.id) } : undefined} size='huge' name={object.objectType === IMediaObjectType.DIRECTORY ? 'folder' : 'file'} />
                                                 </Grid.Row>
-                                                <Grid.Row>
+                                                <Grid.Row >
                                                     {editField === index ?
                                                         <Ref innerRef={selection}>
-                                                            <Input autoFocus value={editFieldValue}
+                                                            <Input className="center" autoFocus transparent fluid value={editFieldValue}
                                                                 onChange={(e) => { setEditFieldValue(e.target.value) }}
                                                                 onKeyPress={(e: any) => { if (e.key === 'Enter') { setEditField(-1); } }}
                                                             />
-                                                        </Ref> : <>{object.objectType === IMediaObjectType.DIRECTORY ? <div onDoubleClick={() => setSelectedMediaObject(object.id)} >{object.name}</div> : object.name}</>}
+                                                        </Ref> : <div onClick={object.objectType === IMediaObjectType.DIRECTORY ? () => { setSelectedMediaObject(object.id) } : undefined}> {object.name}</div>}
                                                 </Grid.Row>
                                                 <Grid.Row container className="child" justify="center" style={{ width: "100%" }}>
-                                                    {editField === index ? null
-                                                        // <Icon name='checkmark' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={confirmButtonHandler} />
-                                                        :
+                                                    {!(editField === index) ?
                                                         <>
-                                                            <Icon name='edit' style={{ cursor: "pointer", fontSize: "inherit" }} onClick={() => editButtonHandler(index, object.name)} />
+                                                            <Icon name='edit' style={{ cursor: "pointer", fontSize: "inherit" }} onClick={() => { editButtonHandler(index, object.name) }} />
                                                             <Icon name='delete' style={{ cursor: "pointer", fontSize: "inherit", margin: 0 }} onClick={() => deleteButtonHandler(index, object)} />
-                                                        </>}
+                                                        </> : null}
                                                 </Grid.Row>
                                             </Grid>
                                         </Grid.Column>
