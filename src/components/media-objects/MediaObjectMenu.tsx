@@ -80,7 +80,7 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
             <List.Item key={mediaObject.id} >
                 <List.Icon name={isSelected ? "folder open" : "folder"} onClick={() => setSelectedMediaObject(mediaObject.id)} />
                 <List.Content >
-                    <Grid onClick={() => setSelectedMediaObject(mediaObject.id)} className="parent" columns="equal" verticalAlign='middle' style={{ margin: "-3px" }}>
+                    <Grid className="parent" columns="equal" verticalAlign='middle' style={{ margin: "-3px" }}>
                         <Grid.Column style={{ padding: "3px" }}>
                             <List.Header>
                                 {editField === mediaObject.id ?
@@ -89,7 +89,7 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
                                             onChange={(e) => { setEditFieldValue(e.target.value) }}
                                             onKeyPress={(e: any) => { if (e.key === 'Enter') { setEditField("") } }}
                                         />
-                                    </Ref> : mediaObject.name}
+                                    </Ref> : <div onClick={() => setSelectedMediaObject(mediaObject.id)} >{mediaObject.name}</div>}
                             </List.Header>
                         </Grid.Column>
                         <Grid.Column className={editField === mediaObject.id || isSelected ? "" : "child"} verticalAlign='middle' style={{ flex: "0 0 auto", width: "auto", padding: "3px" }}>
