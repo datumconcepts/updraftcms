@@ -67,7 +67,7 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
     return (
         <>
             {dialog && <ConfirmDialog {...dialog} />}
-            <MediaObjectToolbar selectedMediaObjectId={selectedMediaObjectId} />
+            <MediaObjectToolbar mediaObjects={mediaObjects} selectedMediaObjectId={selectedMediaObjectId} />
             <Sidebar.Pushable as={Segment} className="workspace" attached={true}>
                 <MediaObjectMenu mediaObjects={mediaObjects} selectedMediaObjectId={selectedMediaObjectId} setSelectedMediaObject={setSelectedMediaObject} />
                 <Sidebar.Pusher>
@@ -83,14 +83,16 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                                         <Grid.Column className="parent" style={{ width: "200px" }} >
                                             <Grid centered>
                                                 <Grid.Row >
+                                                    <Icon size='huge' name={object.objectType === IMediaObjectType.DIRECTORY ? 'folder': 'file'} />
+                                                </Grid.Row>
+                                                <Grid.Row>
                                                     {editField === index ?
                                                         <Ref innerRef={selection}>
                                                             <Input autoFocus value={editFieldValue}
                                                                 onChange={(e) => { setEditFieldValue(e.target.value) }}
                                                                 onKeyPress={(e: any) => { if (e.key === 'Enter') { setEditField(-1); } }}
                                                             />
-                                                        </Ref>
-                                                        : object.name}
+                                                        </Ref> : <>{object.objectType === IMediaObjectType.DIRECTORY ? <div onDoubleClick={() => setSelectedMediaObject(object.id)} >{object.name}</div> : object.name}</>}
                                                 </Grid.Row>
                                                 <Grid.Row container className="child" justify="center" style={{ width: "100%" }}>
                                                     {editField === index ? null

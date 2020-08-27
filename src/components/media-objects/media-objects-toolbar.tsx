@@ -3,14 +3,18 @@ import * as React from 'react';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { Menu, Icon, Breadcrumb, Popup, Modal, Button, Input} from 'semantic-ui-react';
+
+import { IMediaObject, IMediaObjectType } from 'models';
+
 import PageToolbar from 'components/high-order/PageToolbar';
 
 interface IMediaObjectToolbarProps extends RouteComponentProps {
+    mediaObjects: IMediaObject[];
     selectedMediaObjectId: string;
 
     // onFileUploaded: (file: File) => void;
 }
-const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = () => {
+const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = ({mediaObjects, selectedMediaObjectId}) => {
     const [modalOpen, toggleModal] = React.useState(false);
 
     const fileUpload = (files: FileList | null) => {
@@ -23,6 +27,17 @@ const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = () => {
         }
     }
 
+    const getSelectedName: () => string = () => {
+        const selectedMediaObject = mediaObjects.find(o => o.id === selectedMediaObjectId);
+        if (selectedMediaObject) {
+            if (selectedMediaObject.objectType === IMediaObjectType.FILE) {
+                return selectedMediaObject.parentId || selectedMediaObjectId;
+            }
+        }
+        return selectedMediaObjectId;
+    }
+
+
     return (<PageToolbar>
         <Menu.Item>
             <Breadcrumb.Section>Media Objects</Breadcrumb.Section>
@@ -31,7 +46,7 @@ const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = () => {
             <Breadcrumb >
                 <Breadcrumb.Section>root</Breadcrumb.Section>
                 <Breadcrumb.Divider icon={{ name: 'chevron right', color: 'blue' }} />
-                <Breadcrumb.Section>directory 1</Breadcrumb.Section>
+                <Breadcrumb.Section>{selectedMediaObjectId}</Breadcrumb.Section>
             </Breadcrumb>
         </Menu.Item>
 
