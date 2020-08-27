@@ -96,7 +96,7 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
                                     </Ref> : <div onClick={() => setSelectedMediaObject(mediaObject.id)} >{mediaObject.name}</div>}
                             </List.Header>
                         </Grid.Column>
-                        <Grid.Column className={editField === mediaObject.id || isSelected ? "" : "child"} verticalAlign='middle' style={{ flex: "0 0 auto", width: "auto", padding: "3px" }}>
+                        <Grid.Column className="child" verticalAlign='middle' style={{ flex: "0 0 auto", width: "auto", padding: "3px" }}>
                             {!(editField === mediaObject.id) ?
                                 <>
                                     <Icon name='edit' style={{ cursor: "pointer", fontSize: "inherit" }} onClick={() => editButtonHandler(mediaObject.id, mediaObject.name)} />
