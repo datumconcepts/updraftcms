@@ -79,8 +79,8 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
         return (
             <List.Item key={mediaObject.id} >
                 <List.Icon name={isSelected ? "folder open" : "folder"} onClick={() => setSelectedMediaObject(mediaObject.id)} />
-                <List.Content onClick={() => setSelectedMediaObject(mediaObject.id)} >
-                    <Grid className="parent" columns="equal" verticalAlign='middle' style={{ margin: "-3px" }}>
+                <List.Content >
+                    <Grid onClick={() => setSelectedMediaObject(mediaObject.id)} className="parent" columns="equal" verticalAlign='middle' style={{ margin: "-3px" }}>
                         <Grid.Column style={{ padding: "3px" }}>
                             <List.Header>
                                 {editField === mediaObject.id ?
