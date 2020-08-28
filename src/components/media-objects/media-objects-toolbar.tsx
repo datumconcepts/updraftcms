@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
-import { Menu, Icon, Breadcrumb, Popup, Modal, Button, Input} from 'semantic-ui-react';
+import { Menu, Icon, Breadcrumb, Popup, Modal, Button, Input } from 'semantic-ui-react';
 
 import { IMediaObject, IMediaObjectType } from 'models';
 
@@ -14,7 +14,7 @@ interface IMediaObjectToolbarProps extends RouteComponentProps {
 
     // onFileUploaded: (file: File) => void;
 }
-const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = ({mediaObjects, selectedMediaObjectId}) => {
+const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = ({ mediaObjects, selectedMediaObjectId }) => {
     const [modalOpen, toggleModal] = React.useState(false);
 
     const fileUpload = (files: FileList | null) => {
@@ -27,16 +27,20 @@ const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = ({mediaObjects, s
         }
     }
 
-    const getSelectedName: () => string = () => {
-        const selectedMediaObject = mediaObjects.find(o => o.id === selectedMediaObjectId);
-        if (selectedMediaObject) {
-            if (selectedMediaObject.objectType === IMediaObjectType.FILE) {
-                return selectedMediaObject.parentId || selectedMediaObjectId;
-            }
-        }
-        return selectedMediaObjectId;
+    const breadcrumb = (mediaObject: IMediaObject) => {
+        const parent = mediaObjects.find(o => o.id === mediaObject.parentId)!
+        return (
+            <>
+                {!(parent.id === "342") && <div>
+                    <Breadcrumb.Divider icon={{ name: 'chevron right', color: 'blue' }} />
+                    {breadcrumb(parent)}
+                    </div>}
+                    <Breadcrumb.Section>{mediaObject.name === "/" ? "root" : selectedMediaObject.name}</Breadcrumb.Section>
+                    </>
+        )
     }
 
+    const selectedMediaObject = mediaObjects.find(o => o.id === selectedMediaObjectId)!
 
     return (<PageToolbar>
         <Menu.Item>
@@ -44,9 +48,7 @@ const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = ({mediaObjects, s
         </Menu.Item>
         <Menu.Item style={{ flex: 1 }}>
             <Breadcrumb >
-                <Breadcrumb.Section>root</Breadcrumb.Section>
-                <Breadcrumb.Divider icon={{ name: 'chevron right', color: 'blue' }} />
-                <Breadcrumb.Section>{selectedMediaObjectId}</Breadcrumb.Section>
+                {breadcrumb(selectedMediaObject)}
             </Breadcrumb>
         </Menu.Item>
 

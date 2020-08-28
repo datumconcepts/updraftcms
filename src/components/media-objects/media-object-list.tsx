@@ -83,7 +83,7 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                                         <Grid.Column className="parent" style={{ width: "200px" }} >
                                             <Grid centered>
                                                 <Grid.Row >
-                                                    <Icon onClick={object.objectType === IMediaObjectType.DIRECTORY ? () => { setSelectedMediaObject(object.id) } : undefined} size='huge' name={object.objectType === IMediaObjectType.DIRECTORY ? 'folder' : 'file'} />
+                                                    <Icon onClick={object.objectType === IMediaObjectType.DIRECTORY ? () => { setSelectedMediaObject(object.id) } : undefined} size='huge' color="blue" name={object.objectType === IMediaObjectType.DIRECTORY ? 'folder outline' : 'file outline'} />
                                                 </Grid.Row>
                                                 <Grid.Row >
                                                     {editField === index ?
