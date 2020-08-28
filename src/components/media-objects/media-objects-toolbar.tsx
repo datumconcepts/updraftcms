@@ -40,7 +40,7 @@ const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = ({ mediaObjects, 
                     {breadcrumb(parent)}
                     <Breadcrumb.Divider icon={{ name: 'chevron right', color: 'blue' }} />
                 </span>}
-                <Breadcrumb.Section>{mediaObject.name === "/" ? "root" : selectedMediaObject.name}</Breadcrumb.Section>
+                <Breadcrumb.Section>{mediaObject.name === "/" ? "root" : mediaObject.name}</Breadcrumb.Section>
             </>
         )
     }
