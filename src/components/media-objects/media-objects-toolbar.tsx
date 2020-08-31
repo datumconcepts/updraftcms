@@ -17,8 +17,6 @@ interface IMediaObjectToolbarProps extends RouteComponentProps {
 const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = ({ mediaObjects, selectedMediaObjectId }) => {
     const [modalOpen, toggleModal] = React.useState(false);
 
-    const [parent, setParent] = React.useState({});
-
     const fileUpload = (files: FileList | null) => {
         if (files) {
 
@@ -39,7 +37,8 @@ const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = ({ mediaObjects, 
                 {parent && <span>
                     {breadcrumb(parent)}
                     <Breadcrumb.Divider icon={{ name: 'chevron right', color: 'blue' }} />
-                </span>}
+                </span>
+                }
                 <Breadcrumb.Section>{mediaObject.name === "/" ? "root" : mediaObject.name}</Breadcrumb.Section>
             </>
         )

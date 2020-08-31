@@ -17,9 +17,11 @@ interface IMediaObjectListProps {
     mediaObjects: IMediaObject[];
     selectedMediaObjectId: string;
     setSelectedMediaObject(id: string): void;
+    editMediaObject(mediaObjects: Map<string, IMediaObject>): void
+    deleteMediaObject(mediaObjects: Map<string, IMediaObject>): void;
 }
 
-const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, selectedMediaObjectId, setSelectedMediaObject }) => {
+const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, selectedMediaObjectId, setSelectedMediaObject, editMediaObject, deleteMediaObject }) => {
 
     const [editField, setEditField] = React.useState(-1);
     const [editFieldValue, setEditFieldValue] = React.useState("");
@@ -40,7 +42,10 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                 return;
             }
         }
-        setEditField(-1)
+        setEditField(-1);
+        deleteMediaObject({
+            mediaObjects: mediaObjects;
+          });
     };
 
     const editButtonHandler = React.useCallback(
@@ -55,6 +60,7 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
             message: "Are you sure you want to delete " + object.name + "?",
             confirmAction: () => {
                 setEditField(-1);
+
                 confirm(undefined);
             },
             cancelAction: () => {
