@@ -2,16 +2,22 @@ import * as React from 'react';
 
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
-import { Menu, Icon, Breadcrumb, Popup, Modal, Button, Input} from 'semantic-ui-react';
+import { Menu, Icon, Breadcrumb, Popup, Modal, Button, Input } from 'semantic-ui-react';
+
+import { IMediaObject, IMediaObjectType } from 'models';
+
 import PageToolbar from 'components/high-order/PageToolbar';
 
 interface IMediaObjectToolbarProps extends RouteComponentProps {
+    mediaObjects: IMediaObject[];
     selectedMediaObjectId: string;
 
     // onFileUploaded: (file: File) => void;
 }
-const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = () => {
+const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = ({ mediaObjects, selectedMediaObjectId }) => {
     const [modalOpen, toggleModal] = React.useState(false);
+
+    const [parent, setParent] = React.useState({});
 
     const fileUpload = (files: FileList | null) => {
         if (files) {
@@ -23,15 +29,31 @@ const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = () => {
         }
     }
 
+    const breadcrumb = (mediaObject: IMediaObject) => {
+        var parent = undefined;
+        if (mediaObject.parentId) {
+            parent = mediaObjects.find(o => o.id === mediaObject.parentId)
+        }
+        return (
+            <>
+                {parent && <span>
+                    {breadcrumb(parent)}
+                    <Breadcrumb.Divider icon={{ name: 'chevron right', color: 'blue' }} />
+                </span>}
+                <Breadcrumb.Section>{mediaObject.name === "/" ? "root" : mediaObject.name}</Breadcrumb.Section>
+            </>
+        )
+    }
+
+    const selectedMediaObject = mediaObjects.find(o => o.id === selectedMediaObjectId)!
+
     return (<PageToolbar>
         <Menu.Item>
             <Breadcrumb.Section>Media Objects</Breadcrumb.Section>
         </Menu.Item>
         <Menu.Item style={{ flex: 1 }}>
             <Breadcrumb >
-                <Breadcrumb.Section>root</Breadcrumb.Section>
-                <Breadcrumb.Divider icon={{ name: 'chevron right', color: 'blue' }} />
-                <Breadcrumb.Section>directory 1</Breadcrumb.Section>
+                {breadcrumb(selectedMediaObject)}
             </Breadcrumb>
         </Menu.Item>
 

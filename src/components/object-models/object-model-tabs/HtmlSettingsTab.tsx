@@ -64,8 +64,6 @@ const propertyTypes: any[] = [
   {
     name: "Attachment",
     required: false,
-    propertyComponent: (props: any, propertyMap: any) => (
-      <FileUploadComponent {...props} propertyMap={propertyMap} />
     propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
       <FileUploadComponent
         propertyMap={propertyMap}
