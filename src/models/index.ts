@@ -28,7 +28,6 @@ export interface IContentDocument {
   htmlProperties: IDocumentProperty[];
   metaProperties: IDocumentProperty[];
 }
-
 export interface IMediaObject {
   id: string;
   objectType: IMediaObjectType;

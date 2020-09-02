@@ -2,17 +2,12 @@ import * as React from "react";
 
 import { useParams, useHistory } from "react-router-dom";
 
-
 import { IContentDocument, IObjectModel } from 'models';
-
-
 
 import HtmlSettingsTab from './ContentDocumentTabs/HtmlSettingsTab';
 import MetaSettingsTab from './ContentDocumentTabs/MetaSettingsTab';
 
 import { Tab } from 'semantic-ui-react';
-
-
 
 interface IRouteParams {
   id: string;
@@ -45,7 +40,6 @@ const ContentDocumentEdit: React.FC<IContentDocumentEditProps> = ({ contentDocum
       {
         menuItem: 'Meta Properties',
         render: () => <MetaSettingsTab onPropertyUpdate={onValueChange} objectModels={[...objectModels.values()]} contentDocument={contentDocument} />
-
       }
     ]
   } />);

@@ -43,9 +43,9 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
             }
         }
         setEditField(-1);
-        deleteMediaObject({
-            mediaObjects: mediaObjects;
-          });
+        // editMediaObject({
+        //     mediaObjects: {[...mediaObjects}
+        //   });
     };
 
     const editButtonHandler = React.useCallback(
@@ -59,12 +59,12 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
         confirm({
             message: "Are you sure you want to delete " + object.name + "?",
             confirmAction: () => {
-                setEditField(-1);
-
+                // deleteMediaObject({
+                //     mediaObjects: { [...mediaObjects }
+                // });
                 confirm(undefined);
             },
             cancelAction: () => {
-                setEditField(-1);
                 confirm(undefined);
             },
         });
