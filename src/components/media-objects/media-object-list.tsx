@@ -44,9 +44,7 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
             }
         }
         setEditField(-1);
-        // editMediaObject({
-        //     mediaObjects: {[...mediaObjects]}
-        //   });
+        // editMediaObject(new Map([...mediaObjects]);
     };
 
     const editButtonHandler = React.useCallback(
@@ -55,27 +53,13 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
             setEditFieldValue(value)
         }, [])
 
-        const deleteContentDocumentHandler = React.useCallback(() => {
-            if (contentDocument) {
-                contentDocuments.delete(contentDocument.id);
-                dispatch({ type: DELETE_CONTENT_DOCUMENT, contentDocuments, deleteContentDocument: contentDocument });
-                closeContentDocument();
-            }
-        }, [dispatch, closeContentDocument, contentDocuments, contentDocument]);
-    
-
     const deleteButtonHandler = React.useCallback((index, object) => {
         console.log("delete");
         confirm({
             message: "Are you sure you want to delete " + object.name + "?",
             confirmAction: () => {
-                    if (mediaObject) {
-                        mediaObjects.delete(mediaObject.id);
-                        dispatch({ type: DELETE_CONTENT_DOCUMENT, contentDocuments, deleteContentDocument: contentDocument });
-                        closeContentDocument();
-                    }
-                }, [dispatch, closeContentDocument, contentDocuments, contentDocument]);
-                            confirm(undefined);
+                // deleteMediaObject(new Map([...mediaObjects]);
+                confirm(undefined);
             },
             cancelAction: () => {
                 confirm(undefined);
