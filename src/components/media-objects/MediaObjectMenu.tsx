@@ -14,6 +14,8 @@ interface IMediaObjectMenuProps extends RouteComponentProps {
     mediaObjects: IMediaObject[];
     selectedMediaObjectId: string;
     setSelectedMediaObject(id: string): void;
+    editMediaObject(mediaObjects: Map<string, IMediaObject>): void
+    deleteMediaObject(mediaObjects: Map<string, IMediaObject>): void;
 }
 
 const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, selectedMediaObjectId, setSelectedMediaObject }) => {
@@ -21,6 +23,7 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
     const [editField, setEditField] = React.useState("");
     const [editFieldValue, setEditFieldValue] = React.useState("");
     const [dialog, confirm] = React.useState<IConfirmDialogProps>();
+    const [mediaObject, updateMediaObject] = React.useState<IMediaObject>();
 
     React.useEffect(() => {
         document.addEventListener("mousedown", handleClick);
@@ -38,6 +41,7 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
             }
         }
         setEditField("");
+        // editMediaObject(new Map([...mediaObjects]);
     };
 
     const editButtonHandler = React.useCallback(
@@ -47,15 +51,14 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
         }, [])
 
     const deleteButtonHandler = React.useCallback((mediaObject) => {
-        console.log("delete");
         confirm({
             message: "Are you sure you want to delete " + mediaObject.name + "?",
             confirmAction: () => {
-                setEditField("");
+                console.log("delete " + mediaObject.name);
+                // deleteMediaObject(new Map([...mediaObjects]);
                 confirm(undefined);
             },
             cancelAction: () => {
-                setEditField("");
                 confirm(undefined);
             },
         });
