@@ -26,6 +26,7 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
     const [editField, setEditField] = React.useState(-1);
     const [editFieldValue, setEditFieldValue] = React.useState("");
     const [dialog, confirm] = React.useState<IConfirmDialogProps>();
+    const [mediaObject, updateMediaObject] = React.useState<IMediaObject>();
 
     React.useEffect(() => {
         document.addEventListener("mousedown", handleClick);
@@ -44,7 +45,7 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
         }
         setEditField(-1);
         // editMediaObject({
-        //     mediaObjects: {[...mediaObjects}
+        //     mediaObjects: {[...mediaObjects]}
         //   });
     };
 
@@ -54,15 +55,27 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
             setEditFieldValue(value)
         }, [])
 
+        const deleteContentDocumentHandler = React.useCallback(() => {
+            if (contentDocument) {
+                contentDocuments.delete(contentDocument.id);
+                dispatch({ type: DELETE_CONTENT_DOCUMENT, contentDocuments, deleteContentDocument: contentDocument });
+                closeContentDocument();
+            }
+        }, [dispatch, closeContentDocument, contentDocuments, contentDocument]);
+    
+
     const deleteButtonHandler = React.useCallback((index, object) => {
         console.log("delete");
         confirm({
             message: "Are you sure you want to delete " + object.name + "?",
             confirmAction: () => {
-                // deleteMediaObject({
-                //     mediaObjects: { [...mediaObjects }
-                // });
-                confirm(undefined);
+                    if (mediaObject) {
+                        mediaObjects.delete(mediaObject.id);
+                        dispatch({ type: DELETE_CONTENT_DOCUMENT, contentDocuments, deleteContentDocument: contentDocument });
+                        closeContentDocument();
+                    }
+                }, [dispatch, closeContentDocument, contentDocuments, contentDocument]);
+                            confirm(undefined);
             },
             cancelAction: () => {
                 confirm(undefined);

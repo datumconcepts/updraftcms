@@ -28,6 +28,7 @@ interface ISaveMediaObjectsAction extends Action {
 interface IDeleteMediaObjectsAction extends Action {
     type: typeof DELETE_MEDIA_OBJECT;
     mediaObjects: Map<string, IMediaObject>;
+    deletedMediaObject: IMediaObject;
 }
 interface ISelectMediaObject extends Action {
     type: typeof SELECT_MEDIA_OBJECT;
