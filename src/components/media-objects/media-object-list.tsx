@@ -67,6 +67,49 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
         });
     }, []);
 
+    const [editField, setEditField] = React.useState(-1);
+    const [editFieldValue, setEditFieldValue] = React.useState("");
+    const [dialog, confirm] = React.useState<IConfirmDialogProps>();
+
+    React.useEffect(() => {
+        document.addEventListener("mousedown", handleClick);
+        return () => {
+            document.removeEventListener("mousedown", handleClick);
+        };
+    }, []);
+
+    const selection = React.useRef<HTMLInputElement | null>(null);
+
+    const handleClick = (e: any) => {
+        if (selection && selection.current) {
+            if (selection.current.contains(e.target)) {
+                return;
+            }
+        }
+        setEditField(-1)
+    };
+
+    const editButtonHandler = React.useCallback(
+        (index, value) => {
+            setEditField(index)
+            setEditFieldValue(value)
+        }, [])
+
+    const deleteButtonHandler = React.useCallback((index, object) => {
+        console.log("delete");
+        confirm({
+            message: "Are you sure you want to delete " + object.name + "?",
+            confirmAction: () => {
+                setEditField(-1);
+                confirm(undefined);
+            },
+            cancelAction: () => {
+                setEditField(-1);
+                confirm(undefined);
+            },
+        });
+    }, []);
+
     return (
         <>
             {dialog && <ConfirmDialog {...dialog} />}
