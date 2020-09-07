@@ -17,13 +17,16 @@ interface IMediaObjectListProps {
     mediaObjects: IMediaObject[];
     selectedMediaObjectId: string;
     setSelectedMediaObject(id: string): void;
+    editMediaObject(mediaObjects: Map<string, IMediaObject>): void
+    deleteMediaObject(mediaObjects: Map<string, IMediaObject>): void;
 }
 
-const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, selectedMediaObjectId, setSelectedMediaObject }) => {
+const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, selectedMediaObjectId, setSelectedMediaObject, editMediaObject, deleteMediaObject }) => {
 
     const [editField, setEditField] = React.useState(-1);
     const [editFieldValue, setEditFieldValue] = React.useState("");
     const [dialog, confirm] = React.useState<IConfirmDialogProps>();
+    const [mediaObject, updateMediaObject] = React.useState<IMediaObject>();
 
     React.useEffect(() => {
         document.addEventListener("mousedown", handleClick);
@@ -40,7 +43,8 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                 return;
             }
         }
-        setEditField(-1)
+            setEditField(-1);
+        // editMediaObject(new Map([...mediaObjects]);
     };
 
     const editButtonHandler = React.useCallback(
@@ -50,15 +54,14 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
         }, [])
 
     const deleteButtonHandler = React.useCallback((index, object) => {
-        console.log("delete");
         confirm({
             message: "Are you sure you want to delete " + object.name + "?",
             confirmAction: () => {
-                setEditField(-1);
+                console.log("delete " + object.name);
+                // deleteMediaObject(new Map([...mediaObjects]);
                 confirm(undefined);
             },
             cancelAction: () => {
-                setEditField(-1);
                 confirm(undefined);
             },
         });
@@ -69,7 +72,7 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
             {dialog && <ConfirmDialog {...dialog} />}
             <MediaObjectToolbar mediaObjects={mediaObjects} selectedMediaObjectId={selectedMediaObjectId} />
             <Sidebar.Pushable as={Segment} className="workspace" attached={true}>
-                <MediaObjectMenu mediaObjects={mediaObjects} selectedMediaObjectId={selectedMediaObjectId} setSelectedMediaObject={setSelectedMediaObject} />
+                <MediaObjectMenu mediaObjects={mediaObjects} selectedMediaObjectId={selectedMediaObjectId} setSelectedMediaObject={setSelectedMediaObject} editMediaObject={editMediaObject} deleteMediaObject={deleteMediaObject} />
                 <Sidebar.Pusher>
                     <AppContent>
                         {mediaObjects.length === 0 ? (
