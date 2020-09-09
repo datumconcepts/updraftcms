@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
-import { Menu, Icon, Breadcrumb, Popup, Modal, Button, Input } from 'semantic-ui-react';
+import { Menu, Icon, Breadcrumb, Popup, Modal, Button, Input, Label } from 'semantic-ui-react';
 
 import { IMediaObject, IMediaObjectType } from 'models';
 
@@ -11,10 +11,10 @@ import PageToolbar from 'components/high-order/PageToolbar';
 interface IMediaObjectToolbarProps extends RouteComponentProps {
     mediaObjects: IMediaObject[];
     selectedMediaObjectId: string;
-
+    setSelectedMediaObject(id: string): void;
     // onFileUploaded: (file: File) => void;
 }
-const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = ({ mediaObjects, selectedMediaObjectId }) => {
+const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = ({ mediaObjects, selectedMediaObjectId, setSelectedMediaObject }) => {
     const [modalOpen, toggleModal] = React.useState(false);
 
     const [parent, setParent] = React.useState({});
@@ -40,7 +40,7 @@ const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = ({ mediaObjects, 
                     {breadcrumb(parent)}
                     <Breadcrumb.Divider icon={{ name: 'chevron right', color: 'blue' }} />
                 </span>}
-                <Breadcrumb.Section>{mediaObject.name === "/" ? "root" : mediaObject.name}</Breadcrumb.Section>
+                <Breadcrumb.Section onClick={() => setSelectedMediaObject(mediaObject.id)} style={{ color: "rgba(255, 255, 255, 0.9)" }}>{mediaObject.name === "/" ? "root" : mediaObject.name}</Breadcrumb.Section>
             </>
         )
     }
@@ -67,7 +67,7 @@ const MediaObjectToolbar: React.FC<IMediaObjectToolbarProps> = ({ mediaObjects, 
                 <Menu.Item icon={true} as="label" htmlFor="upload_file">
                     <Icon name="upload" />
                     <input type="file" style={{ display: 'none' }} id="upload_file" multiple={true} onChange={e => fileUpload(e.target.files)} />
-                </Menu.Item>} content="Upload File" position="bottom right" />
+                    </Menu.Item>} content="Upload File" position="bottom right" />
         </Menu.Menu>
 
         <Modal size="mini" open={modalOpen} onClose={() => toggleModal(false)}>

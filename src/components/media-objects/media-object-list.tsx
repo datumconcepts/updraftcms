@@ -70,7 +70,7 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
     return (
         <>
             {dialog && <ConfirmDialog {...dialog} />}
-            <MediaObjectToolbar mediaObjects={mediaObjects} selectedMediaObjectId={selectedMediaObjectId} />
+            <MediaObjectToolbar mediaObjects={mediaObjects} selectedMediaObjectId={selectedMediaObjectId} setSelectedMediaObject={setSelectedMediaObject}/>
             <Sidebar.Pushable as={Segment} className="workspace" attached={true}>
                 <MediaObjectMenu mediaObjects={mediaObjects} selectedMediaObjectId={selectedMediaObjectId} setSelectedMediaObject={setSelectedMediaObject} editMediaObject={editMediaObject} deleteMediaObject={deleteMediaObject} />
                 <Sidebar.Pusher>
@@ -86,7 +86,7 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                                         <Grid.Column className="parent" style={{ width: "200px" }} >
                                             <Grid centered>
                                                 <Grid.Row >
-                                                    <Icon onClick={object.objectType === IMediaObjectType.DIRECTORY ? () => { setSelectedMediaObject(object.id) } : undefined} size='huge' color="blue" name={object.objectType === IMediaObjectType.DIRECTORY ? 'folder outline' : 'file outline'} />
+                                                    <Icon style={{cursor: 'default'}} onDoubleClick={object.objectType === IMediaObjectType.DIRECTORY ? () => { setSelectedMediaObject(object.id) } : undefined} size='huge' color="blue" name={object.objectType === IMediaObjectType.DIRECTORY ? 'folder outline' : 'file outline'} />
                                                 </Grid.Row>
                                                 <Grid.Row >
                                                     {editField === index ?
@@ -95,7 +95,7 @@ const MediaObjectList: React.FC<IMediaObjectListProps> = ({ mediaObjects, select
                                                                 onChange={(e) => { setEditFieldValue(e.target.value) }}
                                                                 onKeyPress={(e: any) => { if (e.key === 'Enter') { setEditField(-1); } }}
                                                             />
-                                                        </Ref> : <div onClick={object.objectType === IMediaObjectType.DIRECTORY ? () => { setSelectedMediaObject(object.id) } : undefined}> {object.name}</div>}
+                                                        </Ref> : <div style={{cursor: 'default'}} onDoubleClick={object.objectType === IMediaObjectType.DIRECTORY ? () => { setSelectedMediaObject(object.id) } : undefined}> {object.name}</div>}
                                                 </Grid.Row>
                                                 <Grid.Row container className="child" justify="center" style={{ width: "100%" }}>
                                                     {!(editField === index) ?
