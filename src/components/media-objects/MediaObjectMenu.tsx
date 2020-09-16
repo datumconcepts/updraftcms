@@ -25,30 +25,38 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
     const [dialog, confirm] = React.useState<IConfirmDialogProps>();
     const [mediaObject, updateMediaObject] = React.useState<IMediaObject>();
 
-    React.useEffect(() => {
-        document.addEventListener("mousedown", handleClick);
-        return () => {
-            document.removeEventListener("mousedown", handleClick);
-        };
-    }, []);
-
     const menuSelection = React.useRef<HTMLInputElement | null>(null);
-
-    const handleClick = (e: any) => {
-        if (menuSelection && menuSelection.current) {
-            if (menuSelection.current.contains(e.target)) {
-                return;
-            }
-        }
-        setEditField("");
-        // editMediaObject(new Map([...mediaObjects]);
-    };
 
     const editButtonHandler = React.useCallback(
         (id, value) => {
             setEditField(id)
             setEditFieldValue(value)
         }, [])
+
+    const handleRename = React.useCallback(
+        (editField, editFieldValue) => {
+            console.log("Renamed " + editFieldValue);
+            setEditField("");
+        }, []
+    )
+
+    const handleClick = React.useCallback((e: any) => {
+        if (menuSelection && menuSelection.current) {
+            if (menuSelection.current.contains(e.target)) {
+                return;
+            }
+        }
+        if (!(editField === "")) {
+            handleRename(editField, editFieldValue);
+        }
+    }, [editField, editFieldValue, handleRename])
+
+    React.useEffect(() => {
+        document.addEventListener("mousedown", handleClick);
+        return () => {
+            document.removeEventListener("mousedown", handleClick);
+        };
+    }, [handleClick]);
 
     const deleteButtonHandler = React.useCallback((mediaObject) => {
         confirm({
@@ -63,10 +71,6 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
             },
         });
     }, []);
-
-    const confirmButtonHandler = React.useCallback(() => {
-        setEditField("");
-    }, [])
 
     const getSelectedDirectory: () => string = () => {
         const selectedMediaObject = mediaObjects.find(o => o.id === selectedMediaObjectId);
@@ -85,7 +89,7 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
         const isSelected = mediaObject.id === getSelectedDirectory();
         return (
             <List.Item key={mediaObject.id} >
-                <List.Icon name={isSelected ? "folder open" : "folder"} style={{cursor: 'default'}} onClick={() => setSelectedMediaObject(mediaObject.id)} />
+                <List.Icon name={isSelected ? "folder open" : "folder"} style={{ cursor: 'default' }} onClick={() => setSelectedMediaObject(mediaObject.id)} />
                 <List.Content >
                     <Grid className="parent" columns="equal" verticalAlign='middle' style={{ margin: "-3px" }}>
                         <Grid.Column style={{ padding: "3px" }}>
@@ -94,9 +98,9 @@ const MediaObjectMenu: React.FC<IMediaObjectMenuProps> = ({ mediaObjects, select
                                     <Ref innerRef={menuSelection}>
                                         <Input className='bold' autoFocus transparent fluid value={editFieldValue}
                                             onChange={(e) => { setEditFieldValue(e.target.value) }}
-                                            onKeyPress={(e: any) => { if (e.key === 'Enter') { setEditField("") } }}
+                                            onKeyPress={(e: any) => { if (e.key === 'Enter') { handleRename(editField, editFieldValue) } }}
                                         />
-                                    </Ref> : <div onClick={() => setSelectedMediaObject(mediaObject.id)} style={{cursor: 'default'}}>{mediaObject.name}</div>}
+                                    </Ref> : <div onClick={() => setSelectedMediaObject(mediaObject.id)} style={{ cursor: 'default' }}>{mediaObject.name}</div>}
                             </List.Header>
                         </Grid.Column>
                         <Grid.Column className="child" verticalAlign='middle' style={{ flex: "0 0 auto", width: "auto", padding: "3px" }}>
