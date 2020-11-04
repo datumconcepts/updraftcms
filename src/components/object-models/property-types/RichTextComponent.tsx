@@ -14,6 +14,10 @@ import { IPropertyMap } from "models";
 
 import ModalDialog from "components/high-order/modal-dialog/index";
 
+import ConfirmDialog, {
+  IConfirmDialogProps,
+} from "components/high-order/confirm-dialog";
+
 import "draft-js/dist/Draft.css";
 import StyleButton from "components/high-order/HtmlEditor/StyleButton";
 
@@ -104,6 +108,8 @@ const RichTextComponent: React.FC<IRichTextComponentProps> = ({
   );
   const [expanded, setExpanded] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
+  const [dialog, confirm] = React.useState<IConfirmDialogProps>();
+
   const [obj, setObj] = React.useState<IPropertyMap>({
     ...propertyMap,
     name: propertyMap.name,
@@ -165,6 +171,23 @@ const RichTextComponent: React.FC<IRichTextComponentProps> = ({
     setModalOpen(false);
   }, [onPropertyUpdate, propertyMap, obj, setModalOpen]);
 
+  const deleteComponent = React.useCallback(() => {
+    confirm(undefined);
+    console.log("deleted " + propertyMap.name)
+  }, [propertyMap]);
+
+  const deleteButtonHandler = React.useCallback(() => {
+    confirm({
+      message: "Do you wish to delete " + propertyMap.name + "?",
+      confirmText: "OK",
+      confirmAction: deleteComponent,
+      cancelText: "Cancel",
+      cancelAction: () => {
+        confirm(undefined);
+      },
+    });
+  }, [deleteComponent, propertyMap]);
+
   return (
     <>
       <ModalDialog
@@ -187,6 +210,9 @@ const RichTextComponent: React.FC<IRichTextComponentProps> = ({
           checked={obj.required}
         />
       </ModalDialog>
+
+      {dialog && <ConfirmDialog {...dialog} />}
+
       <Card fluid={true}>
         <Card.Content>
           <Card.Header onClick={handleExpandClick}>
@@ -198,6 +224,12 @@ const RichTextComponent: React.FC<IRichTextComponentProps> = ({
                   name="edit outline"
                   color="blue"
                   onClick={editButtonHandler}
+                />
+                <Icon
+                  style={{ cursor: "pointer" }}
+                  name="trash alternate outline"
+                  color="blue"
+                  onClick={deleteButtonHandler}
                 />
               </Grid.Column>
             </Grid>

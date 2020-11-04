@@ -58,6 +58,11 @@ const LongTextComponent: React.FC<ILongTextComponentProps> = ({
     setModalOpen(false);
   }, [onPropertyUpdate, propertyMap, obj, setModalOpen]);
 
+  const deleteComponent = React.useCallback(() => {
+    confirm(undefined);
+    console.log("deleted "+propertyMap.name)
+  }, [propertyMap]);
+
   const deleteButtonHandler = React.useCallback(() => {
     confirm({
       message: "Do you wish to delete " + propertyMap.name+"?",
@@ -68,12 +73,7 @@ const LongTextComponent: React.FC<ILongTextComponentProps> = ({
         confirm(undefined);
       },
     });
-  }, []);
-
-  const deleteComponent = React.useCallback(() => {
-    confirm(undefined);
-    console.log("deleted "+propertyMap.name)
-  }, []);
+  }, [deleteComponent, propertyMap]);
 
   return (
     <>

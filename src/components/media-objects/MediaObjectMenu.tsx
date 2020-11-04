@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Sidebar, List, Segment, Button, Icon, Grid, Input, Ref } from 'semantic-ui-react';
+import { Sidebar, List, Segment, Icon, Grid, Input, Ref } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import useShortcuts from 'hooks/useShortcuts';
