@@ -25,7 +25,7 @@ const MediaObjectsPage: React.FC = () => {
             mediaObjects.delete(mediaObject.id);
             dispatch({ type: DELETE_MEDIA_OBJECT, mediaObjects: mediaObjects });
         }
-    }, [dispatch]);
+    }, [dispatch, mediaObject]);
 
     return (<Layout>
         <MediaObjectList mediaObjects={[...mediaObjects.values()]} selectedMediaObjectId={selectedMediaObjectId} editMediaObject={editMediaObject} deleteMediaObject={deleteMediaObject} setSelectedMediaObject={selectMediaObject} />

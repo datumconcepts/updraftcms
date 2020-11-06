@@ -35,6 +35,8 @@ export interface IMediaObject {
   name: string;
   path: string;
 }
+export interface IUser {
+}
 export enum IMediaObjectType {
   DIRECTORY = 'directory',
   FILE = 'file'

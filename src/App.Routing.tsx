@@ -8,6 +8,7 @@ import ContentDocumentsListPage from "pages/content-documents";
 import ContentDocumentsEditPage from "pages/content-documents/edit"
 
 import MediaObjectsPage from "pages/media-objects";
+import UsersPage from "pages/users";
 
 
 const AppRouting: React.FC = () => {
@@ -19,6 +20,7 @@ const AppRouting: React.FC = () => {
         <Route path="/:objectModelId?/content" exact={true} component={ContentDocumentsListPage} />
         <Route path="/:objectModelId?/content/:id/edit" component={ContentDocumentsEditPage} />
         <Route path="/media-library" component={MediaObjectsPage} />
+        <Route path="/users" component={UsersPage} />
         <Redirect path="*" to="/object-models" />
       </Switch>
     </Router>
