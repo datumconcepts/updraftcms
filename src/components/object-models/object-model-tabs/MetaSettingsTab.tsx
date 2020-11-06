@@ -14,10 +14,11 @@ const propertyTypes: any[] = [
   {
     name: "Short Text",
     required: false,
-    propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
+    propertyComponent: (onPropertyUpdate: any, propertyMap: any, deleteProperty: any) => (
       <ShortTextComponent
         onPropertyUpdate={onPropertyUpdate}
         propertyMap={propertyMap}
+        deleteProperty={deleteProperty}
       />
     ),
     propertyType: "textbox"
@@ -25,10 +26,11 @@ const propertyTypes: any[] = [
   {
     name: "Long Text",
     required: false,
-    propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
+    propertyComponent: (onPropertyUpdate: any, propertyMap: any, deleteProperty: any) => (
       <LongTextComponent
         onPropertyUpdate={onPropertyUpdate}
         propertyMap={propertyMap}
+        deleteProperty={deleteProperty}
       />
     ),
     propertyType: "textarea"
@@ -100,6 +102,13 @@ class MetaSettingsTab extends React.Component<
     this.props.onPropertyUpdate({ ...this.props.objectModel, 'metaProperties': metaProperties });
   };
 
+  public deleteProperty = (metaProperty: IPropertyMap) => {
+    const { metaProperties } = this.props.objectModel;
+    this.updateMetaProperties(
+      [...metaProperties.filter((x) => x.id !== metaProperty.id)]
+    );
+  };
+
   public render() {
     const {
       objectModel: { metaProperties }
@@ -133,7 +142,8 @@ class MetaSettingsTab extends React.Component<
                                 )
                                 .propertyComponent(
                                   this.valueChangeHandler,
-                                  propItem
+                                  propItem,
+                                  this.deleteProperty
                                 )}
                             </div>
                           )}
