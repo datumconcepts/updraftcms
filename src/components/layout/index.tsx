@@ -25,6 +25,9 @@ const Layout: React.FC<ILayoutProps> = ({ children }) => {
           <Menu.Item icon={true} aria-label="Media Library" as={Link} to="/media-library">
             <Icon name="images outline" />Media
             </Menu.Item>
+            <Menu.Item icon={true} aria-label="Users" as={Link} to="/users">
+            <Icon name="user outline" />Users
+            </Menu.Item>
         </Sidebar>
         <Sidebar.Pusher className="worksapace-pusher">
           {children}
