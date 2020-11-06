@@ -24,6 +24,7 @@ import StyleButton from "components/high-order/HtmlEditor/StyleButton";
 interface IRichTextComponentProps {
   propertyMap: IPropertyMap;
   onPropertyUpdate: (propertyMap: IPropertyMap) => void;
+  deleteProperty: (htmlProperty: IPropertyMap) => void;
 }
 
 const BLOCK_TYPES = [
@@ -102,6 +103,7 @@ const InlineStyleControls = (props: any) => {
 const RichTextComponent: React.FC<IRichTextComponentProps> = ({
   propertyMap,
   onPropertyUpdate,
+  deleteProperty
 }) => {
   const [editorState, setEditorState] = React.useState(
     EditorState.createEmpty()
@@ -173,8 +175,8 @@ const RichTextComponent: React.FC<IRichTextComponentProps> = ({
 
   const deleteComponent = React.useCallback(() => {
     confirm(undefined);
-    console.log("deleted " + propertyMap.name)
-  }, [propertyMap]);
+    deleteProperty(propertyMap);
+  }, [propertyMap, deleteProperty]);
 
   const deleteButtonHandler = React.useCallback(() => {
     confirm({

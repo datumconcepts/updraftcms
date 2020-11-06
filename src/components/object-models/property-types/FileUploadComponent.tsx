@@ -20,11 +20,13 @@ import ConfirmDialog, {
 interface IFileUploadComponentProps {
   propertyMap: IPropertyMap;
   onPropertyUpdate: (propertyMap: IPropertyMap) => void;
+  deleteProperty: (htmlProperty: IPropertyMap) => void;
 }
 
 const FileUploadComponent: React.FC<IFileUploadComponentProps> = ({
   propertyMap,
   onPropertyUpdate,
+  deleteProperty
 }) => {
   const [expanded, setExpanded] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -61,10 +63,12 @@ const FileUploadComponent: React.FC<IFileUploadComponentProps> = ({
 
   const deleteComponent = React.useCallback(() => {
     confirm(undefined);
+    deleteProperty(propertyMap);
     console.log("deleted "+propertyMap.name)
-  }, [propertyMap]);
+  }, [propertyMap, deleteProperty]);
 
   const deleteButtonHandler = React.useCallback(() => {
+    console.log("dfgdf");
     confirm({
       message: "Do you wish to delete " + propertyMap.name+"?",
       confirmText: "OK",

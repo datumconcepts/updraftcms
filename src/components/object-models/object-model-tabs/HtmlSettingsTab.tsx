@@ -16,10 +16,11 @@ const propertyTypes: any[] = [
   {
     name: "Short Text",
     required: false,
-    propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
+    propertyComponent: (onPropertyUpdate: any, propertyMap: any, deleteProperty: any) => (
       <ShortTextComponent
         onPropertyUpdate={onPropertyUpdate}
         propertyMap={propertyMap}
+        deleteProperty={deleteProperty}
       />
     ),
     propertyType: "textbox",
@@ -27,10 +28,11 @@ const propertyTypes: any[] = [
   {
     name: "Long Text",
     required: false,
-    propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
+    propertyComponent: (onPropertyUpdate: any, propertyMap: any, deleteProperty: any) => (
       <LongTextComponent
         onPropertyUpdate={onPropertyUpdate}
         propertyMap={propertyMap}
+        deleteProperty={deleteProperty}
       />
     ),
     propertyType: "textarea",
@@ -42,10 +44,11 @@ const propertyTypes: any[] = [
       multiple: false,
       options: [],
     },
-    propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
+    propertyComponent: (onPropertyUpdate: any, propertyMap: any, deleteProperty: any) => (
       <OptionSelectComponent
         onPropertyUpdate={onPropertyUpdate}
         propertyMap={propertyMap}
+        deleteProperty={deleteProperty}
       />
     ),
     propertyType: "select",
@@ -53,10 +56,11 @@ const propertyTypes: any[] = [
   {
     name: "Rich Text",
     required: false,
-    propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
+    propertyComponent: (onPropertyUpdate: any, propertyMap: any, deleteProperty: any) => (
       <RichTextComponent
         propertyMap={propertyMap}
         onPropertyUpdate={onPropertyUpdate}
+        deleteProperty={deleteProperty}
       />
     ),
     propertyType: "draftjs",
@@ -64,10 +68,11 @@ const propertyTypes: any[] = [
   {
     name: "Attachment",
     required: false,
-    propertyComponent: (onPropertyUpdate: any, propertyMap: any) => (
+    propertyComponent: (onPropertyUpdate: any, propertyMap: any, deleteProperty: any) => (
       <FileUploadComponent
         propertyMap={propertyMap}
         onPropertyUpdate={onPropertyUpdate}
+        deleteProperty={deleteProperty}
       />
     ),
     propertyType: "file",
@@ -118,6 +123,15 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
 
     this.updateHtmlProperties(
       htmlProperties.map((x, i) => ({ ...x, sortOrder: i }))
+    );
+  };
+
+  public deleteProperty = (htmlProperty: IPropertyMap) => {
+    const { htmlProperties } = this.props.objectModel;
+    this.updateHtmlProperties(
+      [
+        ...htmlProperties.filter((x) => x.id !== htmlProperty.id)
+      ]
     );
   };
 
@@ -173,7 +187,8 @@ class HtmlSettingsTab extends React.Component<IHtmlSettingsTabProps> {
                                 )
                                 .propertyComponent(
                                   this.valueChangeHandler,
-                                  propItem
+                                  propItem,
+                                  this.deleteProperty
                                 )}
                             </div>
                           )}

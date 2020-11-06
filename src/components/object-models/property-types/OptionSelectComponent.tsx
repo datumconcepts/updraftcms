@@ -22,11 +22,13 @@ import ConfirmDialog, {
 interface IOptionSelectComponentProps {
   propertyMap: IPropertyMap;
   onPropertyUpdate: (propertyMap: IPropertyMap) => void;
+  deleteProperty: (htmlProperty: IPropertyMap) => void;
 }
 
 const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
   propertyMap,
   onPropertyUpdate,
+  deleteProperty
 }) => {
   const [expanded, setExpanded] = React.useState(false);
   const [active, setActive] = React.useState(false);
@@ -203,8 +205,8 @@ const OptionSelectComponent: React.FC<IOptionSelectComponentProps> = ({
 
   const deleteComponent = React.useCallback(() => {
     confirm(undefined);
-    console.log("deleted " + propertyMap.name)
-  }, [propertyMap]);
+    deleteProperty(propertyMap);
+  }, [propertyMap, deleteProperty]);
 
   const deleteButtonHandler = React.useCallback(() => {
     confirm({

@@ -12,11 +12,13 @@ import ConfirmDialog, {
 interface ITextboxComponentProps {
   propertyMap: IPropertyMap;
   onPropertyUpdate: (propertyMap: IPropertyMap) => void;
+  deleteProperty: (htmlProperty: IPropertyMap) => void;
 }
 
 const ShortTextComponent: React.FC<ITextboxComponentProps> = ({
   propertyMap,
   onPropertyUpdate,
+  deleteProperty
 }) => {
   const [expanded, setExpanded] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -60,8 +62,8 @@ const ShortTextComponent: React.FC<ITextboxComponentProps> = ({
 
   const deleteComponent = React.useCallback(() => {
     confirm(undefined);
-    console.log("deleted " + propertyMap.name)
-  }, [propertyMap]);
+    deleteProperty(propertyMap);
+  }, [propertyMap, deleteProperty]);
 
   const deleteButtonHandler = React.useCallback(() => {
     confirm({

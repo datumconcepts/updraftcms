@@ -12,11 +12,13 @@ import ConfirmDialog, {
 interface ILongTextComponentProps {
   propertyMap: IPropertyMap;
   onPropertyUpdate: (propertyMap: IPropertyMap) => void;
+  deleteProperty: (htmlProperty: IPropertyMap) => void;
 }
 
 const LongTextComponent: React.FC<ILongTextComponentProps> = ({
   propertyMap,
   onPropertyUpdate,
+  deleteProperty
 }) => {
   const [expanded, setExpanded] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -60,8 +62,8 @@ const LongTextComponent: React.FC<ILongTextComponentProps> = ({
 
   const deleteComponent = React.useCallback(() => {
     confirm(undefined);
-    console.log("deleted "+propertyMap.name)
-  }, [propertyMap]);
+    deleteProperty(propertyMap);
+  }, [propertyMap, deleteProperty]);
 
   const deleteButtonHandler = React.useCallback(() => {
     confirm({
